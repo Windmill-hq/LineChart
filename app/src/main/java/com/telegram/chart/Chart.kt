@@ -11,7 +11,7 @@ import android.view.View
 class Chart : View {
     val DEBUG_TAG = "Chart gesture"
 
-    private val paintBack = Paint().apply { color = Color.RED }
+    private val paintBack = Paint().apply { color = Color.CYAN }
     private val window = ActiveWindow()
 
     constructor(context: Context) : super(context) {
@@ -33,6 +33,16 @@ class Chart : View {
     override fun onDraw(canvas: Canvas) {
         canvas.drawPaint(paintBack)
         window.draw(canvas)
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val desiredWidth = suggestedMinimumWidth + paddingLeft + paddingRight
+        val desiredHeight = suggestedMinimumHeight + paddingTop + paddingBottom
+
+        val w = measureDimension(desiredWidth, widthMeasureSpec)
+        val h = measureDimension(desiredHeight, heightMeasureSpec)
+        setMeasuredDimension(w, h)
+        window.setParentSize(w, h)
     }
 
     var isDown = false
@@ -59,7 +69,27 @@ class Chart : View {
     }
 
     private fun moveWindow(event: MotionEvent) {
-        window.move(event)
+        window.onMove(event)
         invalidate()
+    }
+
+    private fun measureDimension(desiredSize: Int, measureSpec: Int): Int {
+        var result: Int
+        val specMode = View.MeasureSpec.getMode(measureSpec)
+        val specSize = View.MeasureSpec.getSize(measureSpec)
+
+        if (specMode == View.MeasureSpec.EXACTLY) {
+            result = specSize
+        } else {
+            result = desiredSize
+            if (specMode == View.MeasureSpec.AT_MOST) {
+                result = Math.min(result, specSize)
+            }
+        }
+
+        if (result < desiredSize) {
+            Log.e("ChartView", "The view is too small, the content might get cut")
+        }
+        return result
     }
 }
