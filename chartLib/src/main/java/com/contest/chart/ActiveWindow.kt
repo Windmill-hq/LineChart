@@ -1,4 +1,4 @@
-package com.telegram.chart
+package com.contest.chart
 
 import android.graphics.Canvas
 import android.graphics.Color

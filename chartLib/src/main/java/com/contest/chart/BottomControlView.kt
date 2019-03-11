@@ -1,7 +1,9 @@
-package com.telegram.chart
+package com.contest.chart
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.support.v4.view.MotionEventCompat
 import android.util.AttributeSet
 import android.util.Log
@@ -9,8 +11,6 @@ import android.view.MotionEvent
 import android.view.View
 
 class BottomControlView : View {
-    val DEBUG_TAG = "BottomControlView gesture"
-
     private val paintBack = Paint().apply { color = Color.CYAN }
     private val window = ActiveWindow()
 
@@ -51,7 +51,6 @@ class BottomControlView : View {
         val handled = when (action) {
             MotionEvent.ACTION_DOWN -> {
                 window.onBeforeMove(event)
-                Log.d(DEBUG_TAG, "Action was DOWN")
                 true
             }
             MotionEvent.ACTION_MOVE -> {
@@ -60,7 +59,6 @@ class BottomControlView : View {
             }
             MotionEvent.ACTION_UP -> {
                 window.onFinishMove()
-                Log.d(DEBUG_TAG, "Action was UP")
                 true
             }
             else -> super.onTouchEvent(event)

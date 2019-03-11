@@ -3,6 +3,7 @@ package com.telegram.chart
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.contest.chart.BottomControlView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), BottomControlView.Listener {
