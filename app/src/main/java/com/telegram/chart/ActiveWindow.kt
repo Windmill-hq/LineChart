@@ -58,22 +58,25 @@ class ActiveWindow {
     }
 
     private fun moveRightHandle(event: MotionEvent) {
-        if (checkMinWidth(event.x)) {
+        if (checkMinWidthRight(event.x)) {
             val newLeft = event.x
             rightHandle.offsetTo(newLeft, rightHandle.top)
             mainRect.set(mainRect.left, mainRect.top, rightHandle.right, mainRect.bottom)
         }
     }
 
-    private fun checkMinWidth(x: Float): Boolean {
-        val minWidthForLeft = rightHandle.right - x
-        val minWidthForRight = x - leftHandle.left
+    private fun checkMinWidthRight(x: Float): Boolean {
+        val distanceToLeftEdge = x - leftHandle.left
+        return distanceToLeftEdge > realWidth
+    }
 
-        return minWidthForLeft > realWidth || minWidthForRight > realWidth
+    private fun checkMinWidthLeft(x: Float): Boolean {
+        val distanceToRightEdge = rightHandle.right - x
+        return distanceToRightEdge > realWidth
     }
 
     private fun moveLeftHandle(event: MotionEvent) {
-        if (checkMinWidth(event.x)) {
+        if (checkMinWidthLeft(event.x)) {
             val newLeft = event.x
             leftHandle.offsetTo(newLeft, leftHandle.top)
             mainRect.set(leftHandle.left, mainRect.top, mainRect.right, mainRect.bottom)
