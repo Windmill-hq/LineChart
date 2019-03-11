@@ -8,8 +8,8 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 
-class Chart : View {
-    val DEBUG_TAG = "Chart gesture"
+class BottomControlView : View {
+    val DEBUG_TAG = "BottomControlView gesture"
 
     private val paintBack = Paint().apply { color = Color.CYAN }
     private val window = ActiveWindow()
@@ -45,32 +45,28 @@ class Chart : View {
         window.setParentSize(w, h)
     }
 
-    var isDown = false
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val action: Int = MotionEventCompat.getActionMasked(event)
-        return when (action) {
+        val handled = when (action) {
             MotionEvent.ACTION_DOWN -> {
-                isDown = true
+                window.onBeforeMove(event)
                 Log.d(DEBUG_TAG, "Action was DOWN")
                 true
             }
             MotionEvent.ACTION_MOVE -> {
-                moveWindow(event)
+                window.onMove(event)
                 true
             }
             MotionEvent.ACTION_UP -> {
-                isDown = false
+                window.onFinishMove()
                 Log.d(DEBUG_TAG, "Action was UP")
                 true
             }
             else -> super.onTouchEvent(event)
         }
-    }
-
-    private fun moveWindow(event: MotionEvent) {
-        window.onMove(event)
-        invalidate()
+        if (handled) invalidate()
+        return handled
     }
 
     private fun measureDimension(desiredSize: Int, measureSpec: Int): Int {
@@ -91,5 +87,13 @@ class Chart : View {
             Log.e("ChartView", "The view is too small, the content might get cut")
         }
         return result
+    }
+
+    public fun setListener(listener: Listener) {
+        window.setListener(listener)
+    }
+
+    interface Listener {
+        fun onWindowSizeChanged(left: Float, right: Float)
     }
 }
