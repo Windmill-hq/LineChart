@@ -12,7 +12,7 @@ import android.view.View
 
 class BottomControlView : View {
     private val paintBack = Paint().apply { color = Color.CYAN }
-    private val window = ActiveWindow()
+    private lateinit var window: ActiveWindow
 
     constructor(context: Context) : super(context) {
         init()
@@ -27,7 +27,7 @@ class BottomControlView : View {
     }
 
     private fun init() {
-        //todo
+        window = ActiveWindow(context.resources.getColor(R.color.frameColor))
     }
 
     override fun onDraw(canvas: Canvas) {

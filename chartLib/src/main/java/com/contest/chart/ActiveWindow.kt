@@ -1,41 +1,44 @@
 package com.contest.chart
 
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.view.MotionEvent
 
-class ActiveWindow {
-    private val left = 5f
+class ActiveWindow(private val frameColor: Int) {
+    private val left = 25f
     private val top = 2f
-    private val realWidth = 220f
+    private val realRectWidth = 220f
     private val realHeight = 160f
-    private val width = realWidth + left
-    private val height = realHeight - top
     private var parentWidth = 0
     private var parentHeight = 0
-    private val handleWidth = 15 + left
+    private val handleWidth = 15
     private val scaleInc = 1.2f
     private val scaleDec = 0.8f
     private var partToDraw = Part.UNKNOWN
+    private val rectStrokeWidth = 6f
+    private val halfStroke = rectStrokeWidth / 2
 
-    private var mainRect = RectF(left, top, width, height)
-    private var leftHandle = RectF(left, 0f, handleWidth, realHeight).apply {
-        offsetTo(mainRect.left, mainRect.top - top)
-    }
+    private val mainLeft = left + handleWidth + halfStroke
+    private val mainRight = mainLeft + realRectWidth
+    private val leftHandleRightPos = handleWidth + left
+    private val rectHeight = realHeight - top
+    private var mainRect = RectF(mainLeft, top, mainRight, rectHeight)
+    private var leftHandle = RectF(left, 0f, leftHandleRightPos, realHeight)
+
     private var rightHandle = RectF(leftHandle).apply {
-        offsetTo(mainRect.right, mainRect.top - top)
+        val rightHandleLeft = mainRect.right + halfStroke
+        offsetTo(rightHandleLeft, 0f)
     }
 
     private var paintMainRect: Paint = Paint().apply {
-        color = Color.GRAY
+        color = frameColor
         style = Paint.Style.STROKE
-        strokeWidth = 6f
+        strokeWidth = rectStrokeWidth
     }
 
     private var paintHandle: Paint = Paint().apply {
-        color = Color.GRAY
+        color = frameColor
     }
 
     private var listener: BottomControlView.Listener? = null
@@ -61,25 +64,25 @@ class ActiveWindow {
         if (checkMinWidthRight(event.x)) {
             val newLeft = event.x
             rightHandle.offsetTo(newLeft, rightHandle.top)
-            mainRect.set(mainRect.left, mainRect.top, rightHandle.right, mainRect.bottom)
+            mainRect.set(mainRect.left, mainRect.top, rightHandle.left - halfStroke, mainRect.bottom)
         }
     }
 
     private fun checkMinWidthRight(x: Float): Boolean {
         val distanceToLeftEdge = x - leftHandle.left
-        return distanceToLeftEdge > realWidth
+        return distanceToLeftEdge > realRectWidth
     }
 
     private fun checkMinWidthLeft(x: Float): Boolean {
         val distanceToRightEdge = rightHandle.right - x
-        return distanceToRightEdge > realWidth
+        return distanceToRightEdge > realRectWidth
     }
 
     private fun moveLeftHandle(event: MotionEvent) {
         if (checkMinWidthLeft(event.x)) {
             val newLeft = event.x
             leftHandle.offsetTo(newLeft, leftHandle.top)
-            mainRect.set(leftHandle.left, mainRect.top, mainRect.right, mainRect.bottom)
+            mainRect.set(leftHandle.right + halfStroke, mainRect.top, mainRect.right, mainRect.bottom)
         }
     }
 
@@ -88,8 +91,8 @@ class ActiveWindow {
             val newLeft = event.x - totalWidth() / 2
             val newTop = mainRect.top
             mainRect.offsetTo(newLeft, newTop)
-            leftHandle.offsetTo(mainRect.left, newTop - top)
-            rightHandle.offsetTo(mainRect.right, newTop - top)
+            leftHandle.offsetTo(mainRect.left - halfStroke - handleWidth, newTop - top)
+            rightHandle.offsetTo(mainRect.right + halfStroke, newTop - top)
         }
     }
 
@@ -107,7 +110,7 @@ class ActiveWindow {
     }
 
     private fun totalWidth(): Float {
-        return rightHandle.right - leftHandle.left
+        return mainRect.right - mainRect.left
     }
 
     private fun isRightHandle(event: MotionEvent): Boolean {
@@ -129,19 +132,12 @@ class ActiveWindow {
     }
 
     private fun callback() {
-        listener?.onWindowSizeChanged(getLeftEdge(), getRightEdge())
-    }
-
-    private fun getRightEdge(): Float {
-        return rightHandle.right
-    }
-
-    private fun getLeftEdge(): Float {
-        return leftHandle.left
+        listener?.onWindowSizeChanged(mainRect.left, mainRect.right)
     }
 
     fun setListener(listener: BottomControlView.Listener) {
         this.listener = listener
+        callback()
     }
 
     private fun MotionEvent.inView(): Boolean {
