@@ -148,8 +148,8 @@ class ActiveWindow(private val frameColor: Int) {
 
     private fun RectF.scale(): RectF {
         return RectF(this).apply {
-            left *= scaleDec
-            right *= scaleInc
+            left -= 50
+            right += 50
         }
     }
 
