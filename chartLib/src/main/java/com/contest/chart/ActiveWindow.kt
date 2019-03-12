@@ -132,7 +132,7 @@ class ActiveWindow(private val frameColor: Int) {
     }
 
     private fun callback() {
-        listener?.onWindowSizeChanged(mainRect.left, mainRect.right)
+        listener?.onWindowSizeChanged((mainRect.left / parentWidth) * 100, (mainRect.right / parentWidth) * 100)
     }
 
     fun setListener(listener: BottomControlView.Listener) {
@@ -148,8 +148,8 @@ class ActiveWindow(private val frameColor: Int) {
 
     private fun RectF.scale(): RectF {
         return RectF(this).apply {
-            left -= 50
-            right += 50
+            left -= 30
+            right += 30
         }
     }
 

@@ -17,6 +17,5 @@ class MainActivity : AppCompatActivity(), BottomControlView.Listener {
     override fun onWindowSizeChanged(left: Float, right: Float) {
         leftText.text = getString(R.string.left_edge, left.toInt())
         rightText.text = getString(R.string.right_edge, right.toInt())
-        screenText.text = getString(R.string.screen_width, chart.width)
     }
 }
