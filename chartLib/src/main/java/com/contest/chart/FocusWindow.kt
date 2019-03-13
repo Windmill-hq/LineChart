@@ -129,7 +129,7 @@ class FocusWindow(private val frameColor: Int) {
         this.parentHeight = parentHeight
     }
 
-    private fun callback() {
+    public fun callback() {
         listeners.forEach {
             it.onFocusWindowSizeChanged(
                 ((mainRect.left / parentWidth) * 100).toInt(),

@@ -35,8 +35,8 @@ class BottomControlView : View {
 
     override fun onDraw(canvas: Canvas) {
         canvas.drawPaint(paintBack)
-        window.draw(canvas)
         smallLineChart.onDraw(canvas)
+        window.draw(canvas)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -96,6 +96,7 @@ class BottomControlView : View {
 
     fun setData(data: List<LineChartData>) {
         smallLineChart.init(data)
+        window.callback()
         invalidate()
     }
 }
