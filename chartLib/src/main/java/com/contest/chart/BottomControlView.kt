@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import com.contest.chart.model.LineChartData
 
 class BottomControlView : View {
     private val paintBack = Paint().apply { color = Color.CYAN }
@@ -89,6 +90,9 @@ class BottomControlView : View {
 
     public fun setListener(listener: Listener) {
         window.setListener(listener)
+    }
+
+    fun setData(data: List<LineChartData>) {
     }
 
     interface Listener {
