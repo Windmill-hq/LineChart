@@ -6,14 +6,16 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.support.v4.view.MotionEventCompat
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import com.contest.chart.model.LineChartData
 
 class BottomControlView : View {
-    private val paintBack = Paint().apply { color = Color.CYAN }
-    private lateinit var window: ActiveWindow
+
+
+    private val paintBack = Paint().apply { color = Color.WHITE }
+    private lateinit var window: FocusWindow
+    private val smallLineChart = SmallLineChart()
 
     constructor(context: Context) : super(context) {
         init()
@@ -28,12 +30,13 @@ class BottomControlView : View {
     }
 
     private fun init() {
-        window = ActiveWindow(context.resources.getColor(R.color.frameColor))
+        window = FocusWindow(context.resources.getColor(R.color.frameColor))
     }
 
     override fun onDraw(canvas: Canvas) {
         canvas.drawPaint(paintBack)
         window.draw(canvas)
+        smallLineChart.onDraw(canvas)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -44,6 +47,7 @@ class BottomControlView : View {
         val h = measureDimension(desiredHeight, heightMeasureSpec)
         setMeasuredDimension(w, h)
         window.setParentSize(w, h)
+        smallLineChart.setParentSize(w, h)
     }
 
 
@@ -81,21 +85,17 @@ class BottomControlView : View {
                 result = Math.min(result, specSize)
             }
         }
-
-        if (result < desiredSize) {
-            Log.e("ChartView", "The view is too small, the content might get cut")
-        }
         return result
     }
 
-    public fun setListener(listener: Listener) {
-        window.setListener(listener)
+
+    fun addListener(listener: FocusWindow.Listener) {
+        window.addListener(listener)
+        window.addListener(smallLineChart)
     }
 
     fun setData(data: List<LineChartData>) {
-    }
-
-    interface Listener {
-        fun onWindowSizeChanged(left: Float, right: Float)
+        smallLineChart.init(data)
+        invalidate()
     }
 }

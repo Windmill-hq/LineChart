@@ -5,7 +5,7 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.view.MotionEvent
 
-class ActiveWindow(private val frameColor: Int) {
+class FocusWindow(private val frameColor: Int) {
     private val left = 25f
     private val top = 2f
     private val realRectWidth = 220f
@@ -13,8 +13,6 @@ class ActiveWindow(private val frameColor: Int) {
     private var parentWidth = 0
     private var parentHeight = 0
     private val handleWidth = 15
-    private val scaleInc = 1.2f
-    private val scaleDec = 0.8f
     private var partToDraw = Part.UNKNOWN
     private val rectStrokeWidth = 6f
     private val halfStroke = rectStrokeWidth / 2
@@ -41,7 +39,7 @@ class ActiveWindow(private val frameColor: Int) {
         color = frameColor
     }
 
-    private var listener: BottomControlView.Listener? = null
+    private var listeners = ArrayList<Listener>()
 
     fun draw(canvas: Canvas) {
         canvas.apply {
@@ -132,12 +130,16 @@ class ActiveWindow(private val frameColor: Int) {
     }
 
     private fun callback() {
-        listener?.onWindowSizeChanged((mainRect.left / parentWidth) * 100, (mainRect.right / parentWidth) * 100)
+        listeners.forEach {
+            it.onFocusWindowSizeChanged(
+                ((mainRect.left / parentWidth) * 100).toInt(),
+                ((mainRect.right / parentWidth) * 100).toInt()
+            )
+        }
     }
 
-    fun setListener(listener: BottomControlView.Listener) {
-        this.listener = listener
-        callback()
+    fun addListener(listener: Listener) {
+        listeners.add(listener)
     }
 
     private fun MotionEvent.inView(): Boolean {
@@ -155,5 +157,9 @@ class ActiveWindow(private val frameColor: Int) {
 
     enum class Part {
         LEFT, RIGHT, CENTER, UNKNOWN
+    }
+
+    interface Listener {
+        fun onFocusWindowSizeChanged(left: Int, right: Int)
     }
 }
