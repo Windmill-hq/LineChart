@@ -25,7 +25,7 @@ class LineChartDataMapper : Function<List<Data>, List<LineChartData>> {
                 } else {
                     val points = mutableColumn.toFloatArr()
                     val colorCode = data.colors[name]
-                    val line = BrokenLine(points, name, colorCode)
+                    val line = BrokenLine(points, name, colorCode!!)
                     lineChart.brokenLines.add(line)
                 }
             }

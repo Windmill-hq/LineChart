@@ -2,6 +2,8 @@ package com.contest.chart
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.util.AttributeSet
 import com.contest.chart.model.LineChartData
 import com.contest.chart.view.FocusedRangeFrame
@@ -19,7 +21,7 @@ class TimeBasedLineChart : MeasuredView, FocusedRangeFrame.Listener {
     private var isInited = false
     private var viewWidth = 0
     private var viewHeight = 0
-
+    private val paintBackGround = Paint().apply { color = Color.WHITE }
 
     override fun onMeasured(width: Int, height: Int) {
         this.viewWidth = width
@@ -29,10 +31,11 @@ class TimeBasedLineChart : MeasuredView, FocusedRangeFrame.Listener {
 
     override fun onDraw(canvas: Canvas) {
         if (!isInited) return
+        canvas.drawPaint(paintBackGround)
 
         data.forEach {
             it.brokenLines.forEach { line ->
-                line.draw(canvas, it.horizontalStep)
+                line.draw(canvas, it.xScale, it.yScale)
             }
         }
     }
@@ -41,10 +44,10 @@ class TimeBasedLineChart : MeasuredView, FocusedRangeFrame.Listener {
         this.data = arrayListOf(dataList[0]) // todo leave only one
 
         data.forEach {
-            it.brokenLines.forEach { line -> line.setYTo(viewHeight) }
+            it.brokenLines.forEach { line -> line.setConditionalY(viewHeight) }
         }
 
-        data.forEach { it.setStep(viewWidth) }
+        data.forEach { it.setScale(viewWidth, viewHeight) }
         isInited = true
     }
 

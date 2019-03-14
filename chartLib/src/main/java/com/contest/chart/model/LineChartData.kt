@@ -1,9 +1,12 @@
 package com.contest.chart.model
 
-class LineChartData {
-    var horizontalStep = 0f
+import com.contest.chart.Constants
 
-    fun setStep(parentWidth: Int) {
+class LineChartData {
+    var xScale = 0f
+    var yScale = 0f
+
+    fun setScale(width: Int, height: Int) {
 
         val sizes = mutableListOf<Int>()
         brokenLines.forEach {
@@ -11,7 +14,14 @@ class LineChartData {
         }
         val maxSize = sizes.max()!!.toFloat()
 
-        horizontalStep = parentWidth / maxSize
+        xScale = (width - Constants.SPARE_SPACE_X) / maxSize
+
+        val maxValues = mutableListOf<Float>()
+        brokenLines.forEach {
+            maxValues.add(it.points.max()!!)
+        }
+
+        yScale = (height - Constants.SPARE_SPACE_Y) / maxValues.max()!!
     }
 
     val brokenLines = ArrayList<BrokenLine>()

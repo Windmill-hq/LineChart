@@ -31,7 +31,6 @@ class FocusedRangeFrame : MeasuredView {
     private var rightHandle = RectF()
 
     private var paintHandle: Paint = Paint()
-    private val paintBackGround = Paint().apply { color = Color.TRANSPARENT }
     private var paintMainRect: Paint = Paint().apply {
         style = Paint.Style.STROKE
         strokeWidth = rectStrokeWidth
@@ -74,7 +73,6 @@ class FocusedRangeFrame : MeasuredView {
 
     override fun onDraw(canvas: Canvas) {
         canvas.apply {
-            drawPaint(paintBackGround)
             drawRect(mainFrame, paintMainRect)
             drawRect(leftHandle, paintHandle)
             drawRect(rightHandle, paintHandle)

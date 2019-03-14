@@ -4,9 +4,9 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 
-class BrokenLine(val points: FloatArray, val name: String, val color: String?) {
-    private var yOffset: Int = 0
-    private val unFocusedColor = Color.parseColor("#a8a8a8")
+class BrokenLine(val points: FloatArray, val name: String, private val color: String) {
+    private var conditionalY: Int = 0
+    private var unFocusedColor = Color.parseColor("#A0A0A0")
     private val focusedColor = Color.parseColor(color)
     private val paint = Paint().apply {
         style = Paint.Style.FILL
@@ -15,7 +15,7 @@ class BrokenLine(val points: FloatArray, val name: String, val color: String?) {
     }
     private var focusRange = 0..100
 
-    fun draw(canvas: Canvas, horizontalStep: Float) {
+    fun draw(canvas: Canvas, xScale: Float, yScale: Float) {
 
         val size = points.size
 
@@ -23,11 +23,11 @@ class BrokenLine(val points: FloatArray, val name: String, val color: String?) {
 
             paint.color = getColor(index)
 
-            val x1 = index * horizontalStep
-            val x2 = (index + 1) * horizontalStep
+            val x1 = index * xScale
+            val x2 = (index + 1) * xScale
 
-            val y1 = points[index]
-            val y2 = points[index + 1]
+            val y1 = conditionalY - (points[index] * yScale)
+            val y2 = conditionalY - (points[index + 1] * yScale)
 
             canvas.drawLine(x1, y1, x2, y2, paint)
         }
@@ -38,8 +38,8 @@ class BrokenLine(val points: FloatArray, val name: String, val color: String?) {
     }
 
 
-    fun setYTo(parentHeight: Int) {
-        yOffset = parentHeight
+    fun setConditionalY(conditionalY: Int) {
+        this.conditionalY = conditionalY
     }
 
     fun onFocusedRangeChanged(left: Int, right: Int) {
@@ -48,4 +48,9 @@ class BrokenLine(val points: FloatArray, val name: String, val color: String?) {
         focusRange = focusLeft..focusRight
     }
 
+}
+
+private fun String.transparentOn(transparensy: String): Int {
+    val pale = this.substringBefore("#") + transparensy + this.substringAfter("#")
+    return Color.parseColor(pale)
 }
