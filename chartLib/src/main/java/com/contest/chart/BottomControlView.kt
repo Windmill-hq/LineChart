@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import com.contest.chart.model.LineChartData
+import com.contest.chart.view.FocusWindow
 
 class BottomControlView : View {
 

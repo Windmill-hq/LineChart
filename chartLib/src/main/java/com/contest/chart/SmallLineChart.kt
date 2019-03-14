@@ -2,6 +2,7 @@ package com.contest.chart
 
 import android.graphics.Canvas
 import com.contest.chart.model.LineChartData
+import com.contest.chart.view.FocusWindow
 
 class SmallLineChart : FocusWindow.Listener {
 

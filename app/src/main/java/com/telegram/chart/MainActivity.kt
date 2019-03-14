@@ -3,7 +3,7 @@ package com.telegram.chart
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
-import com.contest.chart.FocusWindow
+import com.contest.chart.view.FocusWindow
 import com.telegram.chart.model.DataProvider
 import com.telegram.chart.model.LineChartDataMapper
 import io.reactivex.android.schedulers.AndroidSchedulers

@@ -1,4 +1,4 @@
-package com.contest.chart
+package com.contest.chart.view
 
 import android.graphics.Canvas
 import android.graphics.Paint
