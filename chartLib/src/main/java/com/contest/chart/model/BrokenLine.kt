@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.Paint
 
 class BrokenLine(val points: FloatArray, val name: String, private val color: String) {
+    var isEnabled = true
     private var conditionalY: Int = 0
     private var unFocusedColor = Color.parseColor("#A0A0A0")
     private val focusedColor = Color.parseColor(color)
@@ -16,6 +17,7 @@ class BrokenLine(val points: FloatArray, val name: String, private val color: St
     private var focusRange = 0..100
 
     fun draw(canvas: Canvas, xScale: Float, yScale: Float) {
+        if (!isEnabled) return
 
         val size = points.size
 
@@ -46,6 +48,17 @@ class BrokenLine(val points: FloatArray, val name: String, private val color: St
         val focusLeft = points.size * left / 100
         val focusRight = points.size * right / 100
         focusRange = focusLeft..focusRight
+    }
+
+    fun show(show: Boolean) {
+        isEnabled = show
+        if (!isEnabled) {
+            hideAnimated()
+        }
+    }
+
+    private fun hideAnimated() {
+        //todo   need remove line with animation and call invalidate from here
     }
 
 }

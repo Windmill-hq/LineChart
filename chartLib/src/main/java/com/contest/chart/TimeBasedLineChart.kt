@@ -17,7 +17,7 @@ class TimeBasedLineChart : MeasuredView, FocusedRangeFrame.Listener {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    private lateinit var data: List<LineChartData>
+    private lateinit var chartData: List<LineChartData>
     private var isInited = false
     private var viewWidth = 0
     private var viewHeight = 0
@@ -28,12 +28,11 @@ class TimeBasedLineChart : MeasuredView, FocusedRangeFrame.Listener {
         this.viewHeight = height
     }
 
-
     override fun onDraw(canvas: Canvas) {
         if (!isInited) return
         canvas.drawPaint(paintBackGround)
 
-        data.forEach {
+        chartData.forEach {
             it.brokenLines.forEach { line ->
                 line.draw(canvas, it.xScale, it.yScale)
             }
@@ -41,24 +40,43 @@ class TimeBasedLineChart : MeasuredView, FocusedRangeFrame.Listener {
     }
 
     fun setData(dataList: List<LineChartData>) {
-        this.data = arrayListOf(dataList[0]) // todo leave only one
+        this.chartData = dataList
 
-        data.forEach {
+        chartData.forEach {
             it.brokenLines.forEach { line -> line.setConditionalY(viewHeight) }
         }
 
-        data.forEach { it.setScale(viewWidth, viewHeight) }
+        chartData.forEach { it.setCanvasSize(viewWidth, viewHeight) }
         isInited = true
     }
 
 
     override fun onFocusedRangeChanged(left: Int, right: Int) {
         if (!isInited) return
-        data.forEach {
+        chartData.forEach {
             it.brokenLines.forEach { line ->
                 line.onFocusedRangeChanged(left, right)
             }
         }
+        invalidate()
+    }
+
+    fun onLineStateChanged(name: String, isShow: Boolean) {
+        chartData.forEach {
+            it.brokenLines.forEach { line ->
+                if (line.name == name) {
+                    line.show(isShow)
+                }
+            }
+            it.setScale()
+        }
+        invalidate()
+    }
+
+    fun switchNightMode(nightMode: Boolean) {
+        val night = context.resources.getColor(R.color.backGroundDark)
+        val day = context.resources.getColor(R.color.backGround)
+        paintBackGround.color = if (nightMode) night else day
         invalidate()
     }
 }

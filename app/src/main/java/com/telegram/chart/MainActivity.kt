@@ -2,6 +2,8 @@ package com.telegram.chart
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import com.contest.chart.view.FocusWindow
 import com.contest.chart.view.FocusedRangeFrame
@@ -29,7 +31,9 @@ class MainActivity : AppCompatActivity(), FocusedRangeFrame.Listener {
                 .map(LineChartDataMapper())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    timeLineChart.setData(it)
+                    //todo show only first chart
+                    val first = arrayListOf(it[0])
+                    timeLineChart.setData(first)
                 },
                         {
                             Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
@@ -37,13 +41,28 @@ class MainActivity : AppCompatActivity(), FocusedRangeFrame.Listener {
     }
 
     override fun onFocusedRangeChanged(left: Int, right: Int) {
-        leftText.text = getString(R.string.left_edge, left.toInt())
-        rightText.text = getString(R.string.right_edge, right.toInt())
+//        leftText.text = getString(R.string.left_edge, left.toInt())
+//        rightText.text = getString(R.string.right_edge, right.toInt())
     }
 
     override fun onDestroy() {
         disposables.dispose()
         super.onDestroy()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.night_mode -> {
+                timeLineChart.switchDayMode()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }
 

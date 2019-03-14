@@ -1,17 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.contest.chart.TimeBasedLineChart
-        android:id="@+id/chart"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
-    <com.contest.chart.view.FocusedRangeFrame
-        android:id="@+id/focus_frame"
+    <FrameLayout
+        android:id="@+id/bottom_widget"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true">
 
-</FrameLayout>
+        <com.contest.chart.TimeBasedLineChart
+            android:id="@+id/chart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.contest.chart.view.FocusedRangeFrame
+            android:id="@+id/focus_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/checkbox_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bottom_widget"
+        android:orientation="vertical" />
+
+</RelativeLayout>
