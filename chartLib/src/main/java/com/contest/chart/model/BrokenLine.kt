@@ -13,8 +13,7 @@ class BrokenLine(val points: FloatArray, val name: String, val color: String?) {
         style = Paint.Style.STROKE
         strokeWidth = 3f
     }
-    private var focusLeft = 0
-    private var focusRight = 0
+    private var focusRange = 0..100
 
     fun draw(canvas: Canvas, horizontalStep: Float) {
 
@@ -35,7 +34,7 @@ class BrokenLine(val points: FloatArray, val name: String, val color: String?) {
     }
 
     private fun getColor(index: Int): Int {
-        return if (index in focusLeft..focusRight) focusedColor else unFocusedColor
+        return if (index in focusRange) focusedColor else unFocusedColor
     }
 
 
@@ -43,9 +42,10 @@ class BrokenLine(val points: FloatArray, val name: String, val color: String?) {
         yOffset = parentHeight
     }
 
-    fun onFocusedWindowSizeChanged(left: Int, right: Int) {
-        focusLeft = points.size * left / 100
-        focusRight = points.size * right / 100
+    fun onFocusedRangeChanged(left: Int, right: Int) {
+        val focusLeft = points.size * left / 100
+        val focusRight = points.size * right / 100
+        focusRange = focusLeft..focusRight
     }
 
 }

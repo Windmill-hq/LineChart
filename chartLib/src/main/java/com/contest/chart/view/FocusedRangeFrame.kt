@@ -31,7 +31,7 @@ class FocusedRangeFrame : MeasuredView {
     private var rightHandle = RectF()
 
     private var paintHandle: Paint = Paint()
-    private val paintBackGround = Paint().apply { color = Color.WHITE }
+    private val paintBackGround = Paint().apply { color = Color.TRANSPARENT }
     private var paintMainRect: Paint = Paint().apply {
         style = Paint.Style.STROKE
         strokeWidth = rectStrokeWidth
@@ -178,7 +178,7 @@ class FocusedRangeFrame : MeasuredView {
         return mainFrame.contains(event.x, event.y)
     }
 
-    public fun getFocusedRange() {
+    fun getFocusedRange() {
         listeners.forEach {
             it.onFocusedRangeChanged(
                     ((mainFrame.left / width) * 100).toInt(),

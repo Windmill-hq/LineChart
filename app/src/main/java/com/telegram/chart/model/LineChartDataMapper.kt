@@ -3,6 +3,7 @@ package com.telegram.chart.model
 import com.contest.chart.model.BrokenLine
 import com.contest.chart.model.LineChartData
 import io.reactivex.functions.Function
+import java.lang.IllegalArgumentException
 
 class LineChartDataMapper : Function<List<Data>, List<LineChartData>> {
     override fun apply(dataList: List<Data>): List<LineChartData> {
@@ -31,6 +32,8 @@ class LineChartDataMapper : Function<List<Data>, List<LineChartData>> {
 
             chartData.add(lineChart)
         }
+
+        if (chartData.isEmpty()) throw IllegalArgumentException("Data is Empty")
 
         return chartData
     }
