@@ -24,18 +24,16 @@ class MainActivity : AppCompatActivity(), FocusWindow.Listener {
         dataProvider = DataProvider()
 
         dataProvider.getData(this)
-            .subscribeOn(Schedulers.io())
-            .map(LineChartDataMapper())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                chart.setData(it)
-                Toast.makeText(this, "Data Loaded", Toast.LENGTH_LONG).show()
-            }, {
-                Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
-            }).addTo(disposables)
+                .subscribeOn(Schedulers.io())
+                .map(LineChartDataMapper())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ chart.setData(it) },
+                        {
+                            Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                        }).addTo(disposables)
     }
 
-    override fun onFocusWindowSizeChanged(left: Int, right: Int) {
+    override fun onFocusedRangeChanged(left: Int, right: Int) {
         leftText.text = getString(R.string.left_edge, left.toInt())
         rightText.text = getString(R.string.right_edge, right.toInt())
     }

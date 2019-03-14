@@ -131,7 +131,7 @@ class FocusWindow(private val frameColor: Int) {
 
     public fun callback() {
         listeners.forEach {
-            it.onFocusWindowSizeChanged(
+            it.onFocusedRangeChanged(
                 ((mainRect.left / parentWidth) * 100).toInt(),
                 ((mainRect.right / parentWidth) * 100).toInt()
             )
@@ -160,6 +160,6 @@ class FocusWindow(private val frameColor: Int) {
     }
 
     interface Listener {
-        fun onFocusWindowSizeChanged(left: Int, right: Int)
+        fun onFocusedRangeChanged(left: Int, right: Int)
     }
 }

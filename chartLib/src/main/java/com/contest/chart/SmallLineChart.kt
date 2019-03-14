@@ -38,7 +38,7 @@ class SmallLineChart : FocusWindow.Listener {
         this.parentHeight = parentHeight
     }
 
-    override fun onFocusWindowSizeChanged(left: Int, right: Int) {
+    override fun onFocusedRangeChanged(left: Int, right: Int) {
         data.forEach {
             it.brokenLines.forEach { line ->
                 line.onFocusedWindowSizeChanged(left, right)

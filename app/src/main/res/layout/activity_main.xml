@@ -53,4 +53,11 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/chart" />
+
+    <com.contest.chart.view.FocusedRangeFrame
+        android:id="@+id/new_chart"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/screenText" />
 </android.support.constraint.ConstraintLayout>

@@ -15,7 +15,7 @@ class BottomControlView : View {
 
 
     private val paintBack = Paint().apply { color = Color.WHITE }
-    private lateinit var window: FocusWindow
+    private lateinit var focusedWindow: FocusWindow
     private val smallLineChart = SmallLineChart()
 
     constructor(context: Context) : super(context) {
@@ -31,13 +31,13 @@ class BottomControlView : View {
     }
 
     private fun init() {
-        window = FocusWindow(context.resources.getColor(R.color.frameColor))
+        focusedWindow = FocusWindow(context.resources.getColor(R.color.frameColor))
     }
 
     override fun onDraw(canvas: Canvas) {
         canvas.drawPaint(paintBack)
         smallLineChart.onDraw(canvas)
-        window.draw(canvas)
+        focusedWindow.draw(canvas)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -47,7 +47,7 @@ class BottomControlView : View {
         val w = measureDimension(desiredWidth, widthMeasureSpec)
         val h = measureDimension(desiredHeight, heightMeasureSpec)
         setMeasuredDimension(w, h)
-        window.setParentSize(w, h)
+        focusedWindow.setParentSize(w, h)
         smallLineChart.setParentSize(w, h)
     }
 
@@ -56,15 +56,15 @@ class BottomControlView : View {
         val action: Int = MotionEventCompat.getActionMasked(event)
         val handled = when (action) {
             MotionEvent.ACTION_DOWN -> {
-                window.onBeforeMove(event)
+                focusedWindow.onBeforeMove(event)
                 true
             }
             MotionEvent.ACTION_MOVE -> {
-                window.onMove(event)
+                focusedWindow.onMove(event)
                 true
             }
             MotionEvent.ACTION_UP -> {
-                window.onFinishMove()
+                focusedWindow.onFinishMove()
                 true
             }
             else -> super.onTouchEvent(event)
@@ -91,13 +91,13 @@ class BottomControlView : View {
 
 
     fun addListener(listener: FocusWindow.Listener) {
-        window.addListener(listener)
-        window.addListener(smallLineChart)
+        focusedWindow.addListener(listener)
+        focusedWindow.addListener(smallLineChart)
     }
 
     fun setData(data: List<LineChartData>) {
         smallLineChart.init(data)
-        window.callback()
+        focusedWindow.callback()
         invalidate()
     }
 }
