@@ -12,6 +12,7 @@ import com.contest.chart.base.FocusedRangeFrame
 class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
 
     lateinit var bottomChart: TimeBasedLineChart
+    lateinit var upperChart: TimeBasedLineChartUpper
     lateinit var focusedRangeFrame: FocusedRangeFrame
     lateinit var namesCheckBoxLayout: LinearLayout
     private var nightMode = false
@@ -31,17 +32,16 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
     private fun init() {
         val view = LayoutInflater.from(context).inflate(R.layout.time_line_widget, this, true)
         bottomChart = view.findViewById<TimeBasedLineChart>(R.id.bottom_chart)
+        upperChart = view.findViewById<TimeBasedLineChartUpper>(R.id.upper_chart)
         focusedRangeFrame = view.findViewById<FocusedRangeFrame>(R.id.focus_frame)
         namesCheckBoxLayout = view.findViewById<LinearLayout>(R.id.checkbox_layout)
         focusedRangeFrame.addListener(bottomChart)
-    }
-
-    fun addListener(listener: FocusedRangeFrame.Listener) {
-        focusedRangeFrame.addListener(listener)
+        focusedRangeFrame.addListener(upperChart)
     }
 
     fun setData(dataList: List<LineChartData>) {
         bottomChart.setData(dataList)
+        upperChart.setData(dataList)
         focusedRangeFrame.getFocusedRange()
         setNames(dataList)
     }
@@ -56,6 +56,7 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
     override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
         val name = buttonView.text.toString()
         bottomChart.onLineStateChanged(name, isChecked)
+        upperChart.onLineStateChanged(name, isChecked)
     }
 
 
@@ -70,5 +71,6 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
     fun switchDayMode() {
         nightMode = !nightMode
         bottomChart.switchDayNightMode(nightMode)
+        upperChart.switchDayNightMode(nightMode)
     }
 }

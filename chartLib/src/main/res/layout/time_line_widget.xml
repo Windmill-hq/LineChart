@@ -4,11 +4,18 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <com.contest.chart.TimeBasedLineChartUpper
+        android:id="@+id/upper_chart"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical" />
+
     <FrameLayout
         android:id="@+id/bottom_widget"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_chart_height"
-        android:layout_alignParentTop="true">
+        android:layout_below="@+id/upper_chart">
 
         <com.contest.chart.TimeBasedLineChart
             android:id="@+id/bottom_chart"
