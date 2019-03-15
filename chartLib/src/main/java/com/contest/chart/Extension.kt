@@ -1,9 +1,11 @@
 package com.contest.chart
 
+import android.graphics.Color
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import java.lang.StringBuilder
 
 
 fun FrameLayout.createCheckBox(name: String, listener: CompoundButton.OnCheckedChangeListener): CheckBox {
@@ -20,3 +22,10 @@ fun createLayoutParams(): LinearLayout.LayoutParams {
     params.setMargins(12, 12, 12, 6)
     return params
 }
+
+
+fun String.transparentOn(transparency: String): Int {
+    val pale = StringBuilder(this).insert(1, transparency).toString()
+    return Color.parseColor(pale)
+}
+
