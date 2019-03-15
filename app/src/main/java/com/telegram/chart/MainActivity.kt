@@ -30,8 +30,7 @@ class MainActivity : AppCompatActivity(), FocusedRangeFrame.Listener {
                 .map(LineChartDataMapper())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    //todo show only first chart
-                    val first = arrayListOf(it[0])
+                    val first = arrayListOf(it[0])//todo show only first chart
                     timeLineChart.setData(first)
                 },
                         {

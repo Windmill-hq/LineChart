@@ -7,7 +7,7 @@ import android.view.View
 abstract class MeasuredView : View {
 
     private var totalWidth = 0
-    private var totalHight = 0
+    private var totalHeight = 0
 
     constructor(context: Context) : super(context)
 
@@ -23,7 +23,7 @@ abstract class MeasuredView : View {
         val h = measureDimension(desiredHeight, heightMeasureSpec)
         setMeasuredDimension(w, h)
         totalWidth = w
-        totalHight = h
+        totalHeight = h
         onMeasured(w, h)
     }
 

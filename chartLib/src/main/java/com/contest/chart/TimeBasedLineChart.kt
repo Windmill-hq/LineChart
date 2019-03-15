@@ -2,14 +2,12 @@ package com.contest.chart
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import android.util.AttributeSet
 import com.contest.chart.model.LineChartData
+import com.contest.chart.view.BaseThemedChart
 import com.contest.chart.view.FocusedRangeFrame
-import com.contest.chart.view.MeasuredView
 
-class TimeBasedLineChart : MeasuredView, FocusedRangeFrame.Listener {
+class TimeBasedLineChart : BaseThemedChart, FocusedRangeFrame.Listener {
 
     constructor(context: Context) : super(context)
 
@@ -21,7 +19,6 @@ class TimeBasedLineChart : MeasuredView, FocusedRangeFrame.Listener {
     private var isInited = false
     private var viewWidth = 0
     private var viewHeight = 0
-    private val paintBackGround = Paint().apply { color = Color.WHITE }
 
     override fun onMeasured(width: Int, height: Int) {
         this.viewWidth = width
@@ -29,8 +26,8 @@ class TimeBasedLineChart : MeasuredView, FocusedRangeFrame.Listener {
     }
 
     override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
         if (!isInited) return
-        canvas.drawPaint(paintBackGround)
 
         chartData.forEach {
             it.brokenLines.forEach { line ->
@@ -70,13 +67,6 @@ class TimeBasedLineChart : MeasuredView, FocusedRangeFrame.Listener {
             }
             it.setScale()
         }
-        invalidate()
-    }
-
-    fun switchNightMode(nightMode: Boolean) {
-        val night = context.resources.getColor(R.color.backGroundDark)
-        val day = context.resources.getColor(R.color.backGround)
-        paintBackGround.color = if (nightMode) night else day
-        invalidate()
+        invalidate() // todo do not call it here
     }
 }

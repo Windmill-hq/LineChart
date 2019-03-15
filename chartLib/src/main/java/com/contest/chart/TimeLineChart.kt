@@ -3,7 +3,6 @@ package com.contest.chart
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.*
 import com.contest.chart.model.LineChartData
 import com.contest.chart.view.FocusedRangeFrame
@@ -62,28 +61,13 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
         val names = mutableListOf<String>()
         dataList.forEach {
             it.brokenLines.forEach { line -> names.add(line.name) }
-
         }
         return names
     }
 
     fun switchDayMode() {
         nightMode = !nightMode
-        chart.switchNightMode(nightMode)
+        chart.switchDayNightMode(nightMode) //todo  create base chart class and exted measured view, put there func with mode
+        // call other chat to switch mode
     }
-}
-
-private fun FrameLayout.createCheckBox(name: String, listener: CompoundButton.OnCheckedChangeListener): CheckBox {
-    val checkBox = CheckBox(context)
-    checkBox.text = name
-    checkBox.isChecked = true
-    checkBox.setOnCheckedChangeListener(listener)
-    return checkBox
-}
-
-
-private fun createLayoutParams(): LinearLayout.LayoutParams {
-    val params = LinearLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
-    params.setMargins(12, 12, 12, 6)
-    return params
 }
