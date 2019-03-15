@@ -42,7 +42,6 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
     fun setData(dataList: List<LineChartData>) {
         chart.setData(dataList)
         focusedRangeFrame.getFocusedRange()
-
         setNames(dataList)
     }
 

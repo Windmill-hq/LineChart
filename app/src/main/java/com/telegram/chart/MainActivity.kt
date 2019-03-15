@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import com.contest.chart.view.FocusWindow
 import com.contest.chart.view.FocusedRangeFrame
 import com.telegram.chart.model.DataProvider
 import com.telegram.chart.model.LineChartDataMapper

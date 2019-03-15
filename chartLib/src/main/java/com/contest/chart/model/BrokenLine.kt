@@ -3,11 +3,13 @@ package com.contest.chart.model
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import com.contest.chart.Constants
+import java.lang.StringBuilder
 
 class BrokenLine(val points: FloatArray, val name: String, private val color: String) {
     var isEnabled = true
     private var conditionalY: Int = 0
-    private var unFocusedColor = Color.parseColor("#A0A0A0")
+    private var unFocusedColor = color.transparentOn(Constants.TRANSPARENCY)
     private val focusedColor = Color.parseColor(color)
     private val paint = Paint().apply {
         style = Paint.Style.FILL
@@ -63,7 +65,7 @@ class BrokenLine(val points: FloatArray, val name: String, private val color: St
 
 }
 
-private fun String.transparentOn(transparensy: String): Int {
-    val pale = this.substringBefore("#") + transparensy + this.substringAfter("#")
+private fun String.transparentOn(transparency: String): Int {
+    val pale = StringBuilder(this).insert(1, transparency).toString()
     return Color.parseColor(pale)
 }
