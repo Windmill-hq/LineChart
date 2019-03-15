@@ -28,7 +28,7 @@ class LineChartData {
         }
     }
 
-    fun setCanvasSize(viewWidth: Int, viewHeight: Int) {
+    fun setSize(viewWidth: Int, viewHeight: Int) {
         this.width = viewWidth
         this.height = viewHeight
         setScale()

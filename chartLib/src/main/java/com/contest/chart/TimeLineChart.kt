@@ -9,7 +9,7 @@ import com.contest.chart.view.FocusedRangeFrame
 
 class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
 
-    lateinit var chart: TimeBasedLineChart
+    lateinit var bottomChart: TimeBasedLineChart
     lateinit var focusedRangeFrame: FocusedRangeFrame
     lateinit var namesCheckBoxLayout: LinearLayout
     private var nightMode = false
@@ -27,11 +27,11 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
     }
 
     private fun init() {
-        val view = LayoutInflater.from(context).inflate(R.layout.bottom_widget, this, true)
-        chart = view.findViewById<TimeBasedLineChart>(R.id.chart)
+        val view = LayoutInflater.from(context).inflate(R.layout.time_line_widget, this, true)
+        bottomChart = view.findViewById<TimeBasedLineChart>(R.id.bottom_chart)
         focusedRangeFrame = view.findViewById<FocusedRangeFrame>(R.id.focus_frame)
         namesCheckBoxLayout = view.findViewById<LinearLayout>(R.id.checkbox_layout)
-        focusedRangeFrame.addListener(chart)
+        focusedRangeFrame.addListener(bottomChart)
     }
 
     fun addListener(listener: FocusedRangeFrame.Listener) {
@@ -39,7 +39,7 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
     }
 
     fun setData(dataList: List<LineChartData>) {
-        chart.setData(dataList)
+        bottomChart.setData(dataList)
         focusedRangeFrame.getFocusedRange()
         setNames(dataList)
     }
@@ -53,7 +53,7 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
 
     override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
         val name = buttonView.text.toString()
-        chart.onLineStateChanged(name, isChecked)
+        bottomChart.onLineStateChanged(name, isChecked)
     }
 
 
@@ -67,7 +67,7 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
 
     fun switchDayMode() {
         nightMode = !nightMode
-        chart.switchDayNightMode(nightMode) //todo  create base chart class and exted measured view, put there func with mode
+        bottomChart.switchDayNightMode(nightMode)
         // call other chat to switch mode
     }
 }
