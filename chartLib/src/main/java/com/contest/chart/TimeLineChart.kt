@@ -5,7 +5,9 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.*
 import com.contest.chart.model.LineChartData
-import com.contest.chart.view.FocusedRangeFrame
+import com.contest.chart.utils.createCheckBox
+import com.contest.chart.utils.createLayoutParams
+import com.contest.chart.base.FocusedRangeFrame
 
 class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
 
@@ -68,6 +70,5 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
     fun switchDayMode() {
         nightMode = !nightMode
         bottomChart.switchDayNightMode(nightMode)
-        // call other chat to switch mode
     }
 }

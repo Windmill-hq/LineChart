@@ -1,4 +1,4 @@
-package com.contest.chart.view
+package com.contest.chart.base
 
 import android.content.Context
 import android.util.AttributeSet

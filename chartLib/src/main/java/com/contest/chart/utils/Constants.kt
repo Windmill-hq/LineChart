@@ -1,4 +1,4 @@
-package com.contest.chart
+package com.contest.chart.utils
 
 class Constants {
     companion object {

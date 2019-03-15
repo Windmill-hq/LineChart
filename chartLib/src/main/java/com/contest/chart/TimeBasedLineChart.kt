@@ -4,8 +4,8 @@ import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import com.contest.chart.model.LineChartData
-import com.contest.chart.view.BaseThemedChart
-import com.contest.chart.view.FocusedRangeFrame
+import com.contest.chart.base.BaseThemedChart
+import com.contest.chart.base.FocusedRangeFrame
 
 open class TimeBasedLineChart : BaseThemedChart, FocusedRangeFrame.Listener, Refresher {
 

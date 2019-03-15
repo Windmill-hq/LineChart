@@ -1,4 +1,4 @@
-package com.contest.chart
+package com.contest.chart.utils
 
 import android.graphics.Color
 import android.widget.CheckBox

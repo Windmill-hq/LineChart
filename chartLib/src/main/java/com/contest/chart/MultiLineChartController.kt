@@ -5,6 +5,8 @@ import android.graphics.Color
 import android.graphics.Paint
 import com.contest.chart.model.BrokenLine
 import com.contest.chart.model.LineChartData
+import com.contest.chart.utils.Constants
+import com.contest.chart.utils.transparentOn
 
 class MultiLineChartController(
         private val chartData: LineChartData,
