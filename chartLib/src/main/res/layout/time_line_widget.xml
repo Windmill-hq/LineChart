@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <com.contest.chart.upper.UpperLineChart
+    <com.contest.chart.upper.UpperChart
         android:id="@+id/upper_chart"
         android:layout_width="match_parent"
         android:layout_height="220dp"

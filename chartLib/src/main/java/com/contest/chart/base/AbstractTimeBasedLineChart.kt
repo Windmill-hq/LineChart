@@ -14,8 +14,8 @@ abstract class AbstractTimeBasedLineChart<CC : AbstractChartController<*>> : Bas
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     private var isInited = false
-    private var viewWidth = 0
-    private var viewHeight = 0
+    protected var viewWidth = 0
+    protected var viewHeight = 0
     private val chartControllers = ArrayList<CC>()
 
     override fun onMeasured(width: Int, height: Int) {
@@ -31,12 +31,12 @@ abstract class AbstractTimeBasedLineChart<CC : AbstractChartController<*>> : Bas
 
     fun setData(dataList: List<LineChartData>) {
         dataList.forEach {
-            chartControllers.add(onCreateController(it, viewWidth, viewHeight, this))
+            chartControllers.add(onCreateController(it))
         }
         isInited = true
     }
 
-    abstract fun onCreateController(data: LineChartData, viewWidth: Int, viewHeight: Int, refresher: Refresher): CC
+    abstract fun onCreateController(data: LineChartData): CC
 
     override fun onFocusedRangeChanged(left: Int, right: Int) {
         if (!isInited) return

@@ -1,11 +1,11 @@
-package com.contest.chart.bottom
+package com.contest.chart.upper
 
 import android.content.Context
 import android.util.AttributeSet
 import com.contest.chart.base.AbstractTimeBasedLineChart
 import com.contest.chart.model.LineChartData
 
-class BottomChart : AbstractTimeBasedLineChart<BottomChartController> {
+class UpperChart : AbstractTimeBasedLineChart<UpperChartController> {
 
     constructor(context: Context) : super(context)
 
@@ -13,7 +13,8 @@ class BottomChart : AbstractTimeBasedLineChart<BottomChartController> {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    override fun onCreateController(data: LineChartData): BottomChartController {
-        return BottomChartController(data, viewWidth, viewHeight, this)
+    override fun onCreateController(data: LineChartData): UpperChartController {
+        return UpperChartController(data, viewWidth, viewHeight, this)
     }
+
 }

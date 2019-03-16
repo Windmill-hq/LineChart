@@ -3,18 +3,20 @@ package com.contest.chart
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.*
-import com.contest.chart.model.LineChartData
-import com.contest.chart.utils.createCheckBox
-import com.contest.chart.utils.createLayoutParams
+import android.widget.CompoundButton
+import android.widget.FrameLayout
+import android.widget.LinearLayout
 import com.contest.chart.base.FocusedRangeFrame
 import com.contest.chart.bottom.BottomChart
-import com.contest.chart.upper.UpperLineChart
+import com.contest.chart.model.LineChartData
+import com.contest.chart.upper.UpperChart
+import com.contest.chart.utils.createCheckBox
+import com.contest.chart.utils.createLayoutParams
 
 class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
 
     lateinit var bottomChart: BottomChart
-    lateinit var upperChart: UpperLineChart
+    lateinit var upperChart: UpperChart
     lateinit var focusedRangeFrame: FocusedRangeFrame
     lateinit var namesCheckBoxLayout: LinearLayout
     private var nightMode = false
@@ -34,9 +36,9 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
     private fun init() {
         val view = LayoutInflater.from(context).inflate(R.layout.time_line_widget, this, true)
         bottomChart = view.findViewById(R.id.bottom_chart)
-        upperChart = view.findViewById<UpperLineChart>(R.id.upper_chart)
-        focusedRangeFrame = view.findViewById<FocusedRangeFrame>(R.id.focus_frame)
-        namesCheckBoxLayout = view.findViewById<LinearLayout>(R.id.checkbox_layout)
+        upperChart = view.findViewById(R.id.upper_chart)
+        focusedRangeFrame = view.findViewById(R.id.focus_frame)
+        namesCheckBoxLayout = view.findViewById(R.id.checkbox_layout)
         focusedRangeFrame.addListener(bottomChart)
         focusedRangeFrame.addListener(upperChart)
     }

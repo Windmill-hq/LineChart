@@ -20,7 +20,7 @@ class MultiLineChartController(
 
     init {
         chartData.brokenLines.forEach {
-            lineControllers.add(LinePainter(it, height, this))
+            lineControllers.add(LinePainter(it, height))
         }
         calculateScale()
     }
