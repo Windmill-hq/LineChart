@@ -5,7 +5,7 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import com.contest.chart.model.LineChartData
 
-abstract class AbstractTimeBasedLineChart<CC : AbstractChartController<*>> : ThemedMeasuredView, FocusedRangeFrame.Listener, Refresher {
+abstract class AbstractTimeBasedLineChart<CC : AbstractChartController<*>> : MeasuredView, FocusedRangeFrame.Listener, Refresher {
 
     constructor(context: Context) : super(context)
 
@@ -24,7 +24,6 @@ abstract class AbstractTimeBasedLineChart<CC : AbstractChartController<*>> : The
     }
 
     override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
         if (!isInited) return
         chartControllers.forEach { it.draw(canvas) }
     }
@@ -49,5 +48,8 @@ abstract class AbstractTimeBasedLineChart<CC : AbstractChartController<*>> : The
 
     override fun refresh() {
         invalidate()
+    }
+
+    override fun switchDayNightMode(nightMode: Boolean) {
     }
 }

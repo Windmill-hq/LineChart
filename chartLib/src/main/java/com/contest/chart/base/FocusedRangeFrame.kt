@@ -10,7 +10,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import com.contest.chart.R
 
-class FocusedRangeFrame : ThemedMeasuredView {
+class FocusedRangeFrame : MeasuredView {
 
     private val left = 25f
     private val top = 2f

@@ -3,8 +3,17 @@
     <color name="frameColor">#6D527AA5</color>
     <color name="frameColorDark">#6D6890B3</color>
     <color name="backGroundDark">#274257</color>
+    <color name="detailsBackgroundDark">#1D303E</color>
     <color name="backGround">#FFFFFF</color>
     <color name="separator">#6DE1E1E1</color>
     <color name="shadow">#0D274257</color>
     <color name="shadowNight">#41527AA5</color>
+    <color name="detailsLineColor">#287B7E81</color>
+    <color name="detailsLineColorNight">#611A1D21</color>
+
+    <drawable name="backGroundDarkDawable">#274257</drawable>
+
+    <color name="blue">#03A9F4</color>
+
+
 </resources>

@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import com.contest.chart.base.FocusedRangeFrame
 import com.contest.chart.bottom.BottomChart
 import com.contest.chart.model.LineChartData
+import com.contest.chart.upper.DetailsView
 import com.contest.chart.upper.UpperChart
 import com.contest.chart.utils.createCheckBox
 import com.contest.chart.utils.createLayoutParams
@@ -19,6 +20,8 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
     lateinit var upperChart: UpperChart
     lateinit var focusedRangeFrame: FocusedRangeFrame
     lateinit var namesCheckBoxLayout: LinearLayout
+    lateinit var detailsView: DetailsView
+    lateinit var container: LinearLayout
     private var nightMode = false
 
     constructor(context: Context) : super(context) {
@@ -39,6 +42,9 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
         upperChart = view.findViewById(R.id.upper_chart)
         focusedRangeFrame = view.findViewById(R.id.focus_frame)
         namesCheckBoxLayout = view.findViewById(R.id.checkbox_layout)
+        detailsView = view.findViewById(R.id.details_view)
+        container = view.findViewById(R.id.container)
+
         focusedRangeFrame.addListener(bottomChart)
         focusedRangeFrame.addListener(upperChart)
     }
@@ -74,8 +80,12 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
 
     fun switchDayMode() {
         nightMode = !nightMode
-        bottomChart.switchDayNightMode(nightMode)
-        upperChart.switchDayNightMode(nightMode)
+        val day = context.resources.getColor(R.color.backGround)
+        val night = context.resources.getColor(R.color.backGroundDark)
+        val color = if (nightMode) night else day
+        container.setBackgroundColor(color)
+
         focusedRangeFrame.switchDayNightMode(nightMode)
+        detailsView.switchDayNightMode(nightMode)
     }
 }

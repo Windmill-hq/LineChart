@@ -1,21 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/backGround"
     android:orientation="vertical">
 
-    <com.contest.chart.upper.UpperChart
-        android:id="@+id/upper_chart"
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="6dp"
+        android:text="@string/title"
+        android:textColor="@color/blue"
+        android:textSize="26sp" />
+
+    <FrameLayout
+        android:id="@+id/upper_widget"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:layout_alignParentTop="true"
-        android:orientation="vertical" />
+        android:layout_height="@dimen/upper_chart_height">
+
+        <com.contest.chart.upper.UpperChart
+            android:id="@+id/upper_chart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.contest.chart.upper.DetailsView
+            android:id="@+id/details_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/bottom_widget"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/bottom_chart_height"
-        android:layout_below="@+id/upper_chart">
+        android:layout_height="@dimen/bottom_chart_height">
 
         <com.contest.chart.bottom.BottomChart
             android:id="@+id/bottom_chart"
@@ -33,7 +53,6 @@
         android:id="@+id/checkbox_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/bottom_widget"
         android:orientation="vertical" />
 
-</RelativeLayout>
+</LinearLayout>
