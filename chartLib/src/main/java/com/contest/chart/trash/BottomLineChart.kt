@@ -1,4 +1,4 @@
-package com.contest.chart.bottom
+package com.contest.chart.trash
 
 import android.content.Context
 import android.graphics.Canvas

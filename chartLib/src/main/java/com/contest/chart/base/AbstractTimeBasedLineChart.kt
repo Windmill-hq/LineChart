@@ -4,9 +4,8 @@ import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import com.contest.chart.model.LineChartData
-import com.contest.chart.refactor.ChartController
 
-abstract class AbstractTimeBasedLineChart<CC : ChartController> : BaseThemedChart, FocusedRangeFrame.Listener, Refresher {
+abstract class AbstractTimeBasedLineChart<CC : AbstractChartController<*>> : BaseThemedChart, FocusedRangeFrame.Listener, Refresher {
 
     constructor(context: Context) : super(context)
 
@@ -14,10 +13,10 @@ abstract class AbstractTimeBasedLineChart<CC : ChartController> : BaseThemedChar
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    protected var isInited = false
-    protected var viewWidth = 0
-    protected var viewHeight = 0
-    protected val chartControllers = ArrayList<CC>()
+    private var isInited = false
+    private var viewWidth = 0
+    private var viewHeight = 0
+    private val chartControllers = ArrayList<CC>()
 
     override fun onMeasured(width: Int, height: Int) {
         this.viewWidth = width
@@ -30,7 +29,14 @@ abstract class AbstractTimeBasedLineChart<CC : ChartController> : BaseThemedChar
         chartControllers.forEach { it.draw(canvas) }
     }
 
-    abstract fun setData(dataList: List<LineChartData>)
+    fun setData(dataList: List<LineChartData>) {
+        dataList.forEach {
+            chartControllers.add(onCreateController(it, viewWidth, viewHeight, this))
+        }
+        isInited = true
+    }
+
+    abstract fun onCreateController(data: LineChartData, viewWidth: Int, viewHeight: Int, refresher: Refresher): CC
 
     override fun onFocusedRangeChanged(left: Int, right: Int) {
         if (!isInited) return

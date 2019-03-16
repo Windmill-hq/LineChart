@@ -1,9 +1,8 @@
-package com.contest.chart.bottom
+package com.contest.chart.base
 
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import com.contest.chart.base.Focus
 import com.contest.chart.model.BrokenLine
 import com.contest.chart.utils.Constants
 import com.contest.chart.utils.transparentOn

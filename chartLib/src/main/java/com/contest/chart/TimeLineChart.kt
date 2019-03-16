@@ -8,12 +8,12 @@ import com.contest.chart.model.LineChartData
 import com.contest.chart.utils.createCheckBox
 import com.contest.chart.utils.createLayoutParams
 import com.contest.chart.base.FocusedRangeFrame
-import com.contest.chart.refactor.BottomLineChart
+import com.contest.chart.refactor.BottomChart
 import com.contest.chart.upper.UpperLineChart
 
 class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
 
-    lateinit var bottomChart: BottomLineChart
+    lateinit var bottomChart: BottomChart
     lateinit var upperChart: UpperLineChart
     lateinit var focusedRangeFrame: FocusedRangeFrame
     lateinit var namesCheckBoxLayout: LinearLayout

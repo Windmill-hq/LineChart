@@ -3,9 +3,10 @@ package com.contest.chart.refactor
 import android.content.Context
 import android.util.AttributeSet
 import com.contest.chart.base.AbstractTimeBasedLineChart
+import com.contest.chart.base.Refresher
 import com.contest.chart.model.LineChartData
 
-class BottomLineChart : AbstractTimeBasedLineChart<ChartController> {
+class BottomChart : AbstractTimeBasedLineChart<BottomChartController> {
 
     constructor(context: Context) : super(context)
 
@@ -13,10 +14,7 @@ class BottomLineChart : AbstractTimeBasedLineChart<ChartController> {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    override fun setData(dataList: List<LineChartData>) {
-        dataList.forEach {
-            chartControllers.add(ChartController(it, viewWidth, viewHeight, this))
-        }
-        isInited = true
+    override fun onCreateController(data: LineChartData, viewWidth: Int, viewHeight: Int, refresher: Refresher): BottomChartController {
+        return BottomChartController(data, viewWidth, viewHeight, refresher)
     }
 }

@@ -1,29 +1,29 @@
-package com.contest.chart.refactor
+package com.contest.chart.base
 
 import android.graphics.Canvas
-import com.contest.chart.bottom.LinePainter
-import com.contest.chart.base.Focus
-import com.contest.chart.base.Refresher
+import com.contest.chart.model.BrokenLine
 import com.contest.chart.model.LineChartData
 import com.contest.chart.utils.Constants
 
-open class ChartController(
+abstract class AbstractChartController<LP : LinePainter>(
         private val chartData: LineChartData,
         private val width: Int,
         private val height: Int,
         private val refresher: Refresher) : Focus {
 
-    private val lineControllers = ArrayList<LinePainter>()
+    private val lineControllers = ArrayList<LP>()
     private var xScale = 0f
     private var yScale = 0f
     private var focusRange = 0..100
 
     init {
         chartData.brokenLines.forEach {
-            lineControllers.add(LinePainter(it, height, this))
+            lineControllers.add(onCreateLinePainter(it, height, this))
         }
         calculateScale()
     }
+
+    abstract fun onCreateLinePainter(line: BrokenLine, height: Int, focus: Focus): LP
 
     fun draw(canvas: Canvas) {
         lineControllers.forEach {

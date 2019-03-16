@@ -1,7 +1,8 @@
-package com.contest.chart.bottom
+package com.contest.chart.trash
 
 import android.graphics.Canvas
 import com.contest.chart.base.Focus
+import com.contest.chart.base.LinePainter
 import com.contest.chart.base.Refresher
 import com.contest.chart.model.LineChartData
 import com.contest.chart.utils.Constants
