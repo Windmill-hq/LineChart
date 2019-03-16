@@ -9,7 +9,7 @@ import com.contest.chart.utils.transparentOn
 
 open class LinePainter(val line: BrokenLine,
                        private val conditionalY: Int,
-                       private val focus: Focus) {
+                       private val focus: Focus) : BaseLinePainter {
 
     private var unFocusedColor = line.color.transparentOn(Constants.TRANSPARENCY)
     private val focusedColor = Color.parseColor(line.color)
@@ -19,7 +19,7 @@ open class LinePainter(val line: BrokenLine,
         strokeWidth = 3f
     }
 
-    fun draw(canvas: Canvas, xScale: Float, yScale: Float) {
+    override fun draw(canvas: Canvas, xScale: Float, yScale: Float) {
         if (!line.isEnabled) return
 
         val size = line.points.size - 1
@@ -37,6 +37,10 @@ open class LinePainter(val line: BrokenLine,
 
             canvas.drawLine(x1, y1, x2, y2, paint)
         }
+    }
+
+    override fun getPoints(): FloatArray {
+        return line.points
     }
 
     private fun detectColor(index: Int): Int {

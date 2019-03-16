@@ -3,9 +3,9 @@ package com.contest.chart.upper
 import android.graphics.Canvas
 import com.contest.chart.base.Focus
 import com.contest.chart.base.Refresher
-import com.contest.chart.model.BrokenLine
 import com.contest.chart.model.LineChartData
 import com.contest.chart.utils.Constants
+import com.contest.chart.utils.getSampledPoints
 
 class MultiLineChartControllerUpper(
         private val chartData: LineChartData,
@@ -36,7 +36,7 @@ class MultiLineChartControllerUpper(
         val sizes = mutableListOf<Int>()
         chartData.brokenLines.forEach {
             if (it.isEnabled) {
-                sizes.add(it.getSampledPoints().size)
+                sizes.add(it.getSampledPoints(focusRange).size)
             }
         }
 
@@ -47,7 +47,7 @@ class MultiLineChartControllerUpper(
         val maxValues = mutableListOf<Float>()
         chartData.brokenLines.forEach {
             if (it.isEnabled) {
-                maxValues.add(it.getSampledPoints().max()!!)
+                maxValues.add(it.getSampledPoints(focusRange).max()!!)
             }
         }
 
@@ -55,6 +55,7 @@ class MultiLineChartControllerUpper(
             yScale = (height - Constants.SPARE_SPACE_Y) / maxValues.max()!!
         }
     }
+
 
     fun onFocusedRangeChanged(left: Int, right: Int) {
         lineControllers.get(0)?.let {
@@ -78,11 +79,6 @@ class MultiLineChartControllerUpper(
 
     override fun isFocused(pos: Int): Boolean {
         return pos in focusRange
-    }
-
-
-    private fun BrokenLine.getSampledPoints(): FloatArray {
-        return this.points.copyOfRange(focusRange.first, focusRange.last)
     }
 }
 

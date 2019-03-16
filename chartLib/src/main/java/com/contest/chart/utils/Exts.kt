@@ -5,6 +5,7 @@ import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import com.contest.chart.model.BrokenLine
 import java.lang.StringBuilder
 
 
@@ -27,5 +28,9 @@ fun createLayoutParams(): LinearLayout.LayoutParams {
 fun String.transparentOn(transparency: String): Int {
     val pale = StringBuilder(this).insert(1, transparency).toString()
     return Color.parseColor(pale)
+}
+
+fun BrokenLine.getSampledPoints(focusRange: IntRange): FloatArray {
+    return this.points.copyOfRange(focusRange.first, focusRange.last)
 }
 

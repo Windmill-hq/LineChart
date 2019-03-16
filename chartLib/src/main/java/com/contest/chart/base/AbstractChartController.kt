@@ -5,7 +5,7 @@ import com.contest.chart.model.BrokenLine
 import com.contest.chart.model.LineChartData
 import com.contest.chart.utils.Constants
 
-abstract class AbstractChartController<LP : LinePainter>(
+abstract class AbstractChartController<LP : BaseLinePainter>(
         private val chartData: LineChartData,
         private val width: Int,
         private val height: Int,
@@ -54,7 +54,7 @@ abstract class AbstractChartController<LP : LinePainter>(
 
     fun onFocusedRangeChanged(left: Int, right: Int) {
         lineControllers.get(0)?.let {
-            val size = it.line.points.size
+            val size = it.getPoints().size
             val focusLeft = size * left / 100
             val focusRight = size * right / 100
             focusRange = focusLeft..focusRight
