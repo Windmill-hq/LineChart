@@ -8,11 +8,13 @@ import com.contest.chart.model.LineChartData
 import com.contest.chart.utils.createCheckBox
 import com.contest.chart.utils.createLayoutParams
 import com.contest.chart.base.FocusedRangeFrame
+import com.contest.chart.refactor.BottomLineChart
+import com.contest.chart.upper.UpperLineChart
 
 class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
 
-    lateinit var bottomChart: TimeBasedLineChart
-    lateinit var upperChart: TimeBasedLineChartUpper
+    lateinit var bottomChart: BottomLineChart
+    lateinit var upperChart: UpperLineChart
     lateinit var focusedRangeFrame: FocusedRangeFrame
     lateinit var namesCheckBoxLayout: LinearLayout
     private var nightMode = false
@@ -31,8 +33,8 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
 
     private fun init() {
         val view = LayoutInflater.from(context).inflate(R.layout.time_line_widget, this, true)
-        bottomChart = view.findViewById<TimeBasedLineChart>(R.id.bottom_chart)
-        upperChart = view.findViewById<TimeBasedLineChartUpper>(R.id.upper_chart)
+        bottomChart = view.findViewById(R.id.bottom_chart)
+        upperChart = view.findViewById<UpperLineChart>(R.id.upper_chart)
         focusedRangeFrame = view.findViewById<FocusedRangeFrame>(R.id.focus_frame)
         namesCheckBoxLayout = view.findViewById<LinearLayout>(R.id.checkbox_layout)
         focusedRangeFrame.addListener(bottomChart)

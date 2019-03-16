@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <com.contest.chart.TimeBasedLineChartUpper
+    <com.contest.chart.upper.UpperLineChart
         android:id="@+id/upper_chart"
         android:layout_width="match_parent"
         android:layout_height="220dp"
@@ -17,7 +17,7 @@
         android:layout_height="@dimen/bottom_chart_height"
         android:layout_below="@+id/upper_chart">
 
-        <com.contest.chart.TimeBasedLineChart
+        <com.contest.chart.refactor.BottomLineChart
             android:id="@+id/bottom_chart"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

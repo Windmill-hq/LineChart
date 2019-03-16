@@ -1,4 +1,4 @@
-package com.contest.chart
+package com.contest.chart.upper
 
 import android.content.Context
 import android.graphics.Canvas
@@ -6,8 +6,9 @@ import android.util.AttributeSet
 import com.contest.chart.model.LineChartData
 import com.contest.chart.base.BaseThemedChart
 import com.contest.chart.base.FocusedRangeFrame
+import com.contest.chart.base.Refresher
 
-open class TimeBasedLineChart : BaseThemedChart, FocusedRangeFrame.Listener, Refresher {
+open class UpperLineChart : BaseThemedChart, FocusedRangeFrame.Listener, Refresher {
 
     constructor(context: Context) : super(context)
 
@@ -18,7 +19,7 @@ open class TimeBasedLineChart : BaseThemedChart, FocusedRangeFrame.Listener, Ref
     private var isInited = false
     private var viewWidth = 0
     private var viewHeight = 0
-    private val chartControllers = ArrayList<MultiLineChartController>()
+    private val chartControllers = ArrayList<MultiLineChartControllerUpper>()
 
     override fun onMeasured(width: Int, height: Int) {
         this.viewWidth = width
@@ -33,7 +34,7 @@ open class TimeBasedLineChart : BaseThemedChart, FocusedRangeFrame.Listener, Ref
 
     fun setData(dataList: List<LineChartData>) {
         dataList.forEach {
-            chartControllers.add(MultiLineChartController(it, viewWidth, viewHeight, this))
+            chartControllers.add(MultiLineChartControllerUpper(it, viewWidth, viewHeight, this))
         }
         isInited = true
     }
@@ -41,7 +42,6 @@ open class TimeBasedLineChart : BaseThemedChart, FocusedRangeFrame.Listener, Ref
     override fun onFocusedRangeChanged(left: Int, right: Int) {
         if (!isInited) return
         chartControllers.forEach { it.onFocusedRangeChanged(left, right) }
-        refresh()
     }
 
     fun onLineStateChanged(name: String, isEnabled: Boolean) {
@@ -51,8 +51,4 @@ open class TimeBasedLineChart : BaseThemedChart, FocusedRangeFrame.Listener, Ref
     override fun refresh() {
         invalidate()
     }
-}
-
-interface Refresher {
-    fun refresh()
 }

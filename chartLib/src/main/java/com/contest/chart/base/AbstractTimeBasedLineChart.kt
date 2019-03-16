@@ -1,13 +1,12 @@
-package com.contest.chart
+package com.contest.chart.base
 
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import com.contest.chart.model.LineChartData
-import com.contest.chart.base.BaseThemedChart
-import com.contest.chart.base.FocusedRangeFrame
+import com.contest.chart.refactor.ChartController
 
-open class TimeBasedLineChartUpper : BaseThemedChart, FocusedRangeFrame.Listener, Refresher {
+abstract class AbstractTimeBasedLineChart<CC : ChartController> : BaseThemedChart, FocusedRangeFrame.Listener, Refresher {
 
     constructor(context: Context) : super(context)
 
@@ -15,10 +14,10 @@ open class TimeBasedLineChartUpper : BaseThemedChart, FocusedRangeFrame.Listener
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    private var isInited = false
-    private var viewWidth = 0
-    private var viewHeight = 0
-    private val chartControllers = ArrayList<MultiLineChartControllerUpper>()
+    protected var isInited = false
+    protected var viewWidth = 0
+    protected var viewHeight = 0
+    protected val chartControllers = ArrayList<CC>()
 
     override fun onMeasured(width: Int, height: Int) {
         this.viewWidth = width
@@ -31,12 +30,7 @@ open class TimeBasedLineChartUpper : BaseThemedChart, FocusedRangeFrame.Listener
         chartControllers.forEach { it.draw(canvas) }
     }
 
-    fun setData(dataList: List<LineChartData>) {
-        dataList.forEach {
-            chartControllers.add(MultiLineChartControllerUpper(it, viewWidth, viewHeight, this))
-        }
-        isInited = true
-    }
+    abstract fun setData(dataList: List<LineChartData>)
 
     override fun onFocusedRangeChanged(left: Int, right: Int) {
         if (!isInited) return
