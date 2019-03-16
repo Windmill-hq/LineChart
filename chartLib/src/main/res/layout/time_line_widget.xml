@@ -17,7 +17,7 @@
         android:layout_height="@dimen/bottom_chart_height"
         android:layout_below="@+id/upper_chart">
 
-        <com.contest.chart.refactor.BottomChart
+        <com.contest.chart.bottom.BottomChart
             android:id="@+id/bottom_chart"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

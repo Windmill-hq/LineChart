@@ -1,4 +1,4 @@
-package com.contest.chart.refactor
+package com.contest.chart.bottom
 
 import android.content.Context
 import android.util.AttributeSet

@@ -8,7 +8,7 @@ import com.contest.chart.model.LineChartData
 import com.contest.chart.utils.createCheckBox
 import com.contest.chart.utils.createLayoutParams
 import com.contest.chart.base.FocusedRangeFrame
-import com.contest.chart.refactor.BottomChart
+import com.contest.chart.bottom.BottomChart
 import com.contest.chart.upper.UpperLineChart
 
 class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {

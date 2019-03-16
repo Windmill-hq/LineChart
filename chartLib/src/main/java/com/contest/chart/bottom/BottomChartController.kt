@@ -1,4 +1,4 @@
-package com.contest.chart.refactor
+package com.contest.chart.bottom
 
 import com.contest.chart.base.AbstractChartController
 import com.contest.chart.base.Focus
