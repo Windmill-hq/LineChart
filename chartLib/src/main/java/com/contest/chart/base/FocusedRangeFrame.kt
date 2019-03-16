@@ -10,7 +10,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import com.contest.chart.R
 
-class FocusedRangeFrame : MeasuredView {
+class FocusedRangeFrame : ThemedMeasuredView {
 
     private val left = 25f
     private val top = 2f
@@ -28,12 +28,15 @@ class FocusedRangeFrame : MeasuredView {
     private var mainFrame = RectF()
     private var leftHandle = RectF()
     private var rightHandle = RectF()
+    private var rightShadow = RectF()
+    private var leftShadow = RectF()
 
     private var paintHandle: Paint = Paint()
     private var paintMainRect: Paint = Paint().apply {
         style = Paint.Style.STROKE
         strokeWidth = rectStrokeWidth
     }
+    private val shadowPaint = Paint()
     private var listeners = ArrayList<Listener>()
     private var partToDraw = Part.UNKNOWN
 
@@ -53,6 +56,7 @@ class FocusedRangeFrame : MeasuredView {
         val frameColor = context.resources.getColor(R.color.frameColor)
         paintMainRect.color = frameColor
         paintHandle.color = frameColor
+        shadowPaint.color = context.resources.getColor(R.color.shadow)
     }
 
     override fun onMeasured(width: Int, height: Int) {
@@ -68,6 +72,7 @@ class FocusedRangeFrame : MeasuredView {
         val rightHandleLeft = mainFrame.right + halfStroke
         val rightHandleRight = rightHandleLeft + handleWidth
         rightHandle.set(rightHandleLeft, 0f, rightHandleRight, viewHeight.toFloat())
+        updateShadows()
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -75,6 +80,8 @@ class FocusedRangeFrame : MeasuredView {
             drawRect(mainFrame, paintMainRect)
             drawRect(leftHandle, paintHandle)
             drawRect(rightHandle, paintHandle)
+            drawRect(leftShadow, shadowPaint)
+            drawRect(rightShadow, shadowPaint)
         }
     }
 
@@ -115,6 +122,7 @@ class FocusedRangeFrame : MeasuredView {
             val newLeft = event.x
             rightHandle.offsetTo(newLeft, rightHandle.top)
             mainFrame.set(mainFrame.left, mainFrame.top, rightHandle.left - halfStroke, mainFrame.bottom)
+            updateShadows()
         }
     }
 
@@ -133,7 +141,13 @@ class FocusedRangeFrame : MeasuredView {
             val newLeft = event.x
             leftHandle.offsetTo(newLeft, leftHandle.top)
             mainFrame.set(leftHandle.right + halfStroke, mainFrame.top, mainFrame.right, mainFrame.bottom)
+            updateShadows()
         }
+    }
+
+    private fun updateShadows() {
+        leftShadow.set(0f, 0f, leftHandle.left, viewHeight.toFloat())
+        rightShadow.set(rightHandle.right, 0f, viewWidth.toFloat(), viewHeight.toFloat())
     }
 
     private fun moveTogether(event: MotionEvent) {
@@ -143,6 +157,7 @@ class FocusedRangeFrame : MeasuredView {
             mainFrame.offsetTo(newLeft, newTop)
             leftHandle.offsetTo(mainFrame.left - halfStroke - handleWidth, newTop - top)
             rightHandle.offsetTo(mainFrame.right + halfStroke, newTop - top)
+            updateShadows()
         }
     }
 
@@ -203,6 +218,13 @@ class FocusedRangeFrame : MeasuredView {
 
     enum class Part {
         LEFT, RIGHT, CENTER, UNKNOWN
+    }
+
+    override fun switchDayNightMode(nightMode: Boolean) {
+        val night = context.resources.getColor(R.color.shadowNight)
+        val day = context.resources.getColor(R.color.shadow)
+        shadowPaint.color = if (nightMode) night else day
+        invalidate()
     }
 
     interface Listener {

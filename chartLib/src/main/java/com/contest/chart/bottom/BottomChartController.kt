@@ -10,7 +10,7 @@ class BottomChartController(chartData: LineChartData, width: Int, height: Int, r
     : AbstractChartController<LinePainter>(chartData, width, height, refresher) {
 
     override fun onCreateLinePainter(line: BrokenLine, conditionalY: Int): LinePainter {
-        return LinePainter(line, conditionalY)
+        return LinePainter(line, conditionalY, this)
     }
 
     override fun getFocusedPoints(line: BrokenLine): FloatArray {

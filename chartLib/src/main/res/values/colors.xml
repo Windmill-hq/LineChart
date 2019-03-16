@@ -5,4 +5,6 @@
     <color name="backGroundDark">#274257</color>
     <color name="backGround">#FFFFFF</color>
     <color name="separator">#6DE1E1E1</color>
+    <color name="shadow">#0D274257</color>
+    <color name="shadowNight">#41527AA5</color>
 </resources>

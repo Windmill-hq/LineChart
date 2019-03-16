@@ -5,7 +5,7 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import com.contest.chart.model.LineChartData
 
-abstract class AbstractTimeBasedLineChart<CC : AbstractChartController<*>> : BaseThemedChart, FocusedRangeFrame.Listener, Refresher {
+abstract class AbstractTimeBasedLineChart<CC : AbstractChartController<*>> : ThemedMeasuredView, FocusedRangeFrame.Listener, Refresher {
 
     constructor(context: Context) : super(context)
 

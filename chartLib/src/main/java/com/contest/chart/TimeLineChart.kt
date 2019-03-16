@@ -76,5 +76,6 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
         nightMode = !nightMode
         bottomChart.switchDayNightMode(nightMode)
         upperChart.switchDayNightMode(nightMode)
+        focusedRangeFrame.switchDayNightMode(nightMode)
     }
 }
