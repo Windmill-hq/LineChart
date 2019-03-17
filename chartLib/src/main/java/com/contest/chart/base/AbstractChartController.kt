@@ -14,7 +14,7 @@ abstract class AbstractChartController<LC : BaseLinePainter>(
     private val lineControllers = ArrayList<LC>()
     var xStep = 0f
     var yStep = 0f
-    protected var focusRange = 0..100
+    protected var focusRange = 0..1
 
     init {
         chartData.brokenLines.forEach {

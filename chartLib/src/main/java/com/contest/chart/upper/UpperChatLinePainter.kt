@@ -32,7 +32,7 @@ class UpperChatLinePainter(
         }
     }
 
-    fun offsetChanged(newOfset: Int) {
-        positionOffset = newOfset
+    fun offsetChanged(newOffset: Int) {
+        positionOffset = newOffset
     }
 }

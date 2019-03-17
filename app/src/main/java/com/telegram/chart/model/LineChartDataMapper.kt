@@ -17,15 +17,15 @@ class LineChartDataMapper : Function<List<Data>, List<LineChartData>> {
 
             mutableColumns.forEach { list ->
                 val mutableColumn = list.toMutableList()
-                val name = mutableColumn[0].toString()
+                val id = mutableColumn[0].toString()
                 mutableColumn.removeAt(0)
 
-                if (name == "x") {
+                if (id == "x") {
                     lineChart.timeLine = mutableColumn.toLongArr()
                 } else {
                     val points = mutableColumn.toFloatArr()
-                    val colorCode = data.colors[name]
-                    val line = BrokenLine(points, name, colorCode!!)
+                    val colorCode = data.colors[id]
+                    val line = BrokenLine(points, data.names.getValue(id), colorCode!!)
                     lineChart.brokenLines.add(line)
                 }
             }

@@ -87,8 +87,7 @@ class FocusedRangeFrame : MeasuredView {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        val action: Int = MotionEventCompat.getActionMasked(event)
-        val handled = when (action) {
+        val handled = when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 onBeforeMove(event)
                 true
