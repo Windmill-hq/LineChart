@@ -1,8 +1,8 @@
 package com.contest.chart
 
-import com.contest.chart.model.ChartDetail
+import com.contest.chart.model.InterceptionInfo
 
 interface DataProvider {
-    fun requestData(x: Float, y: Float): List<ChartDetail>
-    fun setStepProvider(stepProvider: StepProvider)
+    fun getInterceptions(x: Float, offset: Int): List<InterceptionInfo>
+    fun setChartDetailsProvider(chartDetailsProvider: ChartDetailsProvider)
 }

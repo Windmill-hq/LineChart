@@ -46,8 +46,9 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
         namesLayout = view.findViewById(R.id.checkbox_layout)
 
         detailsView = view.findViewById(R.id.details_view)
+        upperChart.setListener(detailsView)
         detailsView.setDataProvider(dataController)
-        dataController.setStepProvider(upperChart)
+        dataController.setChartDetailsProvider(upperChart)
 
         focusedRangeFrame.addListener(bottomChart)
         focusedRangeFrame.addListener(upperChart)

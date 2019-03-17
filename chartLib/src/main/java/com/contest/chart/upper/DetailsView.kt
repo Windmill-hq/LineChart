@@ -1,16 +1,16 @@
 package com.contest.chart.upper
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.RectF
+import android.content.res.Resources
+import android.graphics.*
 import android.util.AttributeSet
-import android.view.MotionEvent
+import com.contest.chart.DataProvider
 import com.contest.chart.R
+import com.contest.chart.base.FocusedRangeFrame
 import com.contest.chart.base.MeasuredView
+import com.contest.chart.model.InterceptionInfo
 
-class DetailsView : MeasuredView {
+class DetailsView : MeasuredView, FocusedRangeFrame.Listener, UpperChart.UserClickListener {
 
     private val linePaint = Paint().apply {
         color = resources.getColor(R.color.detailsLineColor)
@@ -55,6 +55,10 @@ class DetailsView : MeasuredView {
     private var secondLabel = "Left"
     private var inited = false
 
+    private lateinit var dataProvider: DataProvider
+    private val interceptorPrinter = InterceptorPrinter()
+
+
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
@@ -62,7 +66,7 @@ class DetailsView : MeasuredView {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     override fun onDraw(canvas: Canvas) {
-        canvas.drawLine(positionX, 20f, positionX, viewHeight.toFloat(), linePaint)
+        canvas.drawLine(positionX, rectBottom, positionX, viewHeight.toFloat(), linePaint)
         drawDetails(canvas)
     }
 
@@ -71,6 +75,7 @@ class DetailsView : MeasuredView {
         canvas.drawRoundRect(detailsRect, radius, radius, rectPaintFill)
         if (!nightMode) canvas.drawRoundRect(detailsRect, radius, radius, rectPaintStroke)
         drawData(canvas)
+        interceptorPrinter.drawInterceptions(canvas)
     }
 
     private fun drawData(canvas: Canvas) {
@@ -104,17 +109,25 @@ class DetailsView : MeasuredView {
         return textPaint.apply { color = black }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        return when (event.action) {
-            MotionEvent.ACTION_DOWN,
-            MotionEvent.ACTION_MOVE,
-            MotionEvent.ACTION_UP -> {
-                moveTo(event.x)
-                true
-            }
-            else -> super.onTouchEvent(event)
-        }
+//    @SuppressLint("ClickableViewAccessibility")
+//    override fun onTouchEvent(event: MotionEvent): Boolean {
+//        return when (event.action) {
+////            MotionEvent.ACTION_DOWN,
+////            MotionEvent.ACTION_MOVE,
+//            MotionEvent.ACTION_DOWN -> {
+//                moveTo(event.x, event.y)
+//                true
+//            }
+//            else -> super.onTouchEvent(event)
+//        }
+//    }
+
+    private var lastX = 0f
+
+    override fun onClick(x: Float, offset: Int) {
+        moveTo(x)
+        requestData(x, offset)
+        invalidate()
     }
 
     private fun moveTo(x: Float) {
@@ -122,9 +135,17 @@ class DetailsView : MeasuredView {
         positionX = x
         if (isBlockInView(x)) {
             val left = positionX - xOffset
-            detailsRect.set(left, rectTop, left + rectWidth, rectBottom)
+            val right = left + rectWidth
+            detailsRect.set(left, rectTop, right, rectBottom)
         }
-        invalidate()
+        lastX = x
+    }
+
+    private var positionOffset = 0
+    private fun requestData(x: Float, offset: Int) {
+        positionOffset = offset
+        val interceptions = dataProvider.getInterceptions(x, positionOffset)
+        interceptorPrinter.setData(interceptions)
     }
 
     private fun isBlockInView(x: Float): Boolean {
@@ -134,6 +155,7 @@ class DetailsView : MeasuredView {
     override fun onMeasured(width: Int, height: Int) {
         this.viewWidth = width
         this.viewHeight = height
+        interceptorPrinter.conditionalY = height
     }
 
     override fun switchDayNightMode(nightMode: Boolean) {
@@ -145,6 +167,54 @@ class DetailsView : MeasuredView {
         val nightDetail = context.resources.getColor(R.color.detailsBackgroundDark)
         val dayDetail = context.resources.getColor(R.color.backGround)
         rectPaintFill.color = if (nightMode) nightDetail else dayDetail
+        interceptorPrinter.switchDayNightMode(nightMode, context.resources)
         invalidate()
     }
+
+    fun setDataProvider(provider: DataProvider) {
+        dataProvider = provider
+    }
+
+    override fun onFocusedRangeChanged(left: Int, right: Int) {
+        requestData(lastX, positionOffset)
+    }
 }
+
+class InterceptorPrinter {
+    var conditionalY = 0
+    private val paint = Paint().apply {
+        style = Paint.Style.STROKE
+        strokeWidth = 5f
+    }
+
+    private val paintFilled = Paint().apply {
+        style = Paint.Style.FILL
+        color = Color.WHITE
+    }
+
+    private val data = ArrayList<InterceptionInfo>()
+    fun setData(data: List<InterceptionInfo>) {
+        this.data.clear()
+        this.data.addAll(data)
+    }
+
+    fun drawInterceptions(canvas: Canvas) {
+        data.forEach {
+            it.details.forEach { interception ->
+                paint.color = Color.parseColor(interception.color)
+                val center = interception.point
+                canvas.drawCircle(center.x, center.y, 10f, paintFilled)
+                canvas.drawCircle(center.x, center.y, 10f, paint)
+            }
+        }
+    }
+
+
+    fun switchDayNightMode(nightMode: Boolean, resources: Resources) {
+        val night = resources.getColor(R.color.backGroundDark)
+        val day = resources.getColor(R.color.backGround)
+        val color = if (nightMode) night else day
+        paintFilled.color = color
+    }
+}
+
