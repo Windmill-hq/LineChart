@@ -29,18 +29,31 @@ class DetailsView : MeasuredView {
         style = Paint.Style.FILL
     }
 
+    private val textPaint = Paint().apply {
+        style = Paint.Style.FILL
+    }
+    private val green = resources.getColor(R.color.green)
+    private val red = resources.getColor(R.color.red)
+    private val black = resources.getColor(R.color.black)
+
+    private val detailsRect = RectF()
+
     private var rectTop = 5f
     private var rectWidth = 200f
     private var rectBottom = 155f
     private val radius = 10f
-
-    private val detailsRect = RectF()
-
     private var positionX = 0f
     private var viewWidth = 0
     private var viewHeight = 0
-
+    private val xOffset = 50
     private var nightMode = false
+
+    private var dateLabel = "Sat, May 4"
+    private var firstValue = 127
+    private var firstLabel = "Joined"
+    private var secondValue = 69
+    private var secondLabel = "Left"
+    private var inited = false
 
     constructor(context: Context) : super(context)
 
@@ -54,8 +67,41 @@ class DetailsView : MeasuredView {
     }
 
     private fun drawDetails(canvas: Canvas) {
+        if (!inited) return
         canvas.drawRoundRect(detailsRect, radius, radius, rectPaintFill)
         if (!nightMode) canvas.drawRoundRect(detailsRect, radius, radius, rectPaintStroke)
+        drawData(canvas)
+    }
+
+    private fun drawData(canvas: Canvas) {
+        var x = detailsRect.left + 35
+        var y = detailsRect.top + 35
+        canvas.drawText(dateLabel, x, y, blackPaint())
+
+        y += 50
+        canvas.drawText(firstValue.toString(), x, y, greenPaint())
+        y += 20
+        canvas.drawText(firstLabel, x, y, greenPaint())
+
+        x = detailsRect.left + 100
+        y = detailsRect.top + 85
+        canvas.drawText(secondValue.toString(), x, y, redPaint())
+
+        y += 20
+        canvas.drawText(secondLabel, x, y, redPaint())
+
+    }
+
+    private fun redPaint(): Paint {
+        return textPaint.apply { color = red }
+    }
+
+    private fun greenPaint(): Paint {
+        return textPaint.apply { color = green }
+    }
+
+    private fun blackPaint(): Paint {
+        return textPaint.apply { color = black }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -72,10 +118,17 @@ class DetailsView : MeasuredView {
     }
 
     private fun moveTo(x: Float) {
+        inited = true
         positionX = x
-        val left = positionX - 50
-        detailsRect.set(left, rectTop, left + rectWidth, rectBottom)
+        if (isBlockInView(x)) {
+            val left = positionX - xOffset
+            detailsRect.set(left, rectTop, left + rectWidth, rectBottom)
+        }
         invalidate()
+    }
+
+    private fun isBlockInView(x: Float): Boolean {
+        return x > xOffset && x + rectWidth - xOffset < viewWidth
     }
 
     override fun onMeasured(width: Int, height: Int) {
