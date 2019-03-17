@@ -15,7 +15,7 @@ class UpperChartController(
     : AbstractChartController<UpperChatLinePainter>(chartData, width, height, refresher) {
 
     override fun onCreateLinePainter(line: BrokenLine, conditionalY: Int): UpperChatLinePainter {
-        return UpperChatLinePainter(line, conditionalY, this, Constants.UPPER_CHART_LINE_THIKNESS)
+        return UpperChatLinePainter(line, conditionalY, this, Constants.UPPER_CHART_LINE_THICKNESS)
     }
 
     override fun getFocusedPoints(line: BrokenLine): FloatArray {
