@@ -19,10 +19,11 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
     lateinit var bottomChart: BottomChart
     lateinit var upperChart: UpperChart
     lateinit var focusedRangeFrame: FocusedRangeFrame
-    lateinit var namesCheckBoxLayout: LinearLayout
+    lateinit var namesLayout: LinearLayout
     lateinit var detailsView: DetailsView
     lateinit var container: LinearLayout
     private var nightMode = false
+    private val dataController = DataController()
 
     constructor(context: Context) : super(context) {
         init()
@@ -38,18 +39,23 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
 
     private fun init() {
         val view = LayoutInflater.from(context).inflate(R.layout.time_line_widget, this, true)
-        bottomChart = view.findViewById(R.id.bottom_chart)
-        upperChart = view.findViewById(R.id.upper_chart)
-        focusedRangeFrame = view.findViewById(R.id.focus_frame)
-        namesCheckBoxLayout = view.findViewById(R.id.checkbox_layout)
-        detailsView = view.findViewById(R.id.details_view)
         container = view.findViewById(R.id.container)
+        upperChart = view.findViewById(R.id.upper_chart)
+        bottomChart = view.findViewById(R.id.bottom_chart)
+        focusedRangeFrame = view.findViewById(R.id.focus_frame)
+        namesLayout = view.findViewById(R.id.checkbox_layout)
+
+        detailsView = view.findViewById(R.id.details_view)
+        detailsView.setDataProvider(dataController)
+        dataController.setStepProvider(upperChart)
 
         focusedRangeFrame.addListener(bottomChart)
         focusedRangeFrame.addListener(upperChart)
+        focusedRangeFrame.addListener(detailsView)
     }
 
     fun setData(dataList: List<LineChartData>) {
+        dataController.setData(dataList)
         bottomChart.setData(dataList)
         upperChart.setData(dataList)
         focusedRangeFrame.getFocusedRange()
@@ -59,7 +65,7 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
     private fun setNames(dataList: List<LineChartData>) {
         val names = getNames(dataList)
         names.forEach {
-            namesCheckBoxLayout.addView(createCheckBox(it, this), createLayoutParams())
+            namesLayout.addView(createCheckBox(it, this), createLayoutParams())
         }
     }
 

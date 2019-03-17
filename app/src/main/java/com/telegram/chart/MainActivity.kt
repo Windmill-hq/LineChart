@@ -28,12 +28,10 @@ class MainActivity : AppCompatActivity() {
                 .map(LineChartDataMapper())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    val first = arrayListOf(it[0])//todo show only first chart
-                    timeLineChart.setData(first)
-                },
-                        {
-                            Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
-                        }).addTo(disposables)
+                    timeLineChart.setData(arrayListOf(it.first()))
+                }, {
+                    Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                }).addTo(disposables)
     }
 
     override fun onDestroy() {

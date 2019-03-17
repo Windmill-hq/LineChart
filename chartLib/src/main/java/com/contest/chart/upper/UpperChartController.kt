@@ -4,6 +4,7 @@ import com.contest.chart.base.AbstractChartController
 import com.contest.chart.base.Refresher
 import com.contest.chart.model.BrokenLine
 import com.contest.chart.model.LineChartData
+import com.contest.chart.utils.Constants
 import com.contest.chart.utils.getSampledPoints
 
 class UpperChartController(
@@ -14,7 +15,7 @@ class UpperChartController(
     : AbstractChartController<UpperChatLinePainter>(chartData, width, height, refresher) {
 
     override fun onCreateLinePainter(line: BrokenLine, conditionalY: Int): UpperChatLinePainter {
-        return UpperChatLinePainter(line, conditionalY, this)
+        return UpperChatLinePainter(line, conditionalY, this, Constants.UPPER_CHART_LINE_THIKNESS)
     }
 
     override fun getFocusedPoints(line: BrokenLine): FloatArray {

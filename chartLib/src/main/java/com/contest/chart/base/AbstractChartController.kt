@@ -12,8 +12,8 @@ abstract class AbstractChartController<LC : BaseLinePainter>(
         private val refresher: Refresher) : Focus {
 
     private val lineControllers = ArrayList<LC>()
-    private var xScale = 0f
-    private var yScale = 0f
+    var xStep = 0f
+    var yStep = 0f
     protected var focusRange = 0..100
 
     init {
@@ -23,11 +23,15 @@ abstract class AbstractChartController<LC : BaseLinePainter>(
         calculateScale()
     }
 
+    fun getId(): Int {
+        return chartData.id
+    }
+
     abstract fun onCreateLinePainter(line: BrokenLine, conditionalY: Int): LC
 
     fun draw(canvas: Canvas) {
         lineControllers.forEach {
-            it.draw(canvas, xScale, yScale)
+            it.draw(canvas, xStep, yStep)
         }
     }
 
@@ -38,7 +42,7 @@ abstract class AbstractChartController<LC : BaseLinePainter>(
         }
 
         if (sizes.isNotEmpty()) {
-            xScale = (width - Constants.SPARE_SPACE_X) / sizes.max()!!.toFloat()
+            xStep = (width - Constants.SPARE_SPACE_X) / sizes.max()!!.toFloat()
         }
 
         val maxValues = mutableListOf<Float>()
@@ -47,7 +51,7 @@ abstract class AbstractChartController<LC : BaseLinePainter>(
         }
 
         if (maxValues.isNotEmpty()) {
-            yScale = (height - Constants.SPARE_SPACE_Y) / maxValues.max()!!
+            yStep = (height - Constants.SPARE_SPACE_Y) / maxValues.max()!!
         }
     }
 
@@ -76,6 +80,10 @@ abstract class AbstractChartController<LC : BaseLinePainter>(
 
     override fun isFocused(pos: Int): Boolean {
         return pos in focusRange
+    }
+
+    override fun getFocusedRange(): IntRange {
+        return focusRange
     }
 
     fun getControllers(): List<LC> {

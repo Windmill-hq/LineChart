@@ -2,10 +2,10 @@ package com.contest.chart.bottom
 
 import android.content.Context
 import android.util.AttributeSet
-import com.contest.chart.base.AbstractTimeBasedLineChart
+import com.contest.chart.base.AbstractLineChart
 import com.contest.chart.model.LineChartData
 
-class BottomChart : AbstractTimeBasedLineChart<BottomChartController> {
+class BottomChart : AbstractLineChart<BottomChartController> {
 
     constructor(context: Context) : super(context)
 

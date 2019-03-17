@@ -4,12 +4,12 @@ import android.graphics.Color
 import android.graphics.Paint
 import com.contest.chart.model.BrokenLine
 
-abstract class BaseLinePainter(val line: BrokenLine) : AbstractLinePainter {
+abstract class BaseLinePainter(val line: BrokenLine, thickness: Float) : AbstractLinePainter {
 
     protected val paint = Paint().apply {
         style = Paint.Style.FILL
         style = Paint.Style.STROKE
-        strokeWidth = 3f
+        strokeWidth = thickness
         color = Color.parseColor(line.color)
     }
 

@@ -9,11 +9,11 @@ class LineChartDataMapper : Function<List<Data>, List<LineChartData>> {
     override fun apply(dataList: List<Data>): List<LineChartData> {
         val chartData = ArrayList<LineChartData>()
 
-        dataList.forEach { data ->
+        dataList.forEachIndexed { index, data ->
 
             val mutableColumns = data.columns.toMutableList()
 
-            val lineChart = LineChartData()
+            val lineChart = LineChartData(index)
 
             mutableColumns.forEach { list ->
                 val mutableColumn = list.toMutableList()
