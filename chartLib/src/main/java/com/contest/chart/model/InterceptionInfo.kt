@@ -5,6 +5,7 @@ import android.graphics.PointF
 class InterceptionInfo(val id: Int) {
 
     val details = ArrayList<Data>()
+    var dateLabel = 1L
 
     class Data {
         var name: String = ""

@@ -10,8 +10,6 @@ import com.contest.chart.model.LineChartData
 
 class UpperChart : AbstractLineChart<UpperChartController>, ChartDetailsProvider {
 
-    private lateinit var listener: UserClickListener
-
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
@@ -32,24 +30,8 @@ class UpperChart : AbstractLineChart<UpperChartController>, ChartDetailsProvider
         return xStepMap
     }
 
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        return when (event.action) {
-            MotionEvent.ACTION_UP,
-            MotionEvent.ACTION_MOVE,
-            MotionEvent.ACTION_DOWN -> {
-                listener.onClick(event.x, getControllers().get(0).getFocusedRange().first)
-                true
-            }
-            else -> super.onTouchEvent(event)
-        }
-    }
-
-    fun setListener(listener: UserClickListener) {
-        this.listener = listener
-    }
-
-    interface UserClickListener {
-        fun onClick(x: Float, offset: Int)
+    override fun getPositionOffset(): Int {
+        return getControllers()[0].getFocusedRange().first
     }
 
     override fun getTotalHeight(): Int {

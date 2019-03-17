@@ -8,11 +8,13 @@ class DataController : DataProvider {
     private lateinit var chartList: List<LineChartData>
     private lateinit var detailsProvider: ChartDetailsProvider
 
-    override fun getInterceptions(x: Float, offset: Int): List<InterceptionInfo> {
+    override fun getInterceptions(x: Float): List<InterceptionInfo> {
         if (x == 0f) return emptyList()
 
         val interceptionsList = ArrayList<InterceptionInfo>()
 
+        val positionOffset = detailsProvider.getPositionOffset()
+        val height = detailsProvider.getTotalHeight()
         val xScalesMap = detailsProvider.getStepMap()
 
         val firstChartSteps = xScalesMap.getValue(0)
@@ -25,7 +27,7 @@ class DataController : DataProvider {
                 val data = InterceptionInfo.Data()
                 data.name = it.name
                 data.color = it.color
-                data.point = findInterceptionPoint(it.points, x, firstChartSteps.xStep, firstChartSteps.yStep, offset)
+                data.point = findInterceptionPoint(it.points, x, firstChartSteps, positionOffset, height)
                 data.yStep = firstChartSteps.yStep
                 info.details.add(data)
             }
@@ -45,23 +47,25 @@ class DataController : DataProvider {
     @yStep - y Step used in chart
     @offset - points count  skipped in the view
      */
-    private fun findInterceptionPoint(points: FloatArray, x: Float, xStep: Float, yStep: Float, offset: Int): PointF {
+    private fun findInterceptionPoint(points: FloatArray, x: Float, step: Step, positionOffset: Int, height: Int): PointF {
         // x position is calculated by multiplying position (in array) on x yStep
         // x Step depends on how many point are needed to be drawn
-        val approxPosInArray = (((offset * xStep) + x) / xStep).toInt()
+        val xStep = step.xStep
+        val yStep = step.yStep
+        val approxPosInArray = (((positionOffset * xStep) + x) / xStep).toInt()
 
         //  first point of chart line is defined
-        val startPointX = (approxPosInArray - offset) * xStep
-        val startPointY = detailsProvider.getTotalHeight() - points[approxPosInArray] * yStep
+        val startPointX = (approxPosInArray - positionOffset) * xStep
+        val startPointY = height - points[approxPosInArray] * yStep
 
         // second point of chart line is defined
-        val stopPointX = (approxPosInArray + 1 - offset) * xStep
-        val stopPointY = detailsProvider.getTotalHeight() - points[approxPosInArray + 1] * yStep
+        val stopPointX = (approxPosInArray + 1 - positionOffset) * xStep
+        val stopPointY = height - points[approxPosInArray + 1] * yStep
 
         // coords of conditional ray
         val xRay = x
 
-        // lets imagine right triangle where chart line is hypotenuse
+        // lets imagine right triangle where chart line is hypotenuse, and define all legs
         val minX = Math.min(startPointX, stopPointX)
         val maxX = Math.max(startPointX, stopPointX)
         val horizontalLeg = maxX - minX
@@ -75,13 +79,15 @@ class DataController : DataProvider {
 
         //the ray that is parallel to Y axis (and goes on x coord) will intercept this triangle
         // lets imagine that ray cuts out a little right triangle from the big one
-        // we know length of horizontal little leg  and the second leg will be needed Y coord of interception point
+        // we know length of horizontal little leg, lets define  length of second vertical leg
+        // it'll be needed to count  Y coord of interception point
 
         val horizontalLittleLeg = xRay - minX
         val verticalLittleLeg = horizontalLittleLeg * tangentToHorizontalLeg
 
+        //depends on goes chart line up or down, add or subtract additional y value
         val interceptionY = if (startPointY < stopPointY) {
-            verticalLittleLeg + minY
+            minY + verticalLittleLeg
         } else {
             maxY - verticalLittleLeg
         }

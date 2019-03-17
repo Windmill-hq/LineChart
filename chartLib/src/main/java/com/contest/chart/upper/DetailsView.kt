@@ -1,16 +1,18 @@
 package com.contest.chart.upper
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
 import android.util.AttributeSet
+import android.view.MotionEvent
 import com.contest.chart.DataProvider
 import com.contest.chart.R
 import com.contest.chart.base.FocusedRangeFrame
 import com.contest.chart.base.MeasuredView
 import com.contest.chart.model.InterceptionInfo
 
-class DetailsView : MeasuredView, FocusedRangeFrame.Listener, UpperChart.UserClickListener {
+class DetailsView : MeasuredView, FocusedRangeFrame.Listener {
 
     private val linePaint = Paint().apply {
         color = resources.getColor(R.color.detailsLineColor)
@@ -57,6 +59,7 @@ class DetailsView : MeasuredView, FocusedRangeFrame.Listener, UpperChart.UserCli
 
     private lateinit var dataProvider: DataProvider
     private val interceptorPrinter = InterceptorPrinter()
+    private var lastX = 0f
 
 
     constructor(context: Context) : super(context)
@@ -109,24 +112,22 @@ class DetailsView : MeasuredView, FocusedRangeFrame.Listener, UpperChart.UserCli
         return textPaint.apply { color = black }
     }
 
-//    @SuppressLint("ClickableViewAccessibility")
-//    override fun onTouchEvent(event: MotionEvent): Boolean {
-//        return when (event.action) {
-////            MotionEvent.ACTION_DOWN,
-////            MotionEvent.ACTION_MOVE,
-//            MotionEvent.ACTION_DOWN -> {
-//                moveTo(event.x, event.y)
-//                true
-//            }
-//            else -> super.onTouchEvent(event)
-//        }
-//    }
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        return when (event.action) {
+            MotionEvent.ACTION_UP,
+            MotionEvent.ACTION_MOVE,
+            MotionEvent.ACTION_DOWN -> {
+                handleEvent(event.x)
+                true
+            }
+            else -> super.onTouchEvent(event)
+        }
+    }
 
-    private var lastX = 0f
-
-    override fun onClick(x: Float, offset: Int) {
+    private fun handleEvent(x: Float) {
         moveTo(x)
-        requestData(x, offset)
+        requestData(x)
         invalidate()
     }
 
@@ -141,10 +142,8 @@ class DetailsView : MeasuredView, FocusedRangeFrame.Listener, UpperChart.UserCli
         lastX = x
     }
 
-    private var positionOffset = 0
-    private fun requestData(x: Float, offset: Int) {
-        positionOffset = offset
-        val interceptions = dataProvider.getInterceptions(x, positionOffset)
+    private fun requestData(x: Float) {
+        val interceptions = dataProvider.getInterceptions(x)
         interceptorPrinter.setData(interceptions)
     }
 
@@ -176,7 +175,7 @@ class DetailsView : MeasuredView, FocusedRangeFrame.Listener, UpperChart.UserCli
     }
 
     override fun onFocusedRangeChanged(left: Int, right: Int) {
-        requestData(lastX, positionOffset)
+        requestData(lastX)
     }
 }
 
