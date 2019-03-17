@@ -9,7 +9,7 @@ import android.widget.LinearLayout
 import com.contest.chart.base.FocusedRangeFrame
 import com.contest.chart.bottom.BottomChart
 import com.contest.chart.model.LineChartData
-import com.contest.chart.upper.DetailsView
+import com.contest.chart.details.DetailsView
 import com.contest.chart.upper.UpperChart
 import com.contest.chart.utils.createCheckBox
 import com.contest.chart.utils.createLayoutParams

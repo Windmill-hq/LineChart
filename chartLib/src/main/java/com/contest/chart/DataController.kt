@@ -21,6 +21,8 @@ class DataController : DataProvider {
 
             val step = xScalesMap.getValue(chartData.id)
             val info = InterceptionInfo(chartData.id)
+            val posInArray = getStartPositionInArray(x, step, positionOffset) + 1
+            info.timeLabel = chartData.timeLine[posInArray]
 
             chartData.brokenLines.forEach {
                 if (it.isEnabled) {
@@ -29,6 +31,7 @@ class DataController : DataProvider {
                     data.color = it.color
                     data.point = findInterceptionPoint(it.points, x, step, positionOffset, height)
                     data.yStep = step.yStep
+                    data.value = it.points[posInArray] // average value
                     info.details.add(data)
                 }
             }
@@ -36,6 +39,46 @@ class DataController : DataProvider {
         }
 
         return interceptionsList
+    }
+
+    private fun interpolateValue(points: FloatArray, x: Float, step: Step, positionOffset: Int, height: Int, interPoint: PointF): Float {
+        val startPosition = getStartPositionInArray(x, step, positionOffset)
+
+        val startValue = points[startPosition]
+        val endValue = points[startPosition + 1]
+
+        val (startPoint, stopPoint) = defineStartAndStopPoints(startPosition, points, height, step, positionOffset)
+
+        val startY = startPoint.y
+        val stopY = stopPoint.y
+        val inteceptionY = interPoint.y
+
+
+        val nearStart = Math.abs(startY - inteceptionY)
+        val nearStop = Math.abs(stopY - inteceptionY)
+
+
+        return if (nearStart > nearStop) startValue else endValue
+    }
+
+    private fun getStartPositionInArray(x: Float, step: Step, positionOffset: Int): Int {
+        val xStep = step.xStep
+        return (((positionOffset * xStep) + x) / xStep).toInt()
+    }
+
+    private fun defineStartAndStopPoints(startPosition: Int, points: FloatArray, height: Int, step: Step, positionOffset: Int): Pair<PointF, PointF> {
+        //  first point of chart line is defined
+        val startPointX = (startPosition - positionOffset) * step.xStep
+        val startPointY = height - points[startPosition] * step.yStep
+
+        // second point of chart line is defined
+        val stopPointX = (startPosition + 1 - positionOffset) * step.xStep
+        val stopPointY = height - points[startPosition + 1] * step.yStep
+
+        val start = PointF(startPointX, startPointY)
+        val stop = PointF(stopPointX, stopPointY)
+
+        return Pair(start, stop)
     }
 
     /**
@@ -50,28 +93,20 @@ class DataController : DataProvider {
     private fun findInterceptionPoint(points: FloatArray, x: Float, step: Step, positionOffset: Int, height: Int): PointF {
         // x position is calculated by multiplying position (in array) on x yStep
         // x Step depends on how many point are needed to be drawn
-        val xStep = step.xStep
-        val yStep = step.yStep
-        val approxPosInArray = (((positionOffset * xStep) + x) / xStep).toInt()
+        val approxPosInArray = getStartPositionInArray(x, step, positionOffset)
 
-        //  first point of chart line is defined
-        val startPointX = (approxPosInArray - positionOffset) * xStep
-        val startPointY = height - points[approxPosInArray] * yStep
-
-        // second point of chart line is defined
-        val stopPointX = (approxPosInArray + 1 - positionOffset) * xStep
-        val stopPointY = height - points[approxPosInArray + 1] * yStep
+        val (startPoint, stopPoint) = defineStartAndStopPoints(approxPosInArray, points, height, step, positionOffset)
 
         // coords of conditional ray
         val xRay = x
 
         // lets imagine right triangle where chart line is hypotenuse, and define all legs
-        val minX = Math.min(startPointX, stopPointX)
-        val maxX = Math.max(startPointX, stopPointX)
+        val minX = Math.min(startPoint.x, stopPoint.x)
+        val maxX = Math.max(startPoint.x, stopPoint.x)
         val horizontalLeg = maxX - minX
 
-        val minY = Math.min(startPointY, stopPointY)
-        val maxY = Math.max(startPointY, stopPointY)
+        val minY = Math.min(startPoint.y, stopPoint.y)
+        val maxY = Math.max(startPoint.y, stopPoint.y)
         val verticalLeg = maxY - minY
 
         // lets count tangent from hypotenuse to horizontal leg
@@ -86,7 +121,7 @@ class DataController : DataProvider {
         val verticalLittleLeg = horizontalLittleLeg * tangentToHorizontalLeg
 
         //depends on goes chart line up or down, add or subtract additional y value
-        val interceptionY = if (startPointY < stopPointY) {
+        val interceptionY = if (startPoint.y < stopPoint.y) {
             minY + verticalLittleLeg
         } else {
             maxY - verticalLittleLeg
