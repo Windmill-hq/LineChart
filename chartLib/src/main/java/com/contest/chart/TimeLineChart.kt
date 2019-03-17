@@ -73,8 +73,8 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
         val name = buttonView.text.toString()
         bottomChart.onLineStateChanged(name, isChecked)
         upperChart.onLineStateChanged(name, isChecked)
+        detailsView.refresh()
     }
-
 
     private fun getNames(dataList: List<LineChartData>): MutableList<String> {
         val names = mutableListOf<String>()

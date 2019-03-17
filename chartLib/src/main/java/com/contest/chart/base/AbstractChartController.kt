@@ -58,12 +58,10 @@ abstract class AbstractChartController<LC : BaseLinePainter>(
     abstract fun getFocusedPoints(line: BrokenLine): FloatArray
 
     fun onFocusedRangeChanged(left: Int, right: Int) {
-        lineControllers.get(0)?.let {
-            val size = it.getPoints().size
-            val focusLeft = size * left / 100
-            val focusRight = size * right / 100
-            focusRange = focusLeft..focusRight
-        }
+        val size = lineControllers[0].getPoints().size
+        val focusLeft = size * left / 100
+        val focusRight = size * right / 100
+        focusRange = focusLeft..focusRight
         notifyFocusRangeChanged()
         refresher.refresh()
     }

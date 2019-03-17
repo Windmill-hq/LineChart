@@ -127,8 +127,7 @@ class DetailsView : MeasuredView, FocusedRangeFrame.Listener {
 
     private fun handleEvent(x: Float) {
         moveTo(x)
-        requestData(x)
-        invalidate()
+        requestInterceptionsAndInvalidate(x)
     }
 
     private fun moveTo(x: Float) {
@@ -142,9 +141,10 @@ class DetailsView : MeasuredView, FocusedRangeFrame.Listener {
         lastX = x
     }
 
-    private fun requestData(x: Float) {
+    private fun requestInterceptionsAndInvalidate(x: Float) {
         val interceptions = dataProvider.getInterceptions(x)
         interceptorPrinter.setData(interceptions)
+        invalidate()
     }
 
     private fun isBlockInView(x: Float): Boolean {
@@ -175,7 +175,11 @@ class DetailsView : MeasuredView, FocusedRangeFrame.Listener {
     }
 
     override fun onFocusedRangeChanged(left: Int, right: Int) {
-        requestData(lastX)
+        refresh()
+    }
+
+    fun refresh() {
+        requestInterceptionsAndInvalidate(lastX)
     }
 }
 

@@ -11,29 +11,29 @@ class DataController : DataProvider {
     override fun getInterceptions(x: Float): List<InterceptionInfo> {
         if (x == 0f) return emptyList()
 
-        val interceptionsList = ArrayList<InterceptionInfo>()
-
         val positionOffset = detailsProvider.getPositionOffset()
         val height = detailsProvider.getTotalHeight()
         val xScalesMap = detailsProvider.getStepMap()
 
-        val firstChartSteps = xScalesMap.getValue(0)
-        val firstChart = chartList.get(0)
+        val interceptionsList = ArrayList<InterceptionInfo>()
 
-        val info = InterceptionInfo(firstChart.id)
+        chartList.forEach { chartData ->
 
-        firstChart.brokenLines.forEach {
-            if (it.isEnabled) {
-                val data = InterceptionInfo.Data()
-                data.name = it.name
-                data.color = it.color
-                data.point = findInterceptionPoint(it.points, x, firstChartSteps, positionOffset, height)
-                data.yStep = firstChartSteps.yStep
-                info.details.add(data)
+            val step = xScalesMap.getValue(chartData.id)
+            val info = InterceptionInfo(chartData.id)
+
+            chartData.brokenLines.forEach {
+                if (it.isEnabled) {
+                    val data = InterceptionInfo.Data()
+                    data.name = it.name
+                    data.color = it.color
+                    data.point = findInterceptionPoint(it.points, x, step, positionOffset, height)
+                    data.yStep = step.yStep
+                    info.details.add(data)
+                }
             }
+            interceptionsList.add(info)
         }
-
-        interceptionsList.add(info)
 
         return interceptionsList
     }
