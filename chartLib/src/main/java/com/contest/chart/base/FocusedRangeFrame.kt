@@ -14,7 +14,7 @@ class FocusedRangeFrame : MeasuredView {
 
     private val left = 25f
     private val top = 2f
-    private val realFrameWidth = 220f
+    private val realFrameWidth = 160f
     private var viewWidth = 0
     private var viewHeight = 0
     private val handleWidth = 15

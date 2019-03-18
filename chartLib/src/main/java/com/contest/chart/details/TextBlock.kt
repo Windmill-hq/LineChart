@@ -7,7 +7,7 @@ import com.contest.chart.R
 import com.contest.chart.model.InterceptionInfo
 
 class TextBlock(resources: Resources) {
-    private val data = ArrayList<InterceptionInfo>()
+    private lateinit var interception: InterceptionInfo
 
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
@@ -54,8 +54,7 @@ class TextBlock(resources: Resources) {
         return textPaint.apply { color = black }
     }
 
-    fun setData(interceptions: List<InterceptionInfo>) {
-        this.data.clear()
-        this.data.addAll(interceptions)
+    fun setData(interception: InterceptionInfo) {
+        this.interception = interception
     }
 }

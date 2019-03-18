@@ -27,9 +27,9 @@ class DetailsView : MeasuredView, FocusedRangeFrame.Listener {
 
     override fun onDraw(canvas: Canvas) {
         if (!inited) return
+        interceptorPrinter.draw(canvas)
         detailsWindow.draw(canvas)
         textBlock.draw(canvas, detailsWindow.left, detailsWindow.top)
-        interceptorPrinter.draw(canvas)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -54,9 +54,9 @@ class DetailsView : MeasuredView, FocusedRangeFrame.Listener {
 
 
     private fun requestInterceptionsAndInvalidate(x: Float) {
-        val interceptions = dataProvider.getInterceptions(x)
-        interceptorPrinter.setData(interceptions)
-        textBlock.setData(interceptions)
+        val interception = dataProvider.getInterceptions(x)
+        interceptorPrinter.setData(interception)
+        textBlock.setData(interception)
         invalidate()
     }
 

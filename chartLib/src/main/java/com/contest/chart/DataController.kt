@@ -8,40 +8,42 @@ class DataController : DataProvider {
     private lateinit var chartList: List<LineChartData>
     private lateinit var detailsProvider: ChartDetailsProvider
 
-    override fun getInterceptions(x: Float): List<InterceptionInfo> {
-        if (x == 0f) return emptyList()
+    override fun getInterceptions(x: Float): InterceptionInfo {
+        if (x == 0f) return InterceptionInfo(-1)
 
         val positionOffset = detailsProvider.getPositionOffset()
         val height = detailsProvider.getTotalHeight()
         val xScalesMap = detailsProvider.getStepMap()
+        val chartData = chartList.first()
+        val step = xScalesMap.getValue(chartData.id)
 
-        val interceptionsList = ArrayList<InterceptionInfo>()
+        val info = InterceptionInfo(chartData.id)
+        val posInArray = getStartPositionInArray(x, step, positionOffset) + 1
+        info.timeLabel = chartData.timeLine[posInArray]
 
-        chartList.forEach { chartData ->
-
-            val step = xScalesMap.getValue(chartData.id)
-            val info = InterceptionInfo(chartData.id)
-            val posInArray = getStartPositionInArray(x, step, positionOffset) + 1
-            info.timeLabel = chartData.timeLine[posInArray]
-
-            chartData.brokenLines.forEach {
-                if (it.isEnabled) {
-                    val data = InterceptionInfo.Data()
-                    data.name = it.name
-                    data.color = it.color
-                    data.point = findInterceptionPoint(it.points, x, step, positionOffset, height)
-                    data.yStep = step.yStep
-                    data.value = it.points[posInArray] // average value
-                    info.details.add(data)
-                }
+        chartData.brokenLines.forEach {
+            if (it.isEnabled) {
+                val data = InterceptionInfo.Data()
+                data.name = it.name
+                data.color = it.color
+                data.point = findInterceptionPoint(it.points, x, step, positionOffset, height)
+                data.yStep = step.yStep
+                data.value = it.points[posInArray] // average value
+                info.details.add(data)
             }
-            interceptionsList.add(info)
         }
 
-        return interceptionsList
+        return info
     }
 
-    private fun interpolateValue(points: FloatArray, x: Float, step: Step, positionOffset: Int, height: Int, interPoint: PointF): Float {
+    private fun interpolateValue(
+        points: FloatArray,
+        x: Float,
+        step: Step,
+        positionOffset: Int,
+        height: Int,
+        interPoint: PointF
+    ): Float {
         val startPosition = getStartPositionInArray(x, step, positionOffset)
 
         val startValue = points[startPosition]
@@ -66,7 +68,13 @@ class DataController : DataProvider {
         return (((positionOffset * xStep) + x) / xStep).toInt()
     }
 
-    private fun defineStartAndStopPoints(startPosition: Int, points: FloatArray, height: Int, step: Step, positionOffset: Int): Pair<PointF, PointF> {
+    private fun defineStartAndStopPoints(
+        startPosition: Int,
+        points: FloatArray,
+        height: Int,
+        step: Step,
+        positionOffset: Int
+    ): Pair<PointF, PointF> {
         //  first point of chart line is defined
         val startPointX = (startPosition - positionOffset) * step.xStep
         val startPointY = height - points[startPosition] * step.yStep
@@ -90,7 +98,13 @@ class DataController : DataProvider {
     @yStep - y Step used in chart
     @offset - points count  skipped in the view
      */
-    private fun findInterceptionPoint(points: FloatArray, x: Float, step: Step, positionOffset: Int, height: Int): PointF {
+    private fun findInterceptionPoint(
+        points: FloatArray,
+        x: Float,
+        step: Step,
+        positionOffset: Int,
+        height: Int
+    ): PointF {
         // x position is calculated by multiplying position (in array) on x yStep
         // x Step depends on how many point are needed to be drawn
         val approxPosInArray = getStartPositionInArray(x, step, positionOffset)

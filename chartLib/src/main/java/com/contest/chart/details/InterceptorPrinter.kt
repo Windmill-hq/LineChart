@@ -19,25 +19,20 @@ class InterceptorPrinter {
         color = Color.WHITE
     }
 
-    private val data = ArrayList<InterceptionInfo>()
+    private lateinit var interceptionInfo: InterceptionInfo
 
-    fun setData(data: List<InterceptionInfo>) {
-        this.data.clear()
-        this.data.addAll(data)
+    fun setData(intercept: InterceptionInfo) {
+        interceptionInfo = intercept
     }
 
     fun draw(canvas: Canvas) {
-        data.forEach {
-            it.details.forEach { interception ->
-                paint.color = Color.parseColor(interception.color)
-                val center = interception.point
-                canvas.drawCircle(center.x, center.y, 10f, paintFilled)
-                canvas.drawCircle(center.x, center.y, 10f, paint)
-                val text = interception.value.toString()
-            }
+        interceptionInfo.details.forEach { interception ->
+            paint.color = Color.parseColor(interception.color)
+            val center = interception.point
+            canvas.drawCircle(center.x, center.y, 10f, paintFilled)
+            canvas.drawCircle(center.x, center.y, 10f, paint)
         }
     }
-
 
     fun switchDayNightMode(nightMode: Boolean, resources: Resources) {
         val night = resources.getColor(R.color.backGroundDark)

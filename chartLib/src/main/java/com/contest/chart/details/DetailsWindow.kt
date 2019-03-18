@@ -43,7 +43,7 @@ class DetailsWindow(resources: Resources) {
     }
 
     private val rectPaintFill = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = resources.getColor(R.color.backGround)
+        color = resources.getColor(R.color.detailsBackground)
         style = Paint.Style.FILL
     }
 
@@ -78,7 +78,7 @@ class DetailsWindow(resources: Resources) {
         linePaint.color = if (nightMode) night else day
 
         val nightDetail = resources.getColor(R.color.detailsBackgroundDark)
-        val dayDetail = resources.getColor(R.color.backGround)
+        val dayDetail = resources.getColor(R.color.detailsBackground)
         rectPaintFill.color = if (nightMode) nightDetail else dayDetail
     }
 }
