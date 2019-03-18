@@ -9,8 +9,9 @@ import com.contest.chart.model.InterceptionInfo
 class TextBlock(resources: Resources) {
     private val data = ArrayList<InterceptionInfo>()
 
-    private val textPaint = Paint().apply {
+    private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
+        textSize = 20f
     }
     private val green = resources.getColor(R.color.green)
     private val red = resources.getColor(R.color.red)

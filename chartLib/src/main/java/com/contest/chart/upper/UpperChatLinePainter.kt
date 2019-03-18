@@ -29,6 +29,8 @@ class UpperChatLinePainter(
             val y2 = conditionalY - originY2 * yStep
 
             canvas.drawLine(x1, y1, x2, y2, paint)
+            makeSmooth(canvas, x1, y1)
+            makeSmooth(canvas, x2, y2)
         }
     }
 

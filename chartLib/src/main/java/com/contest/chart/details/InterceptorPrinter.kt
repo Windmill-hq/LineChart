@@ -9,12 +9,12 @@ import com.contest.chart.model.InterceptionInfo
 
 class InterceptorPrinter {
     var conditionalY = 0
-    private val paint = Paint().apply {
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         strokeWidth = 5f
     }
 
-    private val paintFilled = Paint().apply {
+    private val paintFilled = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
         color = Color.WHITE
     }

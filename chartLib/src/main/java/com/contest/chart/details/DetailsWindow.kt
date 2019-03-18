@@ -30,19 +30,19 @@ class DetailsWindow(resources: Resources) {
             return rectangle.top
         }
 
-    private val rectPaintStroke = Paint().apply {
+    private val rectPaintStroke = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = resources.getColor(R.color.detailsLineColor)
         style = Paint.Style.STROKE
         strokeWidth = 3f
     }
 
-    private val linePaint = Paint().apply {
+    private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = resources.getColor(R.color.detailsLineColor)
         style = Paint.Style.STROKE
         strokeWidth = 3f
     }
 
-    private val rectPaintFill = Paint().apply {
+    private val rectPaintFill = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = resources.getColor(R.color.backGround)
         style = Paint.Style.FILL
     }
