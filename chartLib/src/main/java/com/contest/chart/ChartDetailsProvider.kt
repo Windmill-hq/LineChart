@@ -1,7 +1,7 @@
 package com.contest.chart
 
 interface ChartDetailsProvider {
-    fun getStepMap(): Map<Int, Step>
+    fun getChartStep(): Step
     fun getTotalHeight(): Int
     fun getPositionOffset(): Int
 }

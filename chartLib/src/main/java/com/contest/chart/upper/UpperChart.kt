@@ -2,7 +2,6 @@ package com.contest.chart.upper
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.MotionEvent
 import com.contest.chart.Step
 import com.contest.chart.ChartDetailsProvider
 import com.contest.chart.base.AbstractLineChart
@@ -20,18 +19,12 @@ class UpperChart : AbstractLineChart<UpperChartController>, ChartDetailsProvider
         return UpperChartController(data, viewWidth, viewHeight, this)
     }
 
-    override fun getStepMap(): Map<Int, Step> {
-        val xStepMap = HashMap<Int, Step>()
-
-        getControllers().forEach {
-            val id = it.getId()
-            xStepMap[id] = Step(it.xStep, it.yStep)
-        }
-        return xStepMap
+    override fun getChartStep(): Step {
+        return Step(getController().xStep, getController().yStep)
     }
 
     override fun getPositionOffset(): Int {
-        return getControllers()[0].getFocusedRange().first
+        return getController().getFocusedRange().first
     }
 
     override fun getTotalHeight(): Int {

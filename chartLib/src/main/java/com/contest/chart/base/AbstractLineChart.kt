@@ -5,7 +5,8 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import com.contest.chart.model.LineChartData
 
-abstract class AbstractLineChart<CC : AbstractChartController<*>> : MeasuredView, FocusedRangeFrame.Listener, Refresher {
+abstract class AbstractLineChart<CC : AbstractChartController<*>> : MeasuredView, FocusedRangeFrame.Listener,
+    Refresher {
 
     constructor(context: Context) : super(context)
 
@@ -16,7 +17,7 @@ abstract class AbstractLineChart<CC : AbstractChartController<*>> : MeasuredView
     private var isInited = false
     protected var viewWidth = 0
     protected var viewHeight = 0
-    private val chartControllers = ArrayList<CC>()
+    private lateinit var chartController: CC
 
     override fun onMeasured(width: Int, height: Int) {
         this.viewWidth = width
@@ -25,13 +26,11 @@ abstract class AbstractLineChart<CC : AbstractChartController<*>> : MeasuredView
 
     override fun onDraw(canvas: Canvas) {
         if (!isInited) return
-        chartControllers.forEach { it.draw(canvas) }
+        chartController.draw(canvas)
     }
 
-    fun setData(dataList: List<LineChartData>) {
-        dataList.forEach {
-            chartControllers.add(onCreateController(it))
-        }
+    fun setData(chartData: LineChartData) {
+        chartController = onCreateController(chartData)
         isInited = true
     }
 
@@ -39,19 +38,19 @@ abstract class AbstractLineChart<CC : AbstractChartController<*>> : MeasuredView
 
     override fun onFocusedRangeChanged(left: Int, right: Int) {
         if (!isInited) return
-        chartControllers.forEach { it.onFocusedRangeChanged(left, right) }
+        chartController.onFocusedRangeChanged(left, right)
     }
 
     fun onLineStateChanged(name: String, isEnabled: Boolean) {
-        chartControllers.forEach { it.onLineStateChanged(name, isEnabled) }
+        chartController.onLineStateChanged(name, isEnabled)
     }
 
     override fun refresh() {
         invalidate()
     }
 
-    fun getControllers(): List<CC> {
-        return chartControllers
+    fun getController(): CC {
+        return chartController
     }
 
     override fun switchDayNightMode(nightMode: Boolean) {

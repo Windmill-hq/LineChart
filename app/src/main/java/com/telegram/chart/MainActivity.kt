@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
                 .map(LineChartDataMapper())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    timeLineChart.setData(arrayListOf(it.first()))
+                    timeLineChart.setData(it)
                 }, {
                     Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
                 }).addTo(disposables)

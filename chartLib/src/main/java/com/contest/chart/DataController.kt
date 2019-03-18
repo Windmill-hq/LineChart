@@ -5,7 +5,7 @@ import com.contest.chart.model.InterceptionInfo
 import com.contest.chart.model.LineChartData
 
 class DataController : DataProvider {
-    private lateinit var chartList: List<LineChartData>
+    private lateinit var chartList: LineChartData
     private lateinit var detailsProvider: ChartDetailsProvider
 
     override fun getInterceptions(x: Float): InterceptionInfo {
@@ -13,15 +13,13 @@ class DataController : DataProvider {
 
         val positionOffset = detailsProvider.getPositionOffset()
         val height = detailsProvider.getTotalHeight()
-        val xScalesMap = detailsProvider.getStepMap()
-        val chartData = chartList.first()
-        val step = xScalesMap.getValue(chartData.id)
+        val step = detailsProvider.getChartStep()
 
-        val info = InterceptionInfo(chartData.id)
+        val info = InterceptionInfo(chartList.id)
         val posInArray = getStartPositionInArray(x, step, positionOffset) + 1
-        info.timeLabel = chartData.timeLine[posInArray]
+        info.timeLabel = chartList.timeLine[posInArray]
 
-        chartData.brokenLines.forEach {
+        chartList.brokenLines.forEach {
             if (it.isEnabled) {
                 val data = InterceptionInfo.Data()
                 data.name = it.name
@@ -148,7 +146,7 @@ class DataController : DataProvider {
         this.detailsProvider = chartDetailsProvider
     }
 
-    fun setData(dataList: List<LineChartData>) {
-        this.chartList = dataList
+    fun setData(chartData: LineChartData) {
+        this.chartList = chartData
     }
 }

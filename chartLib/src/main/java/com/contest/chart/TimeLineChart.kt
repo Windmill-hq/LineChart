@@ -1,11 +1,10 @@
 package com.contest.chart
 
 import android.content.Context
+import android.support.v7.app.AlertDialog
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.CompoundButton
-import android.widget.FrameLayout
-import android.widget.LinearLayout
+import android.widget.*
 import com.contest.chart.base.FocusedRangeFrame
 import com.contest.chart.bottom.BottomChart
 import com.contest.chart.model.LineChartData
@@ -16,6 +15,7 @@ import com.contest.chart.utils.createLayoutParams
 
 class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
 
+    private val chartDataList = ArrayList<LineChartData>()
     lateinit var bottomChart: BottomChart
     lateinit var upperChart: UpperChart
     lateinit var focusedRangeFrame: FocusedRangeFrame
@@ -24,6 +24,7 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
     lateinit var container: LinearLayout
     private var nightMode = false
     private val dataController = DataController()
+    private var checkedChart = 0
 
     constructor(context: Context) : super(context) {
         init()
@@ -52,18 +53,46 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
         focusedRangeFrame.addListener(bottomChart)
         focusedRangeFrame.addListener(upperChart)
         focusedRangeFrame.addListener(detailsView)
+
+        view.findViewById<TextView>(R.id.title).setOnClickListener { showDialog() }
+    }
+
+    private fun showDialog() {
+        val values = Array(chartDataList.size) { "" }
+
+        chartDataList.forEachIndexed { index, _ -> values[index] = "Chart #$index" }
+
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Choose chart!")
+        builder.setSingleChoiceItems(values, checkedChart) { dialog, which ->
+            checkedChart = which
+            setChartData(chartDataList[which])
+            dialog.dismiss()
+        }
+        builder.setNegativeButton("Cancel") { _, _ -> }
+        builder.show()
+
     }
 
     fun setData(dataList: List<LineChartData>) {
-        dataController.setData(dataList)
-        bottomChart.setData(dataList)
-        upperChart.setData(dataList)
-        focusedRangeFrame.getFocusedRange()
-        setNames(dataList)
+        chartDataList.clear()
+        chartDataList.addAll(dataList)
+
+        setChartData(dataList.first())
     }
 
-    private fun setNames(dataList: List<LineChartData>) {
-        val names = getNames(dataList)
+    private fun setChartData(chartData: LineChartData) {
+        dataController.setData(chartData)
+
+        bottomChart.setData(chartData)
+        upperChart.setData(chartData)
+        setNames(chartData)
+        focusedRangeFrame.getFocusedRange()
+    }
+
+    private fun setNames(chartData: LineChartData) {
+        val names = getNames(chartData)
+        namesLayout.removeAllViews()
         names.forEach {
             namesLayout.addView(createCheckBox(it, this), createLayoutParams())
         }
@@ -76,11 +105,9 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
         detailsView.refresh()
     }
 
-    private fun getNames(dataList: List<LineChartData>): MutableList<String> {
+    private fun getNames(chartData: LineChartData): MutableList<String> {
         val names = mutableListOf<String>()
-        dataList.forEach {
-            it.brokenLines.forEach { line -> names.add(line.name) }
-        }
+        chartData.brokenLines.forEach { line -> names.add(line.name) }
         return names
     }
 
