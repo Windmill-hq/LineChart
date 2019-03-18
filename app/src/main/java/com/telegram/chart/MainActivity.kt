@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.LinearLayout
 import android.widget.Toast
 import com.telegram.chart.model.DataProvider
 import com.telegram.chart.model.LineChartDataMapper
@@ -47,11 +48,22 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.night_mode -> {
-                timeLineChart.switchDayMode()
+                val isChecked = item.isChecked
+                item.isChecked = !isChecked
+                switchTheme(isChecked)
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun switchTheme(checked: Boolean) {
+        timeLineChart.switchTheme()
+        val night = resources.getColor(R.color.backGroundDark)
+        val day = resources.getColor(R.color.white)
+        val color = if (checked) day else night
+
+        root.setBackgroundColor(color)
     }
 }
 

@@ -111,10 +111,10 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
         return names
     }
 
-    fun switchDayMode() {
+    fun switchTheme() {
         nightMode = !nightMode
-        val day = context.resources.getColor(R.color.backGround)
-        val night = context.resources.getColor(R.color.backGroundDark)
+        val day = resources.getColor(R.color.backGround)
+        val night = resources.getColor(R.color.backGroundDark)
         val color = if (nightMode) night else day
         container.setBackgroundColor(color)
 

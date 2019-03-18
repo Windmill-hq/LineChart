@@ -6,7 +6,7 @@ import com.contest.chart.model.LineChartData
 import com.contest.chart.utils.Constants
 
 abstract class AbstractChartController<LC : BaseLinePainter>(
-        private val chartData: LineChartData,
+        val chartData: LineChartData,
         private val width: Int,
         private val height: Int,
         private val refresher: Refresher) : Focus {
