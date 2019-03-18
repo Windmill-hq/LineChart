@@ -13,7 +13,7 @@ class DetailsView : MeasuredView, FocusedRangeFrame.Listener {
 
     private val interceptorPrinter = InterceptorPrinter()
     private val detailsWindow = DetailsWindow(resources)
-    private val textBlock = TextBlock(resources)
+    private val textBlock = TextBlock()
     private lateinit var dataProvider: DataProvider
 
     private var lastX = 0f
@@ -72,6 +72,7 @@ class DetailsView : MeasuredView, FocusedRangeFrame.Listener {
     override fun switchDayNightMode(nightMode: Boolean) {
         detailsWindow.switchDayNightMode(nightMode, resources)
         interceptorPrinter.switchDayNightMode(nightMode, resources)
+        textBlock.switchDayNightMode(nightMode, resources)
         invalidate()
     }
 
