@@ -7,7 +7,7 @@ import android.widget.CompoundButton
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import com.contest.chart.model.BrokenLine
-import java.lang.StringBuilder
+import com.contest.chart.model.LineChartData
 import java.util.*
 
 
@@ -67,5 +67,51 @@ fun LongArray.toStringDate(): Array<String> {
     }
     return dateStr
 }
+
+fun LineChartData.getChartMaxValueInRange(range: IntRange, store: ArrayList<Float>): Float {
+    store.clear()
+    this.brokenLines.forEach { line ->
+        if (line.isEnabled) {
+            var max = 0f
+            for (index in range) {
+                val value = line.points[index]
+                if (value > max) max = value
+            }
+            store.add(max)
+        }
+    }
+
+    val max = store.max()
+    return max ?: return 0f
+}
+
+fun LineChartData.getChartMaxValue(store: ArrayList<Float>): Float {
+    store.clear()
+    this.brokenLines.forEach { line ->
+        if (line.isEnabled) {
+            var max = 0f
+            line.points.forEach { if (it > max) max = it }
+            store.add(max)
+        }
+    }
+
+    return store.max() ?: return 0f
+}
+
+fun LineChartData.getChartMaxSize(store: ArrayList<Int>, range: IntRange? = null): Int {
+    store.clear()
+    this.brokenLines.forEach {
+        if (it.isEnabled) {
+            val size = range?.count() ?: it.points.size
+            store.add(size)
+        }
+    }
+
+    return store.max() ?: 0
+}
+
+
+
+
 
 

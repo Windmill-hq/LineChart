@@ -9,7 +9,7 @@ class HorizontalScale(resources: Resources) : BaseScale<LongArray>(resources) {
     private lateinit var timeLine: Array<String>
     private val datesList = ArrayList<String>()
     private var inited = false
-    var datesToDraw = 0
+    private var datesToDraw = 0
     var y = 0f
     var newStep = 0f
 

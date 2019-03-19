@@ -4,22 +4,26 @@ import android.graphics.Canvas
 import com.contest.chart.model.BrokenLine
 import com.contest.chart.model.LineChartData
 import com.contest.chart.utils.Constants
+import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class AbstractChartController<LC : BaseLinePainter>(
-    val chartData: LineChartData,
-    private val width: Int,
-    private val height: Int,
-    private val refresher: Refresher
+        val chartData: LineChartData,
+        private val width: Int,
+        private val height: Int,
+        private val refresher: Refresher
 ) : Focus {
 
     private val lineControllers = ArrayList<LC>()
     var xStep = 0f
     var yStep = 0f
     protected var focusRange = 0..1
+    private val isBusy = AtomicBoolean()
+    protected var yStepStore: ArrayList<Float> = ArrayList()
+    protected var xStepStore: ArrayList<Int> = ArrayList()
 
     init {
         chartData.brokenLines.forEach { lineControllers.add(onCreateLinePainter(it, height)) }
-        calculateScale()
+        calculateScales()
     }
 
     abstract fun onCreateLinePainter(line: BrokenLine, conditionalY: Int): LC
@@ -30,33 +34,17 @@ abstract class AbstractChartController<LC : BaseLinePainter>(
         }
     }
 
-    protected fun calculateScale() {
-        val sizes = mutableListOf<Int>()
-        chartData.brokenLines.forEach {
-            if (it.isEnabled) sizes.add(getFocusedPoints(it).size)
-        }
-
-        if (sizes.isNotEmpty()) {
-            xStep = (width - Constants.SPARE_SPACE_X) / sizes.max()!!.toFloat()
-        }
-
-        val maxValues = mutableListOf<Float>()
-        chartData.brokenLines.forEach {
-            if (it.isEnabled) maxValues.add(getFocusedPoints(it).max()!!)
-        }
-
-        if (maxValues.isNotEmpty()) {
-            yStep = (height - Constants.SPARE_SPACE_Y) / maxValues.max()!!
-        }
+    private fun calculateScales() {
+        calculateXStep()
+        calculateYScale()
     }
-
-    abstract fun getFocusedPoints(line: BrokenLine): FloatArray
 
     fun onFocusedRangeChanged(left: Int, right: Int) {
         val size = lineControllers[0].getPoints().size
         val focusLeft = size * left / 100
         val focusRight = size * right / 100
         focusRange = focusLeft..focusRight
+        calculateScales()
         notifyFocusRangeChanged()
         refresher.refresh()
     }
@@ -67,7 +55,7 @@ abstract class AbstractChartController<LC : BaseLinePainter>(
         chartData.brokenLines.forEach { line ->
             if (line.name == name) line.isEnabled = isShow
         }
-        calculateScale()
+        calculateScales()
         refresher.refresh() // todo need hide/ show line with animation
     }
 
@@ -81,6 +69,22 @@ abstract class AbstractChartController<LC : BaseLinePainter>(
 
     fun getControllers(): List<LC> {
         return lineControllers
+    }
+
+    abstract fun getMaxSize(): Int
+
+    abstract fun getMaxValue(): Float
+
+    private fun calculateXStep() {
+        val maxSize = getMaxSize()
+        xStep = (width - Constants.SPARE_SPACE_X) / maxSize.toFloat()
+    }
+
+    private fun calculateYScale() {
+//        if (isBusy.get()) return
+
+        val maxVal = getMaxValue()
+        yStep = (height - Constants.SPARE_SPACE_Y) / maxVal
     }
 }
 
