@@ -23,7 +23,6 @@ class UpperChartController(
     }
 
     override fun notifyFocusRangeChanged() {
-        calculateScale()
         getControllers().forEach {
             it.offsetChanged(focusRange.first)
         }
