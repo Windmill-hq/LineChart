@@ -6,10 +6,11 @@ import com.contest.chart.model.LineChartData
 import com.contest.chart.utils.Constants
 
 abstract class AbstractChartController<LC : BaseLinePainter>(
-        val chartData: LineChartData,
-        private val width: Int,
-        private val height: Int,
-        private val refresher: Refresher) : Focus {
+    val chartData: LineChartData,
+    private val width: Int,
+    private val height: Int,
+    private val refresher: Refresher
+) : Focus {
 
     private val lineControllers = ArrayList<LC>()
     var xStep = 0f
@@ -17,14 +18,8 @@ abstract class AbstractChartController<LC : BaseLinePainter>(
     protected var focusRange = 0..1
 
     init {
-        chartData.brokenLines.forEach {
-            lineControllers.add(onCreateLinePainter(it, height))
-        }
+        chartData.brokenLines.forEach { lineControllers.add(onCreateLinePainter(it, height)) }
         calculateScale()
-    }
-
-    fun getId(): Int {
-        return chartData.id
     }
 
     abstract fun onCreateLinePainter(line: BrokenLine, conditionalY: Int): LC

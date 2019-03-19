@@ -35,10 +35,14 @@ class DetailsView : MeasuredView, FocusedRangeFrame.Listener {
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         return when (event.action) {
-            MotionEvent.ACTION_UP,
             MotionEvent.ACTION_MOVE,
             MotionEvent.ACTION_DOWN -> {
                 handleEvent(event.x)
+                true
+            }
+            MotionEvent.ACTION_UP -> {
+                inited = false
+                invalidate()
                 true
             }
             else -> super.onTouchEvent(event)

@@ -5,16 +5,17 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
-import android.support.v4.view.MotionEventCompat
 import android.util.AttributeSet
 import android.view.MotionEvent
 import com.contest.chart.R
+import com.contest.chart.utils.getColor
 
 class FocusedRangeFrame : MeasuredView {
 
     private val left = 25f
     private val top = 2f
-    private val realFrameWidth = 160f
+    private val realFrameWidth = 200f
+    private val minFrameWidth = 100f
     private var viewWidth = 0
     private var viewHeight = 0
     private val handleWidth = 15
@@ -127,12 +128,12 @@ class FocusedRangeFrame : MeasuredView {
 
     private fun checkMinWidthRight(x: Float): Boolean {
         val distanceToLeftEdge = x - leftHandle.left
-        return distanceToLeftEdge > realFrameWidth
+        return distanceToLeftEdge > minFrameWidth
     }
 
     private fun checkMinWidthLeft(x: Float): Boolean {
         val distanceToRightEdge = rightHandle.right - x
-        return distanceToRightEdge > realFrameWidth
+        return distanceToRightEdge > minFrameWidth
     }
 
     private fun moveLeftHandle(event: MotionEvent) {
@@ -220,9 +221,7 @@ class FocusedRangeFrame : MeasuredView {
     }
 
     override fun switchDayNightMode(nightMode: Boolean) {
-        val night = context.resources.getColor(R.color.shadowNight)
-        val day = context.resources.getColor(R.color.shadow)
-        shadowPaint.color = if (nightMode) night else day
+        shadowPaint.color = resources.getColor(R.color.shadow, R.color.shadowNight, nightMode)
         invalidate()
     }
 

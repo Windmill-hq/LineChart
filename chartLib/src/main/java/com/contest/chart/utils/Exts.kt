@@ -1,5 +1,6 @@
 package com.contest.chart.utils
 
+import android.content.res.Resources
 import android.graphics.Color
 import android.widget.CheckBox
 import android.widget.CompoundButton
@@ -7,6 +8,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import com.contest.chart.model.BrokenLine
 import java.lang.StringBuilder
+import java.util.*
 
 
 fun FrameLayout.createCheckBox(name: String, listener: CompoundButton.OnCheckedChangeListener): CheckBox {
@@ -33,4 +35,37 @@ fun String.transparentOn(transparency: String): Int {
 fun BrokenLine.getSampledPoints(focusRange: IntRange): FloatArray {
     return this.points.copyOfRange(focusRange.first, focusRange.last)
 }
+
+
+fun ArrayList<BrokenLine>.getMaxValueInRange(range: IntRange, store: ArrayList<Float>): Float? {
+    store.clear()
+    this.forEach { line ->
+        if (line.isEnabled) {
+            var max = 0f
+            for (index in range) {
+                val value = line.points[index]
+                if (value > max) max = value
+            }
+            store.add(max)
+        }
+    }
+
+    return store.max()
+}
+
+fun Resources.getColor(dayColorId: Int, nightColorId: Int, isNight: Boolean): Int {
+    val day = getColor(dayColorId)
+    val night = getColor(nightColorId)
+    return if (isNight) night else day
+}
+
+fun LongArray.toStringDate(): Array<String> {
+    val dateStr = Array(this.size) { "" }
+
+    this.forEachIndexed { index, date ->
+        dateStr[index] = Date(date).toString().substring(4, 10)
+    }
+    return dateStr
+}
+
 

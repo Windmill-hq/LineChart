@@ -11,8 +11,8 @@ class UpperChartController(
         chartData: LineChartData,
         width: Int,
         height: Int,
-        refresher: Refresher)
-    : AbstractChartController<UpperChatLinePainter>(chartData, width, height, refresher) {
+        refresher: Refresher
+) : AbstractChartController<UpperChatLinePainter>(chartData, width, height, refresher) {
 
     override fun onCreateLinePainter(line: BrokenLine, conditionalY: Int): UpperChatLinePainter {
         return UpperChatLinePainter(line, conditionalY, this, Constants.UPPER_CHART_LINE_THICKNESS)
@@ -24,7 +24,7 @@ class UpperChartController(
 
     override fun notifyFocusRangeChanged() {
         calculateScale()
-        getControllers().forEach{
+        getControllers().forEach {
             it.offsetChanged(focusRange.first)
         }
     }

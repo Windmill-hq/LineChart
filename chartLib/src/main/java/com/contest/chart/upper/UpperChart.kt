@@ -1,19 +1,25 @@
 package com.contest.chart.upper
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import com.contest.chart.Step
 import com.contest.chart.ChartDetailsProvider
+import com.contest.chart.R
 import com.contest.chart.base.AbstractLineChart
+import com.contest.chart.model.BrokenLine
 import com.contest.chart.model.LineChartData
 import com.contest.chart.utils.Constants
+import com.contest.chart.utils.getColor
+import com.contest.chart.utils.getMaxValueInRange
+import com.contest.chart.utils.toStringDate
 import java.util.*
 import kotlin.collections.ArrayList
 
 class UpperChart : AbstractLineChart<UpperChartController>, ChartDetailsProvider {
+    private val scale = Scale(resources)
 
     constructor(context: Context) : super(context)
 
@@ -21,16 +27,18 @@ class UpperChart : AbstractLineChart<UpperChartController>, ChartDetailsProvider
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    private val horizontalScale = HorizontalScale()
 
     override fun onCreateController(data: LineChartData): UpperChartController {
-        horizontalScale.setTimeLine(data.timeLine)
-        horizontalScale.setSize(viewWidth, viewHeight)
         return UpperChartController(data, viewWidth, viewHeight, this)
     }
 
+    override fun onAdditionalInit(chartData: LineChartData) {
+        scale.setData(chartData)
+        scale.setSize(viewWidth, viewHeight)
+    }
+
     override fun onDraw(canvas: Canvas) {
-        horizontalScale.draw(canvas)
+        scale.draw(canvas)
         super.onDraw(canvas)
     }
 
@@ -48,17 +56,99 @@ class UpperChart : AbstractLineChart<UpperChartController>, ChartDetailsProvider
 
     override fun onFocusedRangeChanged(left: Int, right: Int) {
         super.onFocusedRangeChanged(left, right)
-        horizontalScale.onFocusedRangeChanged(getController().getFocusedRange())
+        scale.onFocusedRangeChanged(getController().getFocusedRange())
+    }
+
+    override fun switchDayNightMode(nightMode: Boolean) {
+        scale.switchDayNightMode(nightMode, resources)
     }
 }
 
-class HorizontalScale : BaseScale() {
-    override fun populateDataToDraw(range: IntRange) {
-        val count = range.last - range.first
-        val step = count / datesToDraw
-        for (index in range step step) {
-            datesList.add(timeLine[index])
+class Scale(resources: Resources) : BaseScale<LineChartData>(resources) {
+
+    private val horizontalScale = HorizontalScale(resources)
+    private val verticalScale = VerticalScale(resources)
+    override fun setData(data: LineChartData) {
+        horizontalScale.setData(data.timeLine)
+        verticalScale.setData(data.brokenLines)
+    }
+
+    override fun setSize(viewWidth: Int, viewHeight: Int) {
+        horizontalScale.setSize(viewWidth, viewHeight)
+        verticalScale.setSize(viewWidth, viewHeight)
+    }
+
+    override fun draw(canvas: Canvas) {
+        horizontalScale.draw(canvas)
+        verticalScale.draw(canvas)
+    }
+
+    override fun onFocusedRangeChanged(focusedRange: IntRange) {
+        horizontalScale.onFocusedRangeChanged(focusedRange)
+        verticalScale.onFocusedRangeChanged(focusedRange)
+    }
+}
+
+class VerticalScale(resources: Resources) : BaseScale<ArrayList<BrokenLine>>(resources) {
+    private lateinit var data: ArrayList<BrokenLine>
+    private var viewHeight = 0f
+    private var viewWidth = 0f
+    private val maxValuesStore = ArrayList<Float>()
+    private var maxY = 0
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = resources.getColor(R.color.scaleText)
+    }
+
+    private var step = 100
+    override fun setData(data: ArrayList<BrokenLine>) {
+        this.data = data
+    }
+
+    override fun draw(canvas: Canvas) {
+        drawLines(canvas)
+
+    }
+
+    private fun drawLines(canvas: Canvas) {
+        var y = viewHeight
+        val count = viewHeight.toInt() / step
+        for (i in 0 until count - 1) {
+            y -= step
+            canvas.drawLine(0f, y, viewWidth, y, paint)
+            canvas.drawText(getText(y), 5f, y - 3, paintText)
         }
+    }
+
+    private fun getText(y: Float): String {
+        val percent = (1 - y / viewHeight)
+        return (percent * maxY).toInt().toString()
+    }
+
+    override fun onFocusedRangeChanged(focusedRange: IntRange) {
+        val max = data.getMaxValueInRange(focusedRange, maxValuesStore)
+        if (max != null) {
+            maxY = max.toInt()
+            step = viewHeight.toInt() / 6
+        }
+    }
+
+    override fun setSize(viewWidth: Int, viewHeight: Int) {
+        this.viewWidth = viewWidth.toFloat()
+        this.viewHeight = viewHeight.toFloat()
+    }
+}
+
+class HorizontalScale(resources: Resources) : BaseScale<LongArray>(resources) {
+    private lateinit var timeLine: Array<String>
+    private val datesList = ArrayList<String>()
+    private var inited = false
+    var datesToDraw = 0
+    var y = 0f
+    var newStep = 0f
+
+
+    override fun setData(data: LongArray) {
+        this.timeLine = data.toStringDate()
     }
 
     override fun draw(canvas: Canvas) {
@@ -68,52 +158,46 @@ class HorizontalScale : BaseScale() {
 
         datesList.forEachIndexed { index, date ->
             x = index * newStep
-            canvas.drawText(date, x, y, paint)
+            canvas.drawText(date, x, y, paintText)
         }
     }
-}
 
-abstract class BaseScale {
 
-    protected lateinit var timeLine: Array<String>
-    protected val datesList = ArrayList<String>()
-    protected var inited = false
-    var datesToDraw = 0
-    var y = 0f
-
-    fun setTimeLine(timeLine: LongArray) {
-        this.timeLine = timeLine.toStringDate()
-    }
-
-    protected val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        textSize = 23f
-        color = Color.GRAY
-    }
-
-    fun onFocusedRangeChanged(range: IntRange) {
-        inited = true
-        datesList.clear()
-        populateDataToDraw(range)
-    }
-
-    abstract fun populateDataToDraw(range: IntRange)
-
-    abstract fun draw(canvas: Canvas)
-
-    fun setSize(viewWidth: Int, viewHeight: Int) {
+    override fun setSize(viewWidth: Int, viewHeight: Int) {
         y = viewHeight.toFloat() - 6
         datesToDraw = (viewWidth / Constants.HORIZONTAL_STEP).toInt()
         newStep = (viewWidth / datesToDraw).toFloat()
     }
 
-    var newStep = 0f
-}
 
-private fun LongArray.toStringDate(): Array<String> {
-    val dateStr = Array(this.size) { "" }
-
-    this.forEachIndexed { index, date ->
-        dateStr[index] = Date(date).toString().substring(4, 10)
+    override fun onFocusedRangeChanged(focusedRange: IntRange) {
+        inited = true
+        datesList.clear()
+        defineDataToDraw(focusedRange)
     }
-    return dateStr
+
+    private fun defineDataToDraw(range: IntRange) {
+        val count = range.last - range.first
+        val step = count / datesToDraw
+        for (index in range step step) {
+            datesList.add(timeLine[index])
+        }
+    }
 }
+
+
+abstract class BaseScale<T>(resources: Resources) {
+    protected val paintText = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = resources.getColor(R.color.scaleText)
+        textSize = 23f
+    }
+
+    abstract fun setData(data: T)
+    abstract fun onFocusedRangeChanged(focusedRange: IntRange)
+    abstract fun setSize(viewWidth: Int, viewHeight: Int)
+    abstract fun draw(canvas: Canvas)
+    fun switchDayNightMode(nightMode: Boolean, resources: Resources) {
+        paintText.color = resources.getColor(R.color.scaleText, R.color.scaleTextNight, nightMode)
+    }
+}
+

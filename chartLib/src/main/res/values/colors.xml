@@ -10,6 +10,8 @@
     <color name="shadow">#0D274257</color>
     <color name="shadowNight">#3E1D303E</color>
     <color name="detailsLineColor">#287B7E81</color>
+    <color name="scaleText">#6F7B7E81</color>
+    <color name="scaleTextNight">#FA305775</color>
     <color name="detailsLineColorNight">#611A1D21</color>
 
     <drawable name="backGroundDarkDawable">#274257</drawable>

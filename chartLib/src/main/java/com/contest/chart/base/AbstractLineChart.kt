@@ -30,9 +30,12 @@ abstract class AbstractLineChart<CC : AbstractChartController<*>> : MeasuredView
     }
 
     fun setData(chartData: LineChartData) {
+        onAdditionalInit(chartData)
         chartController = onCreateController(chartData)
         isInited = true
     }
+
+    open fun onAdditionalInit(chartData: LineChartData) {}
 
     abstract fun onCreateController(data: LineChartData): CC
 
@@ -53,6 +56,5 @@ abstract class AbstractLineChart<CC : AbstractChartController<*>> : MeasuredView
         return chartController
     }
 
-    override fun switchDayNightMode(nightMode: Boolean) {
-    }
+    override fun switchDayNightMode(nightMode: Boolean) {}
 }

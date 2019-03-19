@@ -12,6 +12,7 @@ import com.contest.chart.details.DetailsView
 import com.contest.chart.upper.UpperChart
 import com.contest.chart.utils.createCheckBox
 import com.contest.chart.utils.createLayoutParams
+import com.contest.chart.utils.getColor
 
 class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
 
@@ -113,9 +114,7 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
 
     fun switchTheme() {
         nightMode = !nightMode
-        val day = resources.getColor(R.color.backGround)
-        val night = resources.getColor(R.color.backGroundDark)
-        val color = if (nightMode) night else day
+        val color = resources.getColor(R.color.backGround, R.color.backGroundDark, nightMode)
         container.setBackgroundColor(color)
 
         focusedRangeFrame.switchDayNightMode(nightMode)
