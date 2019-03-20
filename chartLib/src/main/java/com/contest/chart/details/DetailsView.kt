@@ -2,14 +2,13 @@ package com.contest.chart.details
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.MotionEvent
 import com.contest.chart.DataProvider
-import com.contest.chart.base.FocusedRangeFrame
 import com.contest.chart.base.MeasuredView
 
-class DetailsView : MeasuredView, FocusedRangeFrame.Listener {
+class DetailsView : MeasuredView {
 
     private val interceptorPrinter = InterceptorPrinter()
     private val detailsWindow = DetailsWindow(resources)
@@ -78,10 +77,6 @@ class DetailsView : MeasuredView, FocusedRangeFrame.Listener {
         interceptorPrinter.switchDayNightMode(nightMode, resources)
         textBlock.switchDayNightMode(nightMode, resources)
         invalidate()
-    }
-
-    override fun onFocusedRangeChanged(left: Int, right: Int) {
-//        refresh()
     }
 
     fun refresh() {

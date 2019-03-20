@@ -13,6 +13,7 @@
         android:drawableEnd="@drawable/ic_expand"
         android:padding="6dp"
         android:text="@string/title"
+        android:background="?attr/selectableItemBackground"
         android:textColor="@color/blue"
         android:textSize="26sp" />
 
