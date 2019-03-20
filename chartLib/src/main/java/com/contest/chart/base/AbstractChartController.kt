@@ -13,17 +13,17 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class AbstractChartController<LC : BaseLinePainter>(
-        val chartData: LineChartData,
-        private val width: Int,
-        private val height: Int,
-        private val refresher: Refresher
+    val chartData: LineChartData,
+    private val width: Int,
+    private val height: Int,
+    private val refresher: Refresher
 ) : Focus, SimpleListener, ValueAnimator.AnimatorUpdateListener {
 
     private val lineControllers = ArrayList<LC>()
     var xStep = 0f
     var yStep = 0f
     protected var focusRange = 0..1
-    private val isBusy = AtomicBoolean()
+    private val isYAnimBusy = AtomicBoolean()
     private val updateAgain = AtomicBoolean()
     protected var yStepStore: ArrayList<Float> = ArrayList()
     protected var xStepStore: ArrayList<Int> = ArrayList()
@@ -33,12 +33,15 @@ abstract class AbstractChartController<LC : BaseLinePainter>(
 
     init {
         chartData.brokenLines.forEach { lineControllers.add(onCreateLinePainter(it, height)) }
+        schedulerUpdater()
     }
 
-    private fun runUpdater() {
+    abstract fun schedulerUpdater()
+
+    protected fun runUpdater() {
         if (isSchedularStarted) return
 
-        scheduledFuture = scheduler.scheduleAtFixedRate({ refresher.refresh() }, 0, 150, TimeUnit.MILLISECONDS)
+        scheduledFuture = scheduler.scheduleAtFixedRate({ refresher.update() }, 0, 50, TimeUnit.MILLISECONDS)
         Log.d("SCHEDULER", " SCHEDULER  started")
 
     }
@@ -126,20 +129,20 @@ abstract class AbstractChartController<LC : BaseLinePainter>(
     }
 
     private fun calculateYStepWithAnim() {
-        if (isBusy.get()) {
+        if (isYAnimBusy.get()) {
             updateAgain.set(true)
         } else {
             val maxVal = getMaxValue()
             val newStep = (height - Constants.SPARE_SPACE_Y) / maxVal
-            isBusy.set(true)
-
-            ValueAnimator.ofFloat(yStep, newStep).apply {
-                duration = 300
-                repeatCount = 0
-                addUpdateListener(this@AbstractChartController)
-                addListener(this@AbstractChartController)
-            }.start()
-            runUpdater()
+            if (yStep != newStep) {
+                isYAnimBusy.set(true)
+                ValueAnimator.ofFloat(yStep, newStep).apply {
+                    duration = 400
+                    repeatCount = 0
+                    addUpdateListener(this@AbstractChartController)
+                    addListener(this@AbstractChartController)
+                }.start()
+            }
         }
     }
 
@@ -148,12 +151,10 @@ abstract class AbstractChartController<LC : BaseLinePainter>(
     }
 
     override fun onAnimationEnd(animation: Animator) {
-        isBusy.set(false)
+        isYAnimBusy.set(false)
         if (updateAgain.get()) {
             updateAgain.set(false)
             calculateYStepWithAnim()
-        } else {
-            stopUpdater()
         }
     }
 

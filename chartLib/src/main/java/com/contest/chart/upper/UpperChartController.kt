@@ -36,5 +36,9 @@ class UpperChartController(
     override fun isAnimationEnabled(): Boolean {
         return true
     }
+
+    override fun schedulerUpdater() {
+        runUpdater()
+    }
 }
 

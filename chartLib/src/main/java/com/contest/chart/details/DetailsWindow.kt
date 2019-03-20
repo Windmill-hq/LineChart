@@ -15,7 +15,7 @@ class DetailsWindow(resources: Resources) {
     private var rectWidth = 200f
     private var rectBottom = 155f
     private val radius = 10f
-    private val xOffset = 50
+    private val xOffset = 30
     private var nightMode = false
 
     private val rectangle = RectF()
@@ -48,7 +48,7 @@ class DetailsWindow(resources: Resources) {
     }
 
     fun draw(canvas: Canvas) {
-        canvas.drawLine(positionX, rectBottom, positionX, viewHeight.toFloat(), linePaint)
+        canvas.drawLine(positionX, 0f, positionX, viewHeight.toFloat(), linePaint)
         canvas.drawRoundRect(rectangle, radius, radius, rectPaintFill)
         if (!nightMode) canvas.drawRoundRect(rectangle, radius, radius, rectPaintStroke)
     }
@@ -61,7 +61,7 @@ class DetailsWindow(resources: Resources) {
     fun moveTo(x: Float) {
         positionX = x
         if (isBlockInView(x)) {
-            val left = positionX - xOffset
+            val left = positionX + xOffset
             val right = left + rectWidth
             rectangle.set(left, rectTop, right, rectBottom)
         }

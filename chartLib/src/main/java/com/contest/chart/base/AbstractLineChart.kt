@@ -56,5 +56,8 @@ abstract class AbstractLineChart<CC : AbstractChartController<*>> : MeasuredView
         return chartController
     }
 
+    override fun update() {
+    }
+
     override fun switchDayNightMode(nightMode: Boolean) {}
 }
