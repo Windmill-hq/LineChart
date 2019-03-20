@@ -2,14 +2,13 @@ package com.telegram.chart.model
 
 import com.contest.chart.model.BrokenLine
 import com.contest.chart.model.LineChartData
-import io.reactivex.functions.Function
 import java.lang.IllegalArgumentException
 
-class LineChartDataMapper : Function<List<Data>, List<LineChartData>> {
-    override fun apply(dataList: List<Data>): List<LineChartData> {
-        val chartData = ArrayList<LineChartData>()
+class LineChartDataMapper : Mapper<List<Data>, List<LineChartData>> {
+    override fun apply(inputData: List<Data>): List<LineChartData> {
+        val outputDataList = ArrayList<LineChartData>()
 
-        dataList.forEachIndexed { index, data ->
+        inputData.forEachIndexed { index, data ->
 
             val mutableColumns = data.columns.toMutableList()
 
@@ -30,12 +29,12 @@ class LineChartDataMapper : Function<List<Data>, List<LineChartData>> {
                 }
             }
 
-            chartData.add(lineChart)
+            outputDataList.add(lineChart)
         }
 
-        if (chartData.isEmpty()) throw IllegalArgumentException("Data is Empty")
+        if (outputDataList.isEmpty()) throw IllegalArgumentException("Data is Empty")
 
-        return chartData
+        return outputDataList
     }
 }
 

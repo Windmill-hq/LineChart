@@ -67,6 +67,7 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
         builder.setSingleChoiceItems(values, checkedChart) { dialog, which ->
             checkedChart = which
             setChartData(chartDataList[which])
+            focusedRangeFrame.getFocusedRange()
             dialog.dismiss()
         }
         builder.setNegativeButton("Cancel") { _, _ -> }
@@ -87,7 +88,6 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
         bottomChart.setData(chartData)
         upperChart.setData(chartData)
         setNames(chartData)
-        focusedRangeFrame.getFocusedRange()
     }
 
     private fun setNames(chartData: LineChartData) {

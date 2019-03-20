@@ -56,8 +56,8 @@ class UpperChartController(
         }
     }
 
-    override fun onCreateLinePainter(line: BrokenLine, conditionalY: Int): UpperChatLinePainter {
-        return UpperChatLinePainter(line, conditionalY, this, Constants.UPPER_CHART_LINE_THICKNESS)
+    override fun onCreateLinePainter(line: BrokenLine): UpperChatLinePainter {
+        return UpperChatLinePainter(line, this, Constants.UPPER_CHART_LINE_THICKNESS)
     }
 
     override fun notifyFocusRangeChanged() {

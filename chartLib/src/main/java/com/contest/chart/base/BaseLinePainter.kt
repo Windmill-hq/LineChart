@@ -5,7 +5,11 @@ import android.graphics.Color
 import android.graphics.Paint
 import com.contest.chart.model.BrokenLine
 
-abstract class BaseLinePainter(val line: BrokenLine, private val thickness: Float) : AbstractLinePainter {
+abstract class BaseLinePainter(
+    val line: BrokenLine,
+    private val thickness: Float,
+    val provider: DetalsProvider
+) : AbstractLinePainter {
 
     protected val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
@@ -20,6 +24,10 @@ abstract class BaseLinePainter(val line: BrokenLine, private val thickness: Floa
 
     override fun getPoints(): FloatArray {
         return line.points
+    }
+
+    override fun getStartY(): Int {
+        return provider.getStartY()
     }
 
     protected fun makeSmooth(canvas: Canvas, x: Float, y: Float) {

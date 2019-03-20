@@ -1,6 +1,7 @@
 package com.contest.chart.base
 
-interface Focus {
+interface DetalsProvider {
     fun isFocused(pos: Int): Boolean
     fun getFocusedRange(): IntRange
+    fun getStartY():Int
 }

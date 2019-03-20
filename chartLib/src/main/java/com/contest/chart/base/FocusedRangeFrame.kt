@@ -64,6 +64,7 @@ class FocusedRangeFrame : MeasuredView {
         this.viewWidth = width
         this.viewHeight = height
         reCalculate()
+        getFocusedRange()
     }
 
     private fun reCalculate() {
@@ -191,12 +192,9 @@ class FocusedRangeFrame : MeasuredView {
     }
 
     fun getFocusedRange() {
-        listeners.forEach {
-            it.onFocusedRangeChanged(
-                    ((mainFrame.left / width) * 100).toInt(),
-                    ((mainFrame.right / width) * 100).toInt()
-            )
-        }
+        val left = ((mainFrame.left / viewWidth) * 100).toInt()
+        val right = ((mainFrame.right / viewWidth) * 100).toInt()
+        listeners.forEach { it.onFocusedRangeChanged(left, right) }
     }
 
     fun addListener(listener: Listener) {

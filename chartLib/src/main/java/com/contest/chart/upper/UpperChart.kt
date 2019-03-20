@@ -25,6 +25,10 @@ class UpperChart : AbstractLineChart<UpperChartController>, ChartDetailsProvider
 
     override fun onAdditionalInit(chartData: LineChartData) {
         scale.setData(chartData)
+    }
+
+    override fun onMeasured(width: Int, height: Int) {
+        super.onMeasured(width, height)
         scale.setSize(viewWidth, viewHeight)
     }
 

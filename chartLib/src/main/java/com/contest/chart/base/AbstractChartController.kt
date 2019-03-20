@@ -7,11 +7,11 @@ import com.contest.chart.model.BrokenLine
 import com.contest.chart.model.LineChartData
 
 abstract class AbstractChartController<LC : BaseLinePainter>(
-        val chartData: LineChartData,
-        protected val width: Int,
-        protected val height: Int,
-        private val refresher: Refresher
-) : Focus {
+    val chartData: LineChartData,
+    protected var width: Int,
+    protected var height: Int,
+    private val refresher: Refresher
+) : DetalsProvider {
 
     private val lineControllers = ArrayList<LC>()
     var horizontalStep = 0f
@@ -21,10 +21,14 @@ abstract class AbstractChartController<LC : BaseLinePainter>(
     protected var xStepStore: ArrayList<Int> = ArrayList()
 
     init {
-        chartData.brokenLines.forEach { lineControllers.add(onCreateLinePainter(it, height)) }
+        chartData.brokenLines.forEach { lineControllers.add(onCreateLinePainter(it)) }
     }
 
-    abstract fun onCreateLinePainter(line: BrokenLine, conditionalY: Int): LC
+    override fun getStartY(): Int {
+        return height
+    }
+
+    abstract fun onCreateLinePainter(line: BrokenLine): LC
 
     abstract fun getMaxSize(): Int
 
@@ -72,6 +76,11 @@ abstract class AbstractChartController<LC : BaseLinePainter>(
         val maxSize = getMaxSize()
         if (maxSize == 0) return
         horizontalStep = width / maxSize.toFloat()
+    }
+
+    fun setSize(width: Int, height: Int) {
+        this.width = width
+        this.height = height
     }
 }
 

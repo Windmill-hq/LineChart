@@ -7,10 +7,10 @@ import com.contest.chart.utils.Constants
 import com.contest.chart.utils.transparentOn
 
 open class LinePainter(
-        line: BrokenLine,
-        private val conditionalY: Int,
-        private val focus: Focus,
-        thickness: Float) : BaseLinePainter(line, thickness) {
+    line: BrokenLine,
+    provider: DetalsProvider,
+    thickness: Float
+) : BaseLinePainter(line, thickness, provider) {
 
     private var unFocusedColor = line.color.transparentOn(Constants.TRANSPARENCY)
     private val focusedColor = Color.parseColor(line.color)
@@ -28,14 +28,14 @@ open class LinePainter(
 
             val originY1 = line.points[positionX]
             val originY2 = line.points[positionX + 1]
-            val y1 = conditionalY - originY1 * yStep
-            val y2 = conditionalY - originY2 * yStep
+            val y1 = getStartY() - originY1 * yStep
+            val y2 = getStartY() - originY2 * yStep
 
             canvas.drawLine(x1, y1, x2, y2, paint)
         }
     }
 
     private fun detectColor(index: Int): Int {
-        return if (focus.isFocused(index)) focusedColor else unFocusedColor
+        return if (provider.isFocused(index)) focusedColor else unFocusedColor
     }
 }

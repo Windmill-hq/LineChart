@@ -4,40 +4,31 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.LinearLayout
 import android.widget.Toast
+import com.contest.chart.model.LineChartData
 import com.telegram.chart.model.DataProvider
-import com.telegram.chart.model.LineChartDataMapper
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
-    private val disposables = CompositeDisposable()
-    private lateinit var dataProvider: DataProvider
+class MainActivity : AppCompatActivity(), DataProvider.CallBack {
 
+    private lateinit var dataProvider: DataProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+        supportActionBar?.subtitle = getString(R.string.author)
         dataProvider = DataProvider()
 
-        dataProvider.getData(this)
-                .subscribeOn(Schedulers.io())
-                .map(LineChartDataMapper())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    timeLineChart.setData(it)
-                }, {
-                    Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
-                }).addTo(disposables)
+        dataProvider.getData(this, this)
     }
 
-    override fun onDestroy() {
-        disposables.dispose()
-        super.onDestroy()
+    override fun onSuccess(chartsDataList: List<LineChartData>) {
+        timeLineChart.setData(chartsDataList)
+    }
+
+    override fun onError(exception: Exception) {
+        Toast.makeText(this, exception.message, Toast.LENGTH_LONG).show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

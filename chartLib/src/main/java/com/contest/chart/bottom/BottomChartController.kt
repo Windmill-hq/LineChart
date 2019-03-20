@@ -9,11 +9,11 @@ import com.contest.chart.utils.Constants
 import com.contest.chart.utils.getChartMaxSize
 import com.contest.chart.utils.getChartMaxValue
 
-class BottomChartController(chartData: LineChartData, width: Int, height: Int, refresher: Refresher)
-    : AbstractChartController<LinePainter>(chartData, width, height, refresher) {
+class BottomChartController(chartData: LineChartData, width: Int, height: Int, refresher: Refresher) :
+    AbstractChartController<LinePainter>(chartData, width, height, refresher) {
 
-    override fun onCreateLinePainter(line: BrokenLine, conditionalY: Int): LinePainter {
-        return LinePainter(line, conditionalY, this, Constants.BOTTOM_CHART_LINE_THICKNESS)
+    override fun onCreateLinePainter(line: BrokenLine): LinePainter {
+        return LinePainter(line, this, Constants.BOTTOM_CHART_LINE_THICKNESS)
     }
 
     override fun getMaxValue(): Float {

@@ -6,7 +6,7 @@ import android.util.AttributeSet
 import com.contest.chart.model.LineChartData
 
 abstract class AbstractLineChart<CC : AbstractChartController<*>> : MeasuredView, FocusedRangeFrame.Listener,
-        Refresher {
+    Refresher {
 
     constructor(context: Context) : super(context)
 
@@ -22,6 +22,7 @@ abstract class AbstractLineChart<CC : AbstractChartController<*>> : MeasuredView
     override fun onMeasured(width: Int, height: Int) {
         this.viewWidth = width
         this.viewHeight = height
+        getController().setSize(width, height)
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -33,6 +34,7 @@ abstract class AbstractLineChart<CC : AbstractChartController<*>> : MeasuredView
         onAdditionalInit(chartData)
         chartController = onCreateController(chartData)
         isInited = true
+        refresh()
     }
 
     open fun onAdditionalInit(chartData: LineChartData) {}
@@ -55,6 +57,5 @@ abstract class AbstractLineChart<CC : AbstractChartController<*>> : MeasuredView
     fun getController(): CC {
         return chartController
     }
-
     override fun switchDayNightMode(nightMode: Boolean) {}
 }
