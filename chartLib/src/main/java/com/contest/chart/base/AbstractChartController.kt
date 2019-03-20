@@ -3,20 +3,17 @@ package com.contest.chart.base
 import android.animation.Animator
 import android.animation.ValueAnimator
 import android.graphics.Canvas
-import android.util.Log
 import com.contest.chart.model.BrokenLine
 import com.contest.chart.model.LineChartData
 import com.contest.chart.utils.Constants
 import java.util.concurrent.Executors
-import java.util.concurrent.Future
-import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class AbstractChartController<LC : BaseLinePainter>(
-    val chartData: LineChartData,
-    private val width: Int,
-    private val height: Int,
-    private val refresher: Refresher
+        val chartData: LineChartData,
+        private val width: Int,
+        private val height: Int,
+        private val refresher: Refresher
 ) : Focus, SimpleListener, ValueAnimator.AnimatorUpdateListener {
 
     private val lineControllers = ArrayList<LC>()
@@ -24,36 +21,13 @@ abstract class AbstractChartController<LC : BaseLinePainter>(
     var yStep = 0f
     protected var focusRange = 0..1
     private val isYAnimBusy = AtomicBoolean()
-    private val updateAgain = AtomicBoolean()
+    private val needUpdateY = AtomicBoolean()
     protected var yStepStore: ArrayList<Float> = ArrayList()
     protected var xStepStore: ArrayList<Int> = ArrayList()
     private var scheduler = Executors.newSingleThreadScheduledExecutor()
-    private lateinit var scheduledFuture: Future<*>
-    private var isSchedularStarted = false
 
     init {
         chartData.brokenLines.forEach { lineControllers.add(onCreateLinePainter(it, height)) }
-        schedulerUpdater()
-    }
-
-    abstract fun schedulerUpdater()
-
-    protected fun runUpdater() {
-        if (isSchedularStarted) return
-
-        scheduledFuture = scheduler.scheduleAtFixedRate({ refresher.update() }, 0, 50, TimeUnit.MILLISECONDS)
-        Log.d("SCHEDULER", " SCHEDULER  started")
-
-    }
-
-    private fun stopUpdater() {
-        if (!scheduledFuture.isCancelled && !scheduledFuture.isDone) {
-            scheduledFuture.cancel(true)
-            Log.d("SCHEDULER", " SCHEDULER  stopped")
-            isSchedularStarted = false
-        } else {
-            Log.d("SCHEDULER", "tried to stop SCHEDULER  when it already stopped")
-        }
     }
 
     abstract fun onCreateLinePainter(line: BrokenLine, conditionalY: Int): LC
@@ -130,7 +104,7 @@ abstract class AbstractChartController<LC : BaseLinePainter>(
 
     private fun calculateYStepWithAnim() {
         if (isYAnimBusy.get()) {
-            updateAgain.set(true)
+            needUpdateY.set(true)
         } else {
             val maxVal = getMaxValue()
             val newStep = (height - Constants.SPARE_SPACE_Y) / maxVal
@@ -148,12 +122,13 @@ abstract class AbstractChartController<LC : BaseLinePainter>(
 
     override fun onAnimationUpdate(animation: ValueAnimator) {
         yStep = animation.animatedValue as Float
+        refresher.refresh()
     }
 
     override fun onAnimationEnd(animation: Animator) {
         isYAnimBusy.set(false)
-        if (updateAgain.get()) {
-            updateAgain.set(false)
+        if (needUpdateY.get()) {
+            needUpdateY.set(false)
             calculateYStepWithAnim()
         }
     }

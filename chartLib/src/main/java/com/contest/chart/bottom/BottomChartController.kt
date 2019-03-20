@@ -30,7 +30,4 @@ class BottomChartController(chartData: LineChartData, width: Int, height: Int, r
     override fun isAnimationEnabled(): Boolean {
         return false
     }
-
-    override fun schedulerUpdater() {
-    }
 }
