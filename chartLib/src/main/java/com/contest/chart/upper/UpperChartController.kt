@@ -85,6 +85,7 @@ class UpperChartController(
             needUpdateVerticalStep.set(true)
         } else {
             val maxVal = getMaxValue()
+            if (maxVal == 0f) return
             val newStep = (height - Constants.SPARE_VERTICAL_SPACE) / maxVal
             if (verticalStep != newStep) {
                 isVerticalAnimBusy.set(true)
