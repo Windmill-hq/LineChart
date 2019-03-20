@@ -32,5 +32,9 @@ class UpperChartController(
     override fun getMaxSize(): Int {
         return chartData.getChartMaxSize(xStepStore, focusRange)
     }
+
+    override fun isAnimationEnabled(): Boolean {
+        return true
+    }
 }
 

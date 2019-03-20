@@ -26,4 +26,8 @@ class BottomChartController(chartData: LineChartData, width: Int, height: Int, r
 
     override fun notifyFocusRangeChanged() {
     }
+
+    override fun isAnimationEnabled(): Boolean {
+        return false
+    }
 }
