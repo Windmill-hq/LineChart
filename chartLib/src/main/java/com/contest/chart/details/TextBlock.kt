@@ -18,7 +18,7 @@ class TextBlock {
 
     private val numberPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
-        textSize = 44f
+        textSize = 36f
     }
 
     private val datePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -26,18 +26,20 @@ class TextBlock {
         textSize = 30f
     }
 
+    private val digitWidth = 20f
     fun draw(canvas: Canvas, left: Float, top: Float) {
         val x = left + 15
         var y = top + 35
         val dateLabel = Date(interception.timeLabel).toString().substring(0..10)
         canvas.drawText(dateLabel, x, y, datePaint)
 
-        y += 50
-        val labelY = y + 40
+        y += 40
 
         interception.details.forEachIndexed { index, data ->
-            canvas.drawText(data.value.toInt().toString(), (index * 100 + x), y, numberPaint(data.color))
-            canvas.drawText(data.name, (index * 100 + x), labelY, textPaint(data.color))
+            val lineY = (index * 40 + y)
+            val valueLenght = data.value.length() + 1
+            canvas.drawText(data.value.toInt().toString(), x, lineY, numberPaint(data.color))
+            canvas.drawText(data.name, x + (valueLenght * digitWidth), lineY, textPaint(data.color))
         }
     }
 
@@ -61,4 +63,9 @@ class TextBlock {
         val color = if (nightMode) night else day
         datePaint.color = color
     }
+}
+
+fun Float.length() = when (this) {
+    0f -> 1
+    else -> Math.log10(Math.abs(toDouble())).toInt() + 1
 }

@@ -51,9 +51,8 @@ class UpperChartController(
             if (needUpdateHorizontalStep.get()) {
                 needUpdateHorizontalStep.set(false)
                 calculateHorizontalStep()
-            } else {
-                refresher.refresh()
             }
+            refresher.refresh()
         }
     }
 
@@ -109,7 +108,7 @@ class UpperChartController(
             if (horizontalStep != newStep.toFloat()) {
                 isHorizontalAnimBusy.set(true)
                 ValueAnimator.ofFloat(horizontalStep, newStep.toFloat()).apply {
-                    duration = 400
+                    duration = 200
                     repeatCount = 0
                     addUpdateListener(horizontalAnimListener)
                     addListener(horizontalAnimListener)

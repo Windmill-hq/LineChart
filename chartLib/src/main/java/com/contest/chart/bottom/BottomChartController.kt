@@ -28,14 +28,8 @@ class BottomChartController(chartData: LineChartData, width: Int, height: Int, r
     }
 
     override fun calculateSteps() {
-        calculateHorizontalStepNoAnim()
         calculateVerticalStepNoAnim()
-    }
-
-    private fun calculateHorizontalStepNoAnim() {
-        val maxSize = getMaxSize()
-        if (maxSize == 0) return
-        horizontalStep = width / maxSize.toFloat()
+        calculateHorizontalStepNoAnim()
     }
 
     private fun calculateVerticalStepNoAnim() {

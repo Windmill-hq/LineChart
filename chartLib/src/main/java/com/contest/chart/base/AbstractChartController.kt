@@ -67,6 +67,12 @@ abstract class AbstractChartController<LC : BaseLinePainter>(
     fun getControllers(): List<LC> {
         return lineControllers
     }
+
+    protected fun calculateHorizontalStepNoAnim() {
+        val maxSize = getMaxSize()
+        if (maxSize == 0) return
+        horizontalStep = width / maxSize.toFloat()
+    }
 }
 
 interface BaseListener : Animator.AnimatorListener, ValueAnimator.AnimatorUpdateListener {

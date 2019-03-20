@@ -25,6 +25,10 @@ class InterceptorPrinter {
         interceptionInfo = intercept
     }
 
+    fun getSize(): Int {
+        return interceptionInfo.details.size
+    }
+
     fun draw(canvas: Canvas) {
         interceptionInfo.details.forEach { interception ->
             paint.color = Color.parseColor(interception.color)

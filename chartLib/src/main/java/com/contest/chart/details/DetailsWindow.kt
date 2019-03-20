@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import com.contest.chart.R
+import com.contest.chart.utils.getColor
 
 class DetailsWindow(resources: Resources) {
     private var viewWidth = 0
@@ -12,12 +13,13 @@ class DetailsWindow(resources: Resources) {
 
     private var positionX = 0f
     private var rectTop = 5f
-    private var rectWidth = 200f
-    private var rectBottom = 155f
+    private var rectWidth = 230f
+    private var rectBottom = 50f
     private val radius = 10f
     private val xOffset = 30
     private var nightMode = false
 
+    private val statisticWidth = 40f
     private val rectangle = RectF()
 
     val left: Float
@@ -58,27 +60,27 @@ class DetailsWindow(resources: Resources) {
         viewHeight = height
     }
 
-    fun moveTo(x: Float) {
+    fun moveTo(x: Float, size: Int) {
         positionX = x
         if (isBlockInView(x)) {
             val left = positionX + xOffset
             val right = left + rectWidth
-            rectangle.set(left, rectTop, right, rectBottom)
+            rectangle.set(left, rectTop, right, rectBottom + (statisticWidth * size))
         }
     }
 
     private fun isBlockInView(x: Float): Boolean {
-        return x > xOffset && x + rectWidth - xOffset < viewWidth
+        val width = getRectWidth()
+        return x > 0 && x + width + xOffset < viewWidth
+    }
+
+    private fun getRectWidth(): Float {
+        return rectangle.right - rectangle.left
     }
 
     fun switchDayNightMode(nightMode: Boolean, resources: Resources) {
         this.nightMode = nightMode
-        val night = resources.getColor(R.color.detailsLineColorNight)
-        val day = resources.getColor(R.color.detailsLineColor)
-        linePaint.color = if (nightMode) night else day
-
-        val nightDetail = resources.getColor(R.color.detailsBackgroundDark)
-        val dayDetail = resources.getColor(R.color.detailsBackground)
-        rectPaintFill.color = if (nightMode) nightDetail else dayDetail
+        linePaint.color = resources.getColor(R.color.detailsLineColor, R.color.detailsLineColorNight, nightMode)
+        rectPaintFill.color = resources.getColor(R.color.detailsBackground, R.color.detailsBackgroundDark, nightMode)
     }
 }

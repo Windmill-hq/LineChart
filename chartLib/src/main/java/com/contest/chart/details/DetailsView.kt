@@ -51,8 +51,8 @@ class DetailsView : MeasuredView {
     private fun handleEvent(x: Float) {
         inited = true
         lastX = x
-        detailsWindow.moveTo(x)
         requestInterceptionsAndInvalidate(x)
+        detailsWindow.moveTo(x, interceptorPrinter.getSize())
     }
 
 
