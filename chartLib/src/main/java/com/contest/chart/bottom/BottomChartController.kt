@@ -27,7 +27,19 @@ class BottomChartController(chartData: LineChartData, width: Int, height: Int, r
     override fun notifyFocusRangeChanged() {
     }
 
-    override fun isAnimationEnabled(): Boolean {
-        return false
+    override fun calculateSteps() {
+        calculateHorizontalStepNoAnim()
+        calculateVerticalStepNoAnim()
+    }
+
+    private fun calculateHorizontalStepNoAnim() {
+        val maxSize = getMaxSize()
+        if (maxSize == 0) return
+        horizontalStep = width / maxSize.toFloat()
+    }
+
+    private fun calculateVerticalStepNoAnim() {
+        val maxVal = getMaxValue()
+        verticalStep = (height - Constants.SPARE_VERTICAL_SPACE) / maxVal
     }
 }

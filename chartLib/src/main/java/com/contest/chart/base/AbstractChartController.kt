@@ -5,26 +5,20 @@ import android.animation.ValueAnimator
 import android.graphics.Canvas
 import com.contest.chart.model.BrokenLine
 import com.contest.chart.model.LineChartData
-import com.contest.chart.utils.Constants
-import java.util.concurrent.Executors
-import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class AbstractChartController<LC : BaseLinePainter>(
         val chartData: LineChartData,
-        private val width: Int,
-        private val height: Int,
+        protected val width: Int,
+        protected val height: Int,
         private val refresher: Refresher
-) : Focus, SimpleListener, ValueAnimator.AnimatorUpdateListener {
+) : Focus {
 
     private val lineControllers = ArrayList<LC>()
-    var xStep = 0f
-    var yStep = 0f
+    var horizontalStep = 0f
+    var verticalStep = 0f
     protected var focusRange = 0..1
-    private val isYAnimBusy = AtomicBoolean()
-    private val needUpdateY = AtomicBoolean()
     protected var yStepStore: ArrayList<Float> = ArrayList()
     protected var xStepStore: ArrayList<Int> = ArrayList()
-    private var scheduler = Executors.newSingleThreadScheduledExecutor()
 
     init {
         chartData.brokenLines.forEach { lineControllers.add(onCreateLinePainter(it, height)) }
@@ -32,15 +26,18 @@ abstract class AbstractChartController<LC : BaseLinePainter>(
 
     abstract fun onCreateLinePainter(line: BrokenLine, conditionalY: Int): LC
 
+    abstract fun getMaxSize(): Int
+
+    abstract fun getMaxValue(): Float
+
+    abstract fun notifyFocusRangeChanged()
+
+    abstract fun calculateSteps()
+
     fun draw(canvas: Canvas) {
         lineControllers.forEach {
-            it.draw(canvas, xStep, yStep)
+            it.draw(canvas, horizontalStep, verticalStep)
         }
-    }
-
-    private fun calculateScales() {
-        calculateXStep()
-        calculateYStep()
     }
 
     fun onFocusedRangeChanged(left: Int, right: Int) {
@@ -48,19 +45,15 @@ abstract class AbstractChartController<LC : BaseLinePainter>(
         val focusLeft = size * left / 100
         val focusRight = size * right / 100
         focusRange = focusLeft..focusRight
-        calculateScales()
+        calculateSteps()
         notifyFocusRangeChanged()
         refresher.refresh()
     }
 
-    abstract fun notifyFocusRangeChanged()
-
     fun onLineStateChanged(name: String, isShow: Boolean) {
-        chartData.brokenLines.forEach { line ->
-            if (line.name == name) line.isEnabled = isShow
-        }
-        calculateScales()
-        refresher.refresh() // todo need hide/ show line with animation
+        chartData.brokenLines.forEach { if (it.name == name) it.isEnabled = isShow }
+        calculateSteps()
+        refresher.refresh()
     }
 
     override fun isFocused(pos: Int): Boolean {
@@ -74,68 +67,9 @@ abstract class AbstractChartController<LC : BaseLinePainter>(
     fun getControllers(): List<LC> {
         return lineControllers
     }
-
-    abstract fun getMaxSize(): Int
-
-    abstract fun getMaxValue(): Float
-
-    private fun calculateXStep() {
-        val maxSize = getMaxSize()
-        xStep = (width - Constants.SPARE_SPACE_X) / maxSize.toFloat()
-    }
-
-    abstract fun isAnimationEnabled(): Boolean
-
-    private var firstLaunch = true
-
-    private fun calculateYStep() {
-        if (firstLaunch || !isAnimationEnabled()) {
-            firstLaunch = false
-            calculateYStepWithoutAnim()
-        } else if (isAnimationEnabled()) {
-            calculateYStepWithAnim()
-        }
-    }
-
-    private fun calculateYStepWithoutAnim() {
-        val maxVal = getMaxValue()
-        yStep = (height - Constants.SPARE_SPACE_Y) / maxVal
-    }
-
-    private fun calculateYStepWithAnim() {
-        if (isYAnimBusy.get()) {
-            needUpdateY.set(true)
-        } else {
-            val maxVal = getMaxValue()
-            val newStep = (height - Constants.SPARE_SPACE_Y) / maxVal
-            if (yStep != newStep) {
-                isYAnimBusy.set(true)
-                ValueAnimator.ofFloat(yStep, newStep).apply {
-                    duration = 400
-                    repeatCount = 0
-                    addUpdateListener(this@AbstractChartController)
-                    addListener(this@AbstractChartController)
-                }.start()
-            }
-        }
-    }
-
-    override fun onAnimationUpdate(animation: ValueAnimator) {
-        yStep = animation.animatedValue as Float
-        refresher.refresh()
-    }
-
-    override fun onAnimationEnd(animation: Animator) {
-        isYAnimBusy.set(false)
-        if (needUpdateY.get()) {
-            needUpdateY.set(false)
-            calculateYStepWithAnim()
-        }
-    }
-
 }
 
-interface SimpleListener : Animator.AnimatorListener {
+interface BaseListener : Animator.AnimatorListener, ValueAnimator.AnimatorUpdateListener {
     override fun onAnimationRepeat(animation: Animator?) {
     }
 

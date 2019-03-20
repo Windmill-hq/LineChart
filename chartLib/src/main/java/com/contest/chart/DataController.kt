@@ -17,6 +17,7 @@ class DataController : DataProvider {
 
         val info = InterceptionInfo(chartList.id)
         val posInArray = getStartPositionInArray(x, step, positionOffset) + 1
+        if (posInArray >= chartList.timeLine.size) return InterceptionInfo(-1)
         info.timeLabel = chartList.timeLine[posInArray]
 
         chartList.brokenLines.forEach {

@@ -83,8 +83,8 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
     }
 
     private fun setChartData(chartData: LineChartData) {
+        chartData.brokenLines.forEach { it.isEnabled = true }
         dataController.setData(chartData)
-
         bottomChart.setData(chartData)
         upperChart.setData(chartData)
         setNames(chartData)

@@ -81,7 +81,7 @@ class DetailsView : MeasuredView, FocusedRangeFrame.Listener {
     }
 
     override fun onFocusedRangeChanged(left: Int, right: Int) {
-        refresh()
+//        refresh()
     }
 
     fun refresh() {

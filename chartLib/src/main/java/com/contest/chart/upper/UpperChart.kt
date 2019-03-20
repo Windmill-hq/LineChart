@@ -34,7 +34,7 @@ class UpperChart : AbstractLineChart<UpperChartController>, ChartDetailsProvider
     }
 
     override fun getChartStep(): Step {
-        return Step(getController().xStep, getController().yStep)
+        return Step(getController().horizontalStep, getController().verticalStep)
     }
 
     override fun getPositionOffset(): Int {
