@@ -1,7 +1,4 @@
 <resources>
-    <string name="app_name">TelegaChart</string>
+    <string name="app_name">T-Chart</string>
     <string name="action_settings">Settings</string>
-    <string name="left_edge">Left edge: %d %%</string>
-    <string name="right_edge">Right edge: %d %%</string>
-    <string name="screen_width">Screen width: %d</string>
 </resources>
