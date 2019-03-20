@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import com.contest.chart.R
 import com.contest.chart.model.InterceptionInfo
+import com.contest.chart.utils.getColor
 import java.util.*
 
 class TextBlock {
@@ -58,10 +59,7 @@ class TextBlock {
     }
 
     fun switchDayNightMode(nightMode: Boolean, resources: Resources) {
-        val night = resources.getColor(R.color.backGround)
-        val day = resources.getColor(R.color.black)
-        val color = if (nightMode) night else day
-        datePaint.color = color
+        datePaint.color = resources.getColor(R.color.black, R.color.backGround, nightMode)
     }
 }
 

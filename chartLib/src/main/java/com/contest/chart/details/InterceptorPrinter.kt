@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import com.contest.chart.R
 import com.contest.chart.model.InterceptionInfo
+import com.contest.chart.utils.getColor
 
 class InterceptorPrinter {
     var conditionalY = 0
@@ -39,9 +40,6 @@ class InterceptorPrinter {
     }
 
     fun switchDayNightMode(nightMode: Boolean, resources: Resources) {
-        val night = resources.getColor(R.color.backGroundDark)
-        val day = resources.getColor(R.color.backGround)
-        val color = if (nightMode) night else day
-        paintFilled.color = color
+        paintFilled.color = resources.getColor(R.color.backGround, R.color.backGroundDark, nightMode)
     }
 }
