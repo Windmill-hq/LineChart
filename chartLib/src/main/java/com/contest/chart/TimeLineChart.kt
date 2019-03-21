@@ -53,6 +53,7 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
 
         focusedRangeFrame.addListener(bottomChart)
         focusedRangeFrame.addListener(upperChart)
+        focusedRangeFrame.setMovementListener(upperChart)
 
         view.findViewById<TextView>(R.id.title).setOnClickListener { showDialog() }
     }

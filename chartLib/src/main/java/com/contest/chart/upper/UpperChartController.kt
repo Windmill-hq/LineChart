@@ -13,10 +13,10 @@ import com.contest.chart.utils.getChartMaxValueInRange
 import java.util.concurrent.atomic.AtomicBoolean
 
 class UpperChartController(
-        chartData: LineChartData,
-        width: Int,
-        height: Int,
-        refresher: Refresher
+    chartData: LineChartData,
+    width: Int,
+    height: Int,
+    refresher: Refresher
 ) : AbstractChartController<UpperChatLinePrinter>(chartData, width, height, refresher) {
 
     private val isVerticalAnimBusy = AtomicBoolean()
@@ -52,7 +52,6 @@ class UpperChartController(
                 needUpdateHorizontalStep.set(false)
                 calculateHorizontalStep()
             }
-            refresher.refresh()
         }
     }
 
@@ -75,8 +74,8 @@ class UpperChartController(
     }
 
     override fun calculateSteps() {
-        calculateVerticalStep()
         calculateHorizontalStep()
+        calculateVerticalStep()
     }
 
 
@@ -88,7 +87,7 @@ class UpperChartController(
             if (maxVal == 0f) return
             val newStep = (height - Constants.SPARE_VERTICAL_SPACE) / maxVal
             if (verticalStep != newStep) {
-                isVerticalAnimBusy.set(true) // TODO NEED CHECK AGAIN MAY BE ALREADY IN PROGRESS?
+                isVerticalAnimBusy.set(true)
                 ValueAnimator.ofFloat(verticalStep, newStep).apply {
                     duration = 400
                     repeatCount = 0
@@ -105,10 +104,10 @@ class UpperChartController(
         } else {
             val maxVal = getMaxSize()
             if (maxVal == 0) return
-            val newStep = width / maxVal
+            val newStep = width / maxVal.toFloat()
             if (horizontalStep != newStep.toFloat()) {
                 isHorizontalAnimBusy.set(true)
-                ValueAnimator.ofFloat(horizontalStep, newStep.toFloat()).apply {
+                ValueAnimator.ofFloat(horizontalStep, newStep).apply {
                     duration = 200
                     repeatCount = 0
                     addUpdateListener(horizontalAnimListener)

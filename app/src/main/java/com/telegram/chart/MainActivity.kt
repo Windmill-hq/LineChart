@@ -39,9 +39,8 @@ class MainActivity : AppCompatActivity(), DataProvider.CallBack {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.night_mode -> {
-                val isChecked = item.isChecked
-                item.isChecked = !isChecked
-                switchTheme(isChecked)
+                switchTheme(item.isChecked)
+                item.isChecked = !item.isChecked
                 true
             }
             else -> super.onOptionsItemSelected(item)

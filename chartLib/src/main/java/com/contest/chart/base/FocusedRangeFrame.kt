@@ -40,6 +40,7 @@ class FocusedRangeFrame : MeasuredView {
     private val shadowPaint = Paint()
     private var listeners = ArrayList<Listener>()
     private var partToDraw = Part.UNKNOWN
+    private lateinit var movementListener: MovementTypeListener
 
     constructor(context: Context) : super(context) {
         init()
@@ -111,9 +112,18 @@ class FocusedRangeFrame : MeasuredView {
 
     private fun onMove(event: MotionEvent) {
         when (partToDraw) {
-            Part.LEFT -> moveLeftHandle(event)
-            Part.RIGHT -> moveRightHandle(event)
-            Part.CENTER -> moveTogether(event)
+            Part.LEFT -> {
+                moveLeftHandle(event)
+                movementListener.onMove(Type.PARTIALLY)
+            }
+            Part.RIGHT -> {
+                moveRightHandle(event)
+                movementListener.onMove(Type.PARTIALLY)
+            }
+            Part.CENTER -> {
+                moveTogether(event)
+                movementListener.onMove(Type.TOGETHER)
+            }
         }
         if (partToDraw != Part.UNKNOWN) getFocusedRange()
     }
@@ -201,6 +211,10 @@ class FocusedRangeFrame : MeasuredView {
         listeners.add(listener)
     }
 
+    fun setMovementListener(listener: MovementTypeListener) {
+        movementListener = listener
+    }
+
     private fun MotionEvent.inView(): Boolean {
         val maxX = x + totalWidth() / 2
         val minX = x
@@ -226,4 +240,12 @@ class FocusedRangeFrame : MeasuredView {
     interface Listener {
         fun onFocusedRangeChanged(left: Int, right: Int)
     }
+
+    interface MovementTypeListener {
+        fun onMove(type: Type)
+    }
+}
+
+enum class Type {
+    TOGETHER, PARTIALLY
 }

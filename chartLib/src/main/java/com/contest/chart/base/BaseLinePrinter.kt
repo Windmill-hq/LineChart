@@ -12,8 +12,7 @@ abstract class BaseLinePrinter(
 ) : AbstractLinePainter {
 
     protected val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        style = Paint.Style.FILL
-        style = Paint.Style.STROKE
+        style = Paint.Style.FILL_AND_STROKE
         strokeWidth = thickness
         color = Color.parseColor(line.color)
     }

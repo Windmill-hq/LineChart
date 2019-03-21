@@ -31,9 +31,4 @@ class BottomChartController(chartData: LineChartData, width: Int, height: Int, r
         calculateVerticalStepNoAnim()
         calculateHorizontalStepNoAnim()
     }
-
-    private fun calculateVerticalStepNoAnim() {
-        val maxVal = getMaxValue()
-        verticalStep = (height - Constants.SPARE_VERTICAL_SPACE) / maxVal
-    }
 }

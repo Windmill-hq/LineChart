@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">T-Chart</string>
-    <string name="action_settings">Settings</string>
+    <string name="night_mode">Day/Night mode</string>
     <string name="author">by Jacob Vynnyk</string>
 </resources>

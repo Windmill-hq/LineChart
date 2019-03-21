@@ -5,6 +5,7 @@ import android.animation.ValueAnimator
 import android.graphics.Canvas
 import com.contest.chart.model.BrokenLine
 import com.contest.chart.model.LineChartData
+import com.contest.chart.utils.Constants
 
 abstract class AbstractChartController<LC : BaseLinePrinter>(
     val chartData: LineChartData,
@@ -70,6 +71,11 @@ abstract class AbstractChartController<LC : BaseLinePrinter>(
 
     fun getControllers(): List<LC> {
         return lineControllers
+    }
+
+    protected fun calculateVerticalStepNoAnim() {
+        val maxVal = getMaxValue()
+        verticalStep = (height - Constants.SPARE_VERTICAL_SPACE) / maxVal
     }
 
     protected fun calculateHorizontalStepNoAnim() {

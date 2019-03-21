@@ -30,8 +30,8 @@ class UpperChatLinePrinter(
             val y2 = getStartY() - originY2 * yStep
 
             canvas.drawLine(x1, y1, x2, y2, paint)
-//            canvas.drawText(" $originY1", x1, y1, paintText)
-//            canvas.drawText(" $originY2", x2, y2, paintText)
+//          canvas.drawText(" $x1", x1, y1, paintText)
+//          canvas.drawText(" $x2", x2, y2, paintText)
             makeSmooth(canvas, x1, y1)
             makeSmooth(canvas, x2, y2)
         }

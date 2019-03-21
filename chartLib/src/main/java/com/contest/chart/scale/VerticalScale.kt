@@ -37,6 +37,7 @@ class VerticalScale(resources: Resources, provider: ChartDetailsProvider)
     override fun onFocusedRangeChanged(focusedRange: IntRange) {
         super.onFocusedRangeChanged(focusedRange)
         val max = data.getMaxValueInRange(focusedRange, maxValuesStore)
+        dataToDraw.clear()
         if (max != null) {
             maxY = max.toInt()
             defineData(maxY)
@@ -44,7 +45,6 @@ class VerticalScale(resources: Resources, provider: ChartDetailsProvider)
     }
 
     private fun defineData(maxY: Int) {
-        dataToDraw.clear()
         val step = maxY / Constants.AVERAGE_HORIZONTALS
         for (value in 0..maxY step step) {
             dataToDraw.add(value)
