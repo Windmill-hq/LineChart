@@ -8,16 +8,16 @@ import com.contest.chart.R
 import com.contest.chart.utils.getColor
 
 abstract class BaseScale<T>(resources: Resources, private val provider: ChartDetailsProvider) {
+
+    protected lateinit var lastRange: IntRange
     protected val paintText = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = resources.getColor(R.color.scaleText)
         textSize = 23f
     }
 
     abstract fun setData(data: T)
-    abstract fun onFocusedRangeChanged(focusedRange: IntRange)
     abstract fun setSize(viewWidth: Int, viewHeight: Int)
     abstract fun draw(canvas: Canvas)
-    abstract fun onLineStateChanged()
 
     fun switchDayNightMode(nightMode: Boolean, resources: Resources) {
         paintText.color = resources.getColor(R.color.scaleText, R.color.scaleTextNight, nightMode)
@@ -29,5 +29,13 @@ abstract class BaseScale<T>(resources: Resources, private val provider: ChartDet
 
     fun getStepX(): Float {
         return provider.getChartStep().xStep
+    }
+
+    open fun onLineStateChanged() {
+        onFocusedRangeChanged(lastRange)
+    }
+
+    open fun onFocusedRangeChanged(focusedRange: IntRange) {
+        lastRange = focusedRange
     }
 }

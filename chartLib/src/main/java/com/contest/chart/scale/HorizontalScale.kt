@@ -41,6 +41,7 @@ class HorizontalScale(resources: Resources, provider: ChartDetailsProvider)
 
 
     override fun onFocusedRangeChanged(focusedRange: IntRange) {
+        super.onFocusedRangeChanged(focusedRange)
         inited = true
         datesList.clear()
         defineDataToDraw(focusedRange)
@@ -52,9 +53,5 @@ class HorizontalScale(resources: Resources, provider: ChartDetailsProvider)
         for (index in range step step) {
             datesList.add(timeLine[index])
         }
-    }
-
-    override fun onLineStateChanged() {
-
     }
 }

@@ -18,7 +18,6 @@ class VerticalScale(resources: Resources, provider: ChartDetailsProvider)
     private val maxValuesStore = ArrayList<Float>()
     private var maxY = 0
     private val dataToDraw = ArrayList<Int>()
-    private lateinit var lastRange: IntRange
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = resources.getColor(R.color.scaleText)
     }
@@ -28,15 +27,15 @@ class VerticalScale(resources: Resources, provider: ChartDetailsProvider)
     }
 
     override fun draw(canvas: Canvas) {
-        dataToDraw.forEach { value ->
+        dataToDraw.forEachIndexed { index, value ->
             val startY = viewHeight - value * getStepY()
             canvas.drawLine(0f, startY, viewWidth, startY, paint)
-            canvas.drawText(value.toString(), 5f, startY - 3, paintText)
+            if (index != 0) canvas.drawText(value.toString(), 5f, startY - 3, paintText)
         }
     }
 
     override fun onFocusedRangeChanged(focusedRange: IntRange) {
-        lastRange = focusedRange
+        super.onFocusedRangeChanged(focusedRange)
         val max = data.getMaxValueInRange(focusedRange, maxValuesStore)
         if (max != null) {
             maxY = max.toInt()
@@ -50,10 +49,6 @@ class VerticalScale(resources: Resources, provider: ChartDetailsProvider)
         for (value in 0..maxY step step) {
             dataToDraw.add(value)
         }
-    }
-
-    override fun onLineStateChanged() {
-        onFocusedRangeChanged(lastRange)
     }
 
     override fun setSize(viewWidth: Int, viewHeight: Int) {
