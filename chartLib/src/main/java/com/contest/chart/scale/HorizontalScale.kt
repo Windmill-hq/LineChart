@@ -53,4 +53,8 @@ class HorizontalScale(resources: Resources, provider: ChartDetailsProvider)
             datesList.add(timeLine[index])
         }
     }
+
+    override fun onLineStateChanged() {
+
+    }
 }

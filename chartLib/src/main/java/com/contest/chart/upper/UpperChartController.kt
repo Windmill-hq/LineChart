@@ -17,7 +17,7 @@ class UpperChartController(
         width: Int,
         height: Int,
         refresher: Refresher
-) : AbstractChartController<UpperChatLinePainter>(chartData, width, height, refresher) {
+) : AbstractChartController<UpperChatLinePrinter>(chartData, width, height, refresher) {
 
     private val isVerticalAnimBusy = AtomicBoolean()
     private val needUpdateVerticalStep = AtomicBoolean()
@@ -56,8 +56,8 @@ class UpperChartController(
         }
     }
 
-    override fun onCreateLinePainter(line: BrokenLine): UpperChatLinePainter {
-        return UpperChatLinePainter(line, this, Constants.UPPER_CHART_LINE_THICKNESS)
+    override fun onCreateLinePainter(line: BrokenLine): UpperChatLinePrinter {
+        return UpperChatLinePrinter(line, this, Constants.UPPER_CHART_LINE_THICKNESS)
     }
 
     override fun notifyFocusRangeChanged() {
@@ -88,7 +88,7 @@ class UpperChartController(
             if (maxVal == 0f) return
             val newStep = (height - Constants.SPARE_VERTICAL_SPACE) / maxVal
             if (verticalStep != newStep) {
-                isVerticalAnimBusy.set(true)
+                isVerticalAnimBusy.set(true) // TODO NEED CHECK AGAIN MAY BE ALREADY IN PROGRESS?
                 ValueAnimator.ofFloat(verticalStep, newStep).apply {
                     duration = 400
                     repeatCount = 0

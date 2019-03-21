@@ -17,6 +17,8 @@ abstract class BaseScale<T>(resources: Resources, private val provider: ChartDet
     abstract fun onFocusedRangeChanged(focusedRange: IntRange)
     abstract fun setSize(viewWidth: Int, viewHeight: Int)
     abstract fun draw(canvas: Canvas)
+    abstract fun onLineStateChanged()
+
     fun switchDayNightMode(nightMode: Boolean, resources: Resources) {
         paintText.color = resources.getColor(R.color.scaleText, R.color.scaleTextNight, nightMode)
     }

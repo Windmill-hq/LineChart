@@ -6,7 +6,7 @@ import android.util.AttributeSet
 import com.contest.chart.model.LineChartData
 
 abstract class AbstractLineChart<CC : AbstractChartController<*>> : MeasuredView, FocusedRangeFrame.Listener,
-    Refresher {
+        Refresher {
 
     constructor(context: Context) : super(context)
 
@@ -46,7 +46,7 @@ abstract class AbstractLineChart<CC : AbstractChartController<*>> : MeasuredView
         chartController.onFocusedRangeChanged(left, right)
     }
 
-    fun onLineStateChanged(name: String, isEnabled: Boolean) {
+    open fun onLineStateChanged(name: String, isEnabled: Boolean) {
         chartController.onLineStateChanged(name, isEnabled)
     }
 
@@ -57,5 +57,6 @@ abstract class AbstractLineChart<CC : AbstractChartController<*>> : MeasuredView
     fun getController(): CC {
         return chartController
     }
+
     override fun switchDayNightMode(nightMode: Boolean) {}
 }

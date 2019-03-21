@@ -3,15 +3,15 @@ package com.contest.chart.upper
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import com.contest.chart.base.BaseLinePainter
+import com.contest.chart.base.BaseLinePrinter
 import com.contest.chart.base.DetalsProvider
 import com.contest.chart.model.BrokenLine
 
-class UpperChatLinePainter(
+class UpperChatLinePrinter(
     line: BrokenLine,
     provider: DetalsProvider,
     thickness: Float
-) : BaseLinePainter(line, thickness, provider) {
+) : BaseLinePrinter(line, thickness, provider) {
 
     private var positionOffset = 0
 

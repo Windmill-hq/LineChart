@@ -5,7 +5,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import com.contest.chart.model.BrokenLine
 
-abstract class BaseLinePainter(
+abstract class BaseLinePrinter(
     val line: BrokenLine,
     private val thickness: Float,
     val provider: DetalsProvider

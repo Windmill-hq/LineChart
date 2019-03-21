@@ -6,7 +6,7 @@ import android.graphics.Canvas
 import com.contest.chart.model.BrokenLine
 import com.contest.chart.model.LineChartData
 
-abstract class AbstractChartController<LC : BaseLinePainter>(
+abstract class AbstractChartController<LC : BaseLinePrinter>(
     val chartData: LineChartData,
     protected var width: Int,
     protected var height: Int,

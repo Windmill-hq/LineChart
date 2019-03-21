@@ -6,6 +6,7 @@ import android.graphics.Paint
 import com.contest.chart.ChartDetailsProvider
 import com.contest.chart.R
 import com.contest.chart.model.BrokenLine
+import com.contest.chart.utils.Constants
 import com.contest.chart.utils.getMaxValueInRange
 
 class VerticalScale(resources: Resources, provider: ChartDetailsProvider)
@@ -16,41 +17,43 @@ class VerticalScale(resources: Resources, provider: ChartDetailsProvider)
     private var viewWidth = 0f
     private val maxValuesStore = ArrayList<Float>()
     private var maxY = 0
+    private val dataToDraw = ArrayList<Int>()
+    private lateinit var lastRange: IntRange
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = resources.getColor(R.color.scaleText)
     }
 
-    private var step = 100
     override fun setData(data: ArrayList<BrokenLine>) {
         this.data = data
     }
 
     override fun draw(canvas: Canvas) {
-        drawLines(canvas)
-
-    }
-
-    private fun drawLines(canvas: Canvas) {
-        var y = viewHeight
-        val count = viewHeight.toInt() / step
-        for (i in 0 until count - 1) {
-            y -= step
-            canvas.drawLine(0f, y, viewWidth, y, paint)
-            canvas.drawText(getText(y), 5f, y - 3, paintText)
+        dataToDraw.forEach { value ->
+            val startY = viewHeight - value * getStepY()
+            canvas.drawLine(0f, startY, viewWidth, startY, paint)
+            canvas.drawText(value.toString(), 5f, startY - 3, paintText)
         }
-    }
-
-    private fun getText(y: Float): String {
-        val percent = (1 - y / viewHeight)
-        return (percent * maxY).toInt().toString()
     }
 
     override fun onFocusedRangeChanged(focusedRange: IntRange) {
+        lastRange = focusedRange
         val max = data.getMaxValueInRange(focusedRange, maxValuesStore)
         if (max != null) {
             maxY = max.toInt()
-            step = viewHeight.toInt() / 6 // todo animate here
+            defineData(maxY)
         }
+    }
+
+    private fun defineData(maxY: Int) {
+        dataToDraw.clear()
+        val step = maxY / Constants.AVERAGE_HORIZONTALS
+        for (value in 0..maxY step step) {
+            dataToDraw.add(value)
+        }
+    }
+
+    override fun onLineStateChanged() {
+        onFocusedRangeChanged(lastRange)
     }
 
     override fun setSize(viewWidth: Int, viewHeight: Int) {

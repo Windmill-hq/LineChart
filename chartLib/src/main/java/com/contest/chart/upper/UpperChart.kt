@@ -49,6 +49,11 @@ class UpperChart : AbstractLineChart<UpperChartController>, ChartDetailsProvider
         return viewHeight
     }
 
+    override fun onLineStateChanged(name: String, isEnabled: Boolean) {
+        super.onLineStateChanged(name, isEnabled)
+        scale.onLineStateChanged()
+    }
+
     override fun onFocusedRangeChanged(left: Int, right: Int) {
         super.onFocusedRangeChanged(left, right)
         scale.onFocusedRangeChanged(getController().getFocusedRange())

@@ -14,6 +14,11 @@ class Scale(resources: Resources, provider: ChartDetailsProvider) : BaseScale<Li
         verticalScale.setData(data.brokenLines)
     }
 
+    override fun onLineStateChanged() {
+        horizontalScale.onLineStateChanged()
+        verticalScale.onLineStateChanged()
+    }
+
     override fun setSize(viewWidth: Int, viewHeight: Int) {
         horizontalScale.setSize(viewWidth, viewHeight)
         verticalScale.setSize(viewWidth, viewHeight)

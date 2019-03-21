@@ -6,11 +6,11 @@ import com.contest.chart.model.BrokenLine
 import com.contest.chart.utils.Constants
 import com.contest.chart.utils.transparentOn
 
-open class LinePainter(
+open class LinePrinter(
     line: BrokenLine,
     provider: DetalsProvider,
     thickness: Float
-) : BaseLinePainter(line, thickness, provider) {
+) : BaseLinePrinter(line, thickness, provider) {
 
     private var unFocusedColor = line.color.transparentOn(Constants.TRANSPARENCY)
     private val focusedColor = Color.parseColor(line.color)
