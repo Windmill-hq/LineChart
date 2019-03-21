@@ -2,10 +2,13 @@ package com.contest.chart.scale
 
 import android.content.res.Resources
 import android.graphics.Canvas
+import com.contest.chart.ChartDetailsProvider
 import com.contest.chart.utils.Constants
 import com.contest.chart.utils.toStringDate
 
-class HorizontalScale(resources: Resources) : BaseScale<LongArray>(resources) {
+class HorizontalScale(resources: Resources, provider: ChartDetailsProvider)
+    : BaseScale<LongArray>(resources, provider) {
+
     private lateinit var timeLine: Array<String>
     private val datesList = ArrayList<String>()
     private var inited = false

@@ -10,7 +10,7 @@ import com.contest.chart.model.LineChartData
 import com.contest.chart.scale.Scale
 
 class UpperChart : AbstractLineChart<UpperChartController>, ChartDetailsProvider {
-    private val scale = Scale(resources)
+    private val scale = Scale(resources, this)
 
     constructor(context: Context) : super(context)
 

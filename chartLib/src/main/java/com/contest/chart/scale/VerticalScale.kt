@@ -3,11 +3,14 @@ package com.contest.chart.scale
 import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Paint
+import com.contest.chart.ChartDetailsProvider
 import com.contest.chart.R
 import com.contest.chart.model.BrokenLine
 import com.contest.chart.utils.getMaxValueInRange
 
-class VerticalScale(resources: Resources) : BaseScale<ArrayList<BrokenLine>>(resources) {
+class VerticalScale(resources: Resources, provider: ChartDetailsProvider)
+    : BaseScale<ArrayList<BrokenLine>>(resources, provider) {
+
     private lateinit var data: ArrayList<BrokenLine>
     private var viewHeight = 0f
     private var viewWidth = 0f
@@ -46,7 +49,7 @@ class VerticalScale(resources: Resources) : BaseScale<ArrayList<BrokenLine>>(res
         val max = data.getMaxValueInRange(focusedRange, maxValuesStore)
         if (max != null) {
             maxY = max.toInt()
-            step = viewHeight.toInt() / 6
+            step = viewHeight.toInt() / 6 // todo animate here
         }
     }
 

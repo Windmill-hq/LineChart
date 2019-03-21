@@ -2,12 +2,13 @@ package com.contest.chart.scale
 
 import android.content.res.Resources
 import android.graphics.Canvas
+import com.contest.chart.ChartDetailsProvider
 import com.contest.chart.model.LineChartData
 
-class Scale(resources: Resources) : BaseScale<LineChartData>(resources) {
+class Scale(resources: Resources, provider: ChartDetailsProvider) : BaseScale<LineChartData>(resources, provider) {
 
-    private val horizontalScale = HorizontalScale(resources)
-    private val verticalScale = VerticalScale(resources)
+    private val horizontalScale = HorizontalScale(resources, provider)
+    private val verticalScale = VerticalScale(resources, provider)
     override fun setData(data: LineChartData) {
         horizontalScale.setData(data.timeLine)
         verticalScale.setData(data.brokenLines)
