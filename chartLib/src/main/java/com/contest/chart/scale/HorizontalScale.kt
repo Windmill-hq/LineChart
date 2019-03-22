@@ -9,8 +9,8 @@ import com.contest.chart.model.LineChartData
 import com.contest.chart.utils.Constants
 import com.contest.chart.utils.toStringDate
 
-class HorizontalScale(resources: Resources, provider: ChartDetailsProvider)
-    : BaseScale<LineChartData>(resources, provider) {
+class HorizontalScale(resources: Resources, provider: ChartDetailsProvider) :
+    BaseScale<LineChartData>(resources, provider) {
 
     private lateinit var timeLine: Array<String>
     private var quantityOfLabel = 0
@@ -56,7 +56,8 @@ class HorizontalScale(resources: Resources, provider: ChartDetailsProvider)
 
 
     private fun defineDataToDraw(range: IntRange) {
-        val size = range.last - range.first
+        var size = range.last - range.first
+        if (size < quantityOfLabel) size = quantityOfLabel
         val stepToPick = size / quantityOfLabel
         for (index in range step stepToPick) {
             dataMap[index] = timeLine[index]

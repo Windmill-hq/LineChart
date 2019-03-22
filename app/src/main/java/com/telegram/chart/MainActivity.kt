@@ -47,12 +47,8 @@ class MainActivity : AppCompatActivity(), DataProvider.CallBack {
         }
     }
 
-    private fun switchTheme(checked: Boolean) {
-        timeLineChart.switchTheme()
-        val night = resources.getColor(R.color.backGroundDark)
-        val day = resources.getColor(R.color.white)
-        val color = if (checked) day else night
-
+    private fun switchTheme(isNight: Boolean) {
+        val color = resources.getColor(R.color.white, R.color.backGroundDark, isNight)
         root.setBackgroundColor(color)
     }
 }
