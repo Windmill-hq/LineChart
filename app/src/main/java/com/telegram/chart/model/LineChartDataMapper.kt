@@ -41,7 +41,7 @@ class LineChartDataMapper : Mapper<List<Data>, List<LineChartData>> {
 private fun MutableList<Any>.toLongArr(): LongArray {
     val result = LongArray(size)
     var index = 0
-    for (element in this) result[index++] = element.toLong()
+    for (element in this) result[index++] = element as Long
     return result
 }
 
@@ -49,11 +49,8 @@ private fun MutableList<Any>.toLongArr(): LongArray {
 private fun MutableList<Any>.toFloatArr(): FloatArray {
     val result = FloatArray(size)
     var index = 0
-    for (element in this) result[index++] = element.toFloat()
+    for (element in this) result[index++] = (element as Int).toFloat()
     return result
 }
-
-private fun Any.toLong() = (this as Double).toLong()
-private fun Any.toFloat() = (this as Double).toFloat()
 
 

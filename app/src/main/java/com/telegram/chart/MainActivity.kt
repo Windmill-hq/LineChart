@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity(), DataProvider.CallBack {
         supportActionBar?.subtitle = getString(R.string.author)
         dataProvider = DataProvider()
 
-        dataProvider.getData(this, this)
+        dataProvider.getDataMy(this, this)
     }
 
     override fun onSuccess(chartsDataList: List<LineChartData>) {
@@ -43,8 +43,9 @@ class MainActivity : AppCompatActivity(), DataProvider.CallBack {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.night_mode -> {
-                switchTheme(item.isChecked)
                 item.isChecked = !item.isChecked
+                switchTheme(item.isChecked)
+                timeLineChart.switchTheme()
                 true
             }
             else -> super.onOptionsItemSelected(item)
