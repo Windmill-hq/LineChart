@@ -105,7 +105,7 @@ class UpperChartController(
             val maxVal = getMaxSize()
             if (maxVal == 0) return
             val newStep = width / maxVal.toFloat()
-            if (horizontalStep != newStep.toFloat()) {
+            if (horizontalStep != newStep) {
                 isHorizontalAnimBusy.set(true)
                 ValueAnimator.ofFloat(horizontalStep, newStep).apply {
                     duration = 200

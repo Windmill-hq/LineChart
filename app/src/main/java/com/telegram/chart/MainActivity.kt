@@ -1,5 +1,6 @@
 package com.telegram.chart
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
@@ -15,6 +16,9 @@ class MainActivity : AppCompatActivity(), DataProvider.CallBack {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (!resources.getBoolean(R.bool.isTablet))
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         supportActionBar?.subtitle = getString(R.string.author)

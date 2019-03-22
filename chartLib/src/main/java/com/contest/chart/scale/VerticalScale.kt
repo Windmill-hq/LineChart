@@ -9,8 +9,8 @@ import com.contest.chart.model.BrokenLine
 import com.contest.chart.utils.Constants
 import com.contest.chart.utils.getMaxValueInRange
 
-class VerticalScale(resources: Resources, provider: ChartDetailsProvider)
-    : BaseScale<ArrayList<BrokenLine>>(resources, provider) {
+class VerticalScale(resources: Resources, provider: ChartDetailsProvider) :
+    BaseScale<ArrayList<BrokenLine>>(resources, provider) {
 
     private lateinit var data: ArrayList<BrokenLine>
     private var viewHeight = 0f
