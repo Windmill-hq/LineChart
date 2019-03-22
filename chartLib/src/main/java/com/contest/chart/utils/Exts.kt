@@ -1,5 +1,6 @@
 package com.contest.chart.utils
 
+import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Color
 import android.widget.CheckBox
@@ -11,9 +12,11 @@ import com.contest.chart.model.LineChartData
 import java.util.*
 
 
-fun FrameLayout.createCheckBox(name: String, listener: CompoundButton.OnCheckedChangeListener): CheckBox {
+fun FrameLayout.createCheckBox(name: String, color: Int, listener: CompoundButton.OnCheckedChangeListener): CheckBox {
     val checkBox = CheckBox(context)
+    checkBox.buttonTintList = ColorStateList.valueOf(color)
     checkBox.text = name
+    checkBox.setTextColor(color)
     checkBox.isChecked = true
     checkBox.setOnCheckedChangeListener(listener)
     return checkBox

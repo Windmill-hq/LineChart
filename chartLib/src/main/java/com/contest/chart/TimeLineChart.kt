@@ -1,6 +1,7 @@
 package com.contest.chart
 
 import android.content.Context
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -94,10 +95,9 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
     }
 
     private fun setNames(chartData: LineChartData) {
-        val names = getNames(chartData)
         namesLayout.removeAllViews()
-        names.forEach {
-            namesLayout.addView(createCheckBox(it, this), createLayoutParams())
+        chartData.brokenLines.forEach {
+            namesLayout.addView(createCheckBox(it.name, Color.parseColor(it.color), this), createLayoutParams())
         }
     }
 
@@ -106,12 +106,6 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
         bottomChart.onLineStateChanged(name, isChecked)
         upperChart.onLineStateChanged(name, isChecked)
         detailsView.refresh()
-    }
-
-    private fun getNames(chartData: LineChartData): MutableList<String> {
-        val names = mutableListOf<String>()
-        chartData.brokenLines.forEach { line -> names.add(line.name) }
-        return names
     }
 
     fun switchTheme() {
