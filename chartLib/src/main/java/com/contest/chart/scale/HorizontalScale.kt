@@ -28,13 +28,9 @@ class HorizontalScale(resources: Resources, provider: ChartDetailsProvider) :
     }
 
     override fun draw(canvas: Canvas) {
-        val size = dataMap.size
-        var count = 0
         dataMap.forEach {
-            count++
-            var position = (it.key - positionOffset) * getStepX()
+            val position = (it.key - positionOffset) * getStepX()
             val date = it.value
-            if (count == size && position > maxPositionX) position = maxPositionX.toFloat()
             canvas.drawText(date, position, startY, paintText)
         }
     }
@@ -54,12 +50,12 @@ class HorizontalScale(resources: Resources, provider: ChartDetailsProvider) :
         if (!isChartEnabled()) dataMap.clear()
     }
 
-
     private fun defineDataToDraw(range: IntRange) {
         var size = range.last - range.first
         if (size < quantityOfLabel) size = quantityOfLabel
         val stepToPick = size / quantityOfLabel
-        for (index in range step stepToPick) {
+
+        for (index in 0 until timeLine.size step stepToPick) {
             dataMap[index] = timeLine[index]
         }
     }

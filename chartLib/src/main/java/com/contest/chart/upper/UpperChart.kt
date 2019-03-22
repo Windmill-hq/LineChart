@@ -11,7 +11,8 @@ import com.contest.chart.base.Type
 import com.contest.chart.model.LineChartData
 import com.contest.chart.scale.Scale
 
-class UpperChart : AbstractLineChart<UpperChartController>, ChartDetailsProvider, FocusedRangeFrame.MovementTypeListener {
+class UpperChart : AbstractLineChart<UpperChartController>, ChartDetailsProvider,
+    FocusedRangeFrame.MovementTypeListener {
     private val scale = Scale(resources, this)
 
     constructor(context: Context) : super(context)
@@ -19,7 +20,6 @@ class UpperChart : AbstractLineChart<UpperChartController>, ChartDetailsProvider
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
 
     override fun onCreateController(data: LineChartData): UpperChartController {
         return UpperChartController(data, viewWidth, viewHeight, this)
@@ -39,8 +39,12 @@ class UpperChart : AbstractLineChart<UpperChartController>, ChartDetailsProvider
         super.onDraw(canvas)
     }
 
+    val step = Step(0f, 0f)
+
     override fun getChartStep(): Step {
-        return Step(getController().horizontalStep, getController().verticalStep)
+        step.xStep = getController().horizontalStep
+        step.yStep = getController().verticalStep
+        return step
     }
 
     override fun getPositionOffset(): Int {

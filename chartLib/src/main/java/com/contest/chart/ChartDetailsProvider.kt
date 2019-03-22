@@ -6,4 +6,4 @@ interface ChartDetailsProvider {
     fun getPositionOffset(): Int
 }
 
-class Step(val xStep: Float, val yStep: Float)
+class Step(var xStep: Float, var yStep: Float)
