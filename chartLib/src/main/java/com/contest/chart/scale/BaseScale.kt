@@ -5,7 +5,6 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import com.contest.chart.ChartDetailsProvider
 import com.contest.chart.R
-import com.contest.chart.base.Type
 import com.contest.chart.utils.getColor
 
 abstract class BaseScale<T>(resources: Resources, private val provider: ChartDetailsProvider) {

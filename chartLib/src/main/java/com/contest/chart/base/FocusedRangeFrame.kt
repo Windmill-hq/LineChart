@@ -229,7 +229,3 @@ class FocusedRangeFrame : MeasuredView {
         fun onFocusedRangeChanged(left: Int, right: Int)
     }
 }
-
-enum class Type {
-    TOGETHER, PARTIALLY
-}

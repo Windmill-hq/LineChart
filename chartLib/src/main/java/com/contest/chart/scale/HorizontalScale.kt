@@ -3,7 +3,6 @@ package com.contest.chart.scale
 import android.content.res.Resources
 import android.graphics.Canvas
 import com.contest.chart.ChartDetailsProvider
-import com.contest.chart.base.Type
 import com.contest.chart.model.BrokenLine
 import com.contest.chart.model.LineChartData
 import com.contest.chart.utils.Constants
