@@ -10,7 +10,7 @@ import com.contest.chart.utils.Constants
 import com.contest.chart.utils.getMaxValueInRange
 
 class VerticalScale(resources: Resources, provider: ChartDetailsProvider) :
-    BaseScale<ArrayList<BrokenLine>>(resources, provider) {
+        BaseScale<ArrayList<BrokenLine>>(resources, provider) {
 
     private lateinit var data: ArrayList<BrokenLine>
     private var viewHeight = 0f
@@ -30,7 +30,16 @@ class VerticalScale(resources: Resources, provider: ChartDetailsProvider) :
         dataToDraw.forEachIndexed { index, value ->
             val startY = viewHeight - value * getStepY()
             canvas.drawLine(0f, startY, viewWidth, startY, paint)
-            if (index != 0) canvas.drawText(value.toString(), 5f, startY - 3, paintText)
+            if (index != 0) canvas.drawText(beautify(value), 5f, startY - 3, paintText)
+        }
+    }
+
+    private fun beautify(value: Int): String {
+        val length = value.toString().length
+        return when {
+            length > 6 -> (value / 1000000).toString() + "M"
+            length > 3 -> (value / 1000).toString() + "K"
+            else -> value.toString()
         }
     }
 

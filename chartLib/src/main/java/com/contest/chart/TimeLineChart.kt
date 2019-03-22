@@ -1,18 +1,19 @@
 package com.contest.chart
 
 import android.content.Context
-import android.support.v7.app.AlertDialog
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.*
 import com.contest.chart.base.FocusedRangeFrame
 import com.contest.chart.bottom.BottomChart
-import com.contest.chart.model.LineChartData
 import com.contest.chart.details.DetailsView
+import com.contest.chart.model.LineChartData
 import com.contest.chart.upper.UpperChart
 import com.contest.chart.utils.createCheckBox
 import com.contest.chart.utils.createLayoutParams
 import com.contest.chart.utils.getColor
+
 
 class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
 
@@ -54,31 +55,33 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
         focusedRangeFrame.addListener(bottomChart)
         focusedRangeFrame.addListener(upperChart)
 
-        view.findViewById<TextView>(R.id.title).setOnClickListener { showDialog() }
+        spinner = view.findViewById(R.id.chart_spinner)
     }
 
-    private fun showDialog() {
-        val values = Array(chartDataList.size) { "" }
+    lateinit var spinner: Spinner
 
-        chartDataList.forEachIndexed { index, _ -> values[index] = "Chart #$index" }
+    private fun prepareSpinner() {
+        val values = ArrayList<String>()
+        chartDataList.forEachIndexed { index, _ -> values.add("Chart $index") }
 
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle("Choose chart!")
-        builder.setSingleChoiceItems(values, checkedChart) { dialog, which ->
-            checkedChart = which
-            setChartData(chartDataList[which])
-            focusedRangeFrame.getFocusedRange()
-            dialog.dismiss()
+        val adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, values)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                checkedChart = position
+                setChartData(chartDataList[position])
+                focusedRangeFrame.getFocusedRange()
+            }
         }
-        builder.setNegativeButton("Cancel") { _, _ -> }
-        builder.show()
-
     }
 
     fun setData(dataList: List<LineChartData>) {
         chartDataList.clear()
         chartDataList.addAll(dataList)
-
+        prepareSpinner()
         setChartData(dataList.first())
     }
 
