@@ -3,7 +3,6 @@ package com.contest.chart.scale
 import android.content.res.Resources
 import android.graphics.Canvas
 import com.contest.chart.ChartDetailsProvider
-import com.contest.chart.base.Type
 import com.contest.chart.model.LineChartData
 
 class Scale(resources: Resources, provider: ChartDetailsProvider) : BaseScale<LineChartData>(resources, provider) {
@@ -33,9 +32,5 @@ class Scale(resources: Resources, provider: ChartDetailsProvider) : BaseScale<Li
     override fun onFocusedRangeChanged(focusedRange: IntRange) {
         horizontalScale.onFocusedRangeChanged(focusedRange)
         verticalScale.onFocusedRangeChanged(focusedRange)
-    }
-
-    override fun onMove(type: Type) {
-        horizontalScale.onMove(type)
     }
 }

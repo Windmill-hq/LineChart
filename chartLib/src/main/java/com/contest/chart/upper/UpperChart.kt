@@ -6,13 +6,10 @@ import android.util.AttributeSet
 import com.contest.chart.Step
 import com.contest.chart.ChartDetailsProvider
 import com.contest.chart.base.AbstractLineChart
-import com.contest.chart.base.FocusedRangeFrame
-import com.contest.chart.base.Type
 import com.contest.chart.model.LineChartData
 import com.contest.chart.scale.Scale
 
-class UpperChart : AbstractLineChart<UpperChartController>, ChartDetailsProvider,
-    FocusedRangeFrame.MovementTypeListener {
+class UpperChart : AbstractLineChart<UpperChartController>, ChartDetailsProvider {
     private val scale = Scale(resources, this)
 
     constructor(context: Context) : super(context)
@@ -67,9 +64,5 @@ class UpperChart : AbstractLineChart<UpperChartController>, ChartDetailsProvider
 
     override fun switchDayNightMode(nightMode: Boolean) {
         scale.switchDayNightMode(nightMode, resources)
-    }
-
-    override fun onMove(type: Type) {
-        scale.onMove(type)
     }
 }

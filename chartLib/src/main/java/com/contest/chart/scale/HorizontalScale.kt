@@ -19,7 +19,6 @@ class HorizontalScale(resources: Resources, provider: ChartDetailsProvider) :
     private var positionOffset = 0
     private var viewWidth = 0
     private var maxPositionX = 0
-    private var movementType = Type.PARTIALLY
     private lateinit var brokenLines: ArrayList<BrokenLine>
 
     override fun setData(data: LineChartData) {
@@ -58,10 +57,6 @@ class HorizontalScale(resources: Resources, provider: ChartDetailsProvider) :
         for (index in 0 until timeLine.size step stepToPick) {
             dataMap[index] = timeLine[index]
         }
-    }
-
-    override fun onMove(type: Type) {
-        movementType = type
     }
 
     private fun isChartEnabled(): Boolean {

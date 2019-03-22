@@ -39,6 +39,4 @@ abstract class BaseScale<T>(resources: Resources, private val provider: ChartDet
     open fun onFocusedRangeChanged(focusedRange: IntRange) {
         lastRange = focusedRange
     }
-
-    open fun onMove(type: Type) {}
 }
