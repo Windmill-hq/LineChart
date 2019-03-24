@@ -6,6 +6,7 @@ import android.graphics.Paint
 import com.contest.chart.base.BaseLinePrinter
 import com.contest.chart.base.DetalsProvider
 import com.contest.chart.model.BrokenLine
+import com.contest.chart.utils.Constants
 
 class UpperChatLinePrinter(
     line: BrokenLine,
@@ -26,12 +27,10 @@ class UpperChatLinePrinter(
 
             val originY1 = line.points[positionX]
             val originY2 = line.points[positionX + 1]
-            val y1 = getStartY() - originY1 * yStep
-            val y2 = getStartY() - originY2 * yStep
+            val y1 = getStartY() - originY1 * yStep - Constants.BOTTOM_VERTICAL_OFFSET
+            val y2 = getStartY() - originY2 * yStep - Constants.BOTTOM_VERTICAL_OFFSET
 
             canvas.drawLine(x1, y1, x2, y2, paint)
-//          canvas.drawText(" $x1", x1, y1, paintText)
-//          canvas.drawText(" $x2", x2, y2, paintText)
             makeSmooth(canvas, x1, y1)
             makeSmooth(canvas, x2, y2)
         }

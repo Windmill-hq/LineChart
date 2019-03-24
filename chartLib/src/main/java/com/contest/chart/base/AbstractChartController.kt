@@ -8,10 +8,10 @@ import com.contest.chart.model.LineChartData
 import com.contest.chart.utils.Constants
 
 abstract class AbstractChartController<LC : BaseLinePrinter>(
-    val chartData: LineChartData,
-    protected var width: Int,
-    protected var height: Int,
-    private val refresher: Refresher
+        val chartData: LineChartData,
+        protected var width: Int,
+        protected var height: Int,
+        private val refresher: Refresher
 ) : DetalsProvider {
 
     private val lineControllers = ArrayList<LC>()
@@ -75,7 +75,7 @@ abstract class AbstractChartController<LC : BaseLinePrinter>(
 
     protected fun calculateVerticalStepNoAnim() {
         val maxVal = getMaxValue()
-        verticalStep = (height - Constants.SPARE_VERTICAL_SPACE) / maxVal
+        verticalStep = (height - Constants.UPPER_VERTICAL_OFFSET) / maxVal
     }
 
     protected fun calculateHorizontalStepNoAnim() {

@@ -3,6 +3,7 @@ package com.contest.chart
 import android.graphics.PointF
 import com.contest.chart.model.InterceptionInfo
 import com.contest.chart.model.LineChartData
+import com.contest.chart.utils.Constants
 
 class DataController : DataProvider {
     private lateinit var chartdata: LineChartData
@@ -76,11 +77,11 @@ class DataController : DataProvider {
     ): Pair<PointF, PointF> {
         //  first point of chart line is defined
         val startPointX = (startPosition - positionOffset) * step.xStep
-        val startPointY = height - points[startPosition] * step.yStep
+        val startPointY = height - points[startPosition] * step.yStep - Constants.BOTTOM_VERTICAL_OFFSET
 
         // second point of chart line is defined
         val stopPointX = (startPosition + 1 - positionOffset) * step.xStep
-        val stopPointY = height - points[startPosition + 1] * step.yStep
+        val stopPointY = height - points[startPosition + 1] * step.yStep - Constants.BOTTOM_VERTICAL_OFFSET
 
         val start = PointF(startPointX, startPointY)
         val stop = PointF(stopPointX, stopPointY)

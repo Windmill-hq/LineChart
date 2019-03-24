@@ -11,6 +11,7 @@ import com.contest.chart.scale.Scale
 
 class UpperChart : AbstractLineChart<UpperChartController>, ChartDetailsProvider {
     private val scale = Scale(resources, this)
+    private val step = Step(0f, 0f)
 
     constructor(context: Context) : super(context)
 
@@ -35,8 +36,6 @@ class UpperChart : AbstractLineChart<UpperChartController>, ChartDetailsProvider
         scale.draw(canvas)
         super.onDraw(canvas)
     }
-
-    val step = Step(0f, 0f)
 
     override fun getChartStep(): Step {
         step.xStep = getController().horizontalStep

@@ -26,20 +26,12 @@ class VerticalScale(resources: Resources, provider: ChartDetailsProvider) :
         this.data = data
     }
 
+    private val textOffset = 3
     override fun draw(canvas: Canvas) {
         dataToDraw.forEachIndexed { index, value ->
-            val startY = viewHeight - value * getStepY()
-            canvas.drawLine(0f, startY, viewWidth, startY, paint)
-            if (index != 0) canvas.drawText(beautify(value), 5f, startY - 3, paintText)
-        }
-    }
-
-    private fun beautify(value: Int): String {
-        val length = value.toString().length
-        return when {
-            length > 6 -> (value / 1000000).toString() + "M"
-            length > 3 -> (value / 1000).toString() + "K"
-            else -> value.toString()
+            val startY = viewHeight - value * getStepY() - Constants.BOTTOM_VERTICAL_OFFSET
+            canvas.drawLine(10f, startY, viewWidth, startY, paint)
+            canvas.drawText(withSuffix(value), 10f, startY - textOffset, paintText)
         }
     }
 
@@ -63,5 +55,11 @@ class VerticalScale(resources: Resources, provider: ChartDetailsProvider) :
     override fun setSize(viewWidth: Int, viewHeight: Int) {
         this.viewWidth = viewWidth.toFloat()
         this.viewHeight = viewHeight.toFloat()
+    }
+
+    private fun withSuffix(count: Int): String {
+        if (count < 1000) return "" + count
+        val exp = (Math.log(count.toDouble()) / Math.log(1000.0)).toInt()
+        return String.format("%.1f %c", count / Math.pow(1000.0, exp.toDouble()), "kMGTPE"[exp - 1])
     }
 }

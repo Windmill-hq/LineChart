@@ -9,7 +9,7 @@ import com.contest.chart.utils.Constants
 import com.contest.chart.utils.toStringDate
 
 class HorizontalScale(resources: Resources, provider: ChartDetailsProvider) :
-    BaseScale<LineChartData>(resources, provider) {
+        BaseScale<LineChartData>(resources, provider) {
 
     private lateinit var timeLine: Array<String>
     private var quantityOfLabel = 0
@@ -27,10 +27,23 @@ class HorizontalScale(resources: Resources, provider: ChartDetailsProvider) :
 
     override fun draw(canvas: Canvas) {
         dataMap.forEach {
-            val position = (it.key - positionOffset) * getStepX()
+            val position = (it.key - positionOffset) * getStableX()
             val date = it.value
             canvas.drawText(date, position, startY, paintText)
         }
+    }
+
+    private var lastStepX = 0f
+    private val minDiff = 0.08f
+
+    private fun getStableX(): Float {
+        val newStep = getStepX()
+        if (lastStepX == 0f) lastStepX = newStep
+        val difInPercent = Math.abs(lastStepX - newStep) / newStep
+        if (difInPercent > minDiff) {
+            lastStepX = newStep
+        }
+        return lastStepX
     }
 
     override fun setSize(viewWidth: Int, viewHeight: Int) {

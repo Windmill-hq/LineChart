@@ -85,7 +85,7 @@ class UpperChartController(
         } else {
             val maxVal = getMaxValue()
             if (maxVal == 0f) return
-            val newStep = (height - Constants.SPARE_VERTICAL_SPACE) / maxVal
+            val newStep = (height - Constants.UPPER_VERTICAL_OFFSET) / maxVal
             if (verticalStep != newStep) {
                 isVerticalAnimBusy.set(true)
                 ValueAnimator.ofFloat(verticalStep, newStep).apply {
