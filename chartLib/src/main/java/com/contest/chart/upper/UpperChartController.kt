@@ -8,6 +8,7 @@ import com.contest.chart.base.Refresher
 import com.contest.chart.model.BrokenLine
 import com.contest.chart.model.LineChartData
 import com.contest.chart.utils.Constants
+import com.contest.chart.utils.animateValue
 import com.contest.chart.utils.getChartMaxSize
 import com.contest.chart.utils.getChartMaxValueInRange
 import java.util.concurrent.atomic.AtomicBoolean
@@ -18,24 +19,6 @@ class UpperChartController(
     height: Int,
     refresher: Refresher
 ) : AbstractChartController<UpperChatLinePrinter>(chartData, width, height, refresher) {
-
-    private val isVerticalAnimBusy = AtomicBoolean()
-    private val needUpdateVerticalStep = AtomicBoolean()
-
-    private val verticalAnimListener = object : BaseListener {
-        override fun onAnimationUpdate(animation: ValueAnimator) {
-            verticalStep = animation.animatedValue as Float
-            refresher.refresh()
-        }
-
-        override fun onAnimationEnd(animation: Animator) {
-            isVerticalAnimBusy.set(false)
-            if (needUpdateVerticalStep.get()) {
-                needUpdateVerticalStep.set(false)
-                calculateVerticalStep()
-            }
-        }
-    }
 
     private val isHorizontalAnimBusy = AtomicBoolean()
     private val needUpdateHorizontalStep = AtomicBoolean()
@@ -74,29 +57,10 @@ class UpperChartController(
     }
 
     override fun calculateSteps() {
-        calculateHorizontalStep()
+        calculateHorizontalStepNoAnim()
         calculateVerticalStep()
     }
 
-
-    private fun calculateVerticalStep() {
-        if (isVerticalAnimBusy.get()) {
-            needUpdateVerticalStep.set(true)
-        } else {
-            val maxVal = getMaxValue()
-            if (maxVal == 0f) return
-            val newStep = (height - Constants.UPPER_VERTICAL_OFFSET) / maxVal
-            if (verticalStep != newStep) {
-                isVerticalAnimBusy.set(true)
-                ValueAnimator.ofFloat(verticalStep, newStep).apply {
-                    duration = 400
-                    repeatCount = 0
-                    addUpdateListener(verticalAnimListener)
-                    addListener(verticalAnimListener)
-                }.start()
-            }
-        }
-    }
 
     private fun calculateHorizontalStep() {
         if (isHorizontalAnimBusy.get()) {
@@ -107,14 +71,10 @@ class UpperChartController(
             val newStep = width / maxVal.toFloat()
             if (horizontalStep != newStep) {
                 isHorizontalAnimBusy.set(true)
-                ValueAnimator.ofFloat(horizontalStep, newStep).apply {
-                    duration = 200
-                    repeatCount = 0
-                    addUpdateListener(horizontalAnimListener)
-                    addListener(horizontalAnimListener)
-                }.start()
+                animateValue(horizontalStep, newStep, 200, horizontalAnimListener)
             }
         }
     }
 }
+
 

@@ -1,5 +1,6 @@
 package com.contest.chart.utils
 
+import android.animation.ValueAnimator
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Color
@@ -7,6 +8,7 @@ import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import com.contest.chart.base.BaseListener
 import com.contest.chart.model.BrokenLine
 import com.contest.chart.model.LineChartData
 import java.util.*
@@ -34,11 +36,6 @@ fun String.transparentOn(transparency: String): Int {
     val pale = StringBuilder(this).insert(1, transparency).toString()
     return Color.parseColor(pale)
 }
-
-fun BrokenLine.getSampledPoints(focusRange: IntRange): FloatArray {
-    return this.points.copyOfRange(focusRange.first, focusRange.last)
-}
-
 
 fun ArrayList<BrokenLine>.getMaxValueInRange(range: IntRange, store: ArrayList<Float>): Float? {
     store.clear()
@@ -112,6 +109,22 @@ fun LineChartData.getChartMaxSize(store: ArrayList<Int>, range: IntRange? = null
 
     return store.max() ?: 0
 }
+
+fun animateValue(
+    startVal: Float,
+    endVal: Float,
+    time: Long,
+    listener: BaseListener
+) {
+
+    ValueAnimator.ofFloat(startVal, endVal).apply {
+        duration = time
+        repeatCount = 0
+        addUpdateListener(listener)
+        addListener(listener)
+    }.start()
+}
+
 
 
 

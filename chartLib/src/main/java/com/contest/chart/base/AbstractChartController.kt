@@ -6,12 +6,14 @@ import android.graphics.Canvas
 import com.contest.chart.model.BrokenLine
 import com.contest.chart.model.LineChartData
 import com.contest.chart.utils.Constants
+import com.contest.chart.utils.animateValue
+import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class AbstractChartController<LC : BaseLinePrinter>(
-        val chartData: LineChartData,
-        protected var width: Int,
-        protected var height: Int,
-        private val refresher: Refresher
+    val chartData: LineChartData,
+    protected var width: Int,
+    protected var height: Int,
+    private val refresher: Refresher
 ) : DetalsProvider {
 
     private val lineControllers = ArrayList<LC>()
@@ -24,6 +26,39 @@ abstract class AbstractChartController<LC : BaseLinePrinter>(
     init {
         chartData.brokenLines.forEach { lineControllers.add(onCreateLinePainter(it)) }
     }
+
+    private val isVerticalAnimBusy = AtomicBoolean()
+    private val needUpdateVerticalStep = AtomicBoolean()
+
+    private val verticalAnimListener = object : BaseListener {
+        override fun onAnimationUpdate(animation: ValueAnimator) {
+            verticalStep = animation.animatedValue as Float
+            refresher.refresh()
+        }
+
+        override fun onAnimationEnd(animation: Animator) {
+            isVerticalAnimBusy.set(false)
+            if (needUpdateVerticalStep.get()) {
+                needUpdateVerticalStep.set(false)
+                calculateVerticalStep()
+            }
+        }
+    }
+
+    protected fun calculateVerticalStep() {
+        if (isVerticalAnimBusy.get()) {
+            needUpdateVerticalStep.set(true)
+        } else {
+            val maxVal = getMaxValue()
+            if (maxVal == 0f) return
+            val newStep = (height - Constants.UPPER_VERTICAL_OFFSET) / maxVal
+            if (verticalStep != newStep) {
+                isVerticalAnimBusy.set(true)
+                animateValue(verticalStep, newStep, 400, verticalAnimListener)
+            }
+        }
+    }
+
 
     override fun getStartY(): Int {
         return height
