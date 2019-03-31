@@ -12,16 +12,11 @@ open class LinePrinter(
     thickness: Float
 ) : BaseLinePrinter(line, thickness, provider) {
 
-    private var unFocusedColor = line.color.transparentOn(Constants.TRANSPARENCY)
-    private val focusedColor = Color.parseColor(line.color)
-
     override fun draw(canvas: Canvas, xStep: Float, yStep: Float) {
         if (!line.isEnabled) return
 
         val size = line.points.size - 1
         for (positionX in 0 until size) {
-
-            paint.color = detectColor(positionX)
 
             val x1 = positionX * xStep
             val x2 = (positionX + 1) * xStep
@@ -33,9 +28,5 @@ open class LinePrinter(
 
             canvas.drawLine(x1, y1, x2, y2, paint)
         }
-    }
-
-    private fun detectColor(index: Int): Int {
-        return if (provider.isFocused(index)) focusedColor else unFocusedColor
     }
 }

@@ -14,10 +14,10 @@ abstract class AbstractLineChart<CC : AbstractChartController<*>> : MeasuredView
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    private var isInited = false
+    protected var isInited = false
     protected var viewWidth = 0
     protected var viewHeight = 0
-    private lateinit var chartController: CC
+    protected lateinit var chartController: CC
 
     override fun onMeasured(width: Int, height: Int) {
         this.viewWidth = width
@@ -37,7 +37,7 @@ abstract class AbstractLineChart<CC : AbstractChartController<*>> : MeasuredView
         chartController.draw(canvas)
     }
 
-    fun setData(chartData: LineChartData) {
+   open fun setData(chartData: LineChartData) {
         onAdditionalInit(chartData)
         chartController = onCreateController(chartData)
         isInited = true

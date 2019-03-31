@@ -18,6 +18,7 @@ class UpperChartController(
     chartView: ChartView
 ) : AbstractChartController<UpperChatLinePrinter>(chartData, chartView) {
 
+    private var focusRange = 0..1
     private val isHorizontalAnimBusy = AtomicBoolean()
     private val needUpdateHorizontalStep = AtomicBoolean()
 
@@ -72,6 +73,20 @@ class UpperChartController(
                 animateValue(horizontalStep, newStep, 200, horizontalAnimListener)
             }
         }
+    }
+
+    override fun onFocusedRangeChanged(left: Int, right: Int) {
+        val size = lineControllers[0].getPoints().size
+        val focusLeft = size * left / 100
+        val focusRight = size * right / 100
+        focusRange = focusLeft..focusRight
+        calculateSteps()
+        notifyFocusRangeChanged()
+        view.update()
+    }
+
+    override fun getFocusedRange(): IntRange {
+        return focusRange
     }
 }
 

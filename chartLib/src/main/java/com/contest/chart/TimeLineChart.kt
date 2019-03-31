@@ -47,7 +47,6 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
         detailsView.setDataProvider(dataController)
         dataController.setChartDetailsProvider(upperChart)
 
-        focusedRangeFrame.addListener(bottomChart)
         focusedRangeFrame.addListener(upperChart)
 
         spinner = view.findViewById(R.id.chart_spinner)
@@ -77,7 +76,7 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
         chartDataList.clear()
         chartDataList.addAll(dataList)
         prepareSpinner()
-        setChartData(dataList.first())
+//        setChartData(dataList.last())
     }
 
     private fun setChartData(chartData: LineChartData) {

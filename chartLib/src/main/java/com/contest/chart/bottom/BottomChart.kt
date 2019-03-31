@@ -16,4 +16,11 @@ class BottomChart : AbstractLineChart<BottomChartController> {
     override fun onCreateController(data: LineChartData): BottomChartController {
         return BottomChartController(data, this)
     }
+
+    override fun setData(chartData: LineChartData) {
+        onAdditionalInit(chartData)
+        chartController = onCreateController(chartData)
+        isInited = true
+        update()
+    }
 }

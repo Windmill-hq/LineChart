@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity(), DataProvider.CallBack {
 
         setContentView(R.layout.activity_main)
         dataProvider = DataProvider()
-        dataProvider.getDataMy(this, this)
+        dataProvider.getData(this, this)
         night_mode_button.setOnClickListener { switchTheme() }
     }
 

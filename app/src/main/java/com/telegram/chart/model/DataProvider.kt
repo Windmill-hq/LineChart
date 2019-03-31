@@ -9,7 +9,7 @@ class DataProvider {
 
     private val fileName = "chart_data.json"
 
-    fun getDataMy(context: Context, callBack: CallBack) {
+    fun getData(context: Context, callBack: CallBack) {
         try {
             val chartsDataList = ArrayList<Data>()
             val content = context.assets.open(fileName).bufferedReader().use { it.readText() }

@@ -27,8 +27,18 @@ class BottomChartController(chartData: LineChartData, chartView: ChartView) :
     override fun notifyFocusRangeChanged() {
     }
 
+    init {
+        calculateSteps()
+    }
+
     override fun calculateSteps() {
         calculateVerticalStep()
         calculateHorizontalStepNoAnim()
+    }
+
+    override fun onFocusedRangeChanged(left: Int, right: Int) {}
+
+    override fun getFocusedRange(): IntRange {
+        return IntRange.EMPTY
     }
 }

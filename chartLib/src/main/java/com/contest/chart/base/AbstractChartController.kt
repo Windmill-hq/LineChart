@@ -9,15 +9,14 @@ import com.contest.chart.utils.Constants
 import com.contest.chart.utils.animateValue
 import java.util.concurrent.atomic.AtomicBoolean
 
-abstract class AbstractChartController<LC : BaseLinePrinter>(
+abstract class AbstractChartController<LP : BaseLinePrinter>(
     val chartData: LineChartData,
     protected val view: ChartView
 ) : DetalsProvider {
 
-    private val lineControllers = ArrayList<LC>()
+    protected val lineControllers = ArrayList<LP>()
     var horizontalStep = 0f
     var verticalStep = 0f
-    protected var focusRange = 0..1
     protected var yStepStore: ArrayList<Float> = ArrayList()
     protected var xStepStore: ArrayList<Int> = ArrayList()
 
@@ -62,7 +61,7 @@ abstract class AbstractChartController<LC : BaseLinePrinter>(
         return view.getChartHeight()
     }
 
-    abstract fun onCreateLinePainter(line: BrokenLine): LC
+    abstract fun onCreateLinePainter(line: BrokenLine): LP
 
     abstract fun getMaxSize(): Int
 
@@ -72,20 +71,12 @@ abstract class AbstractChartController<LC : BaseLinePrinter>(
 
     abstract fun calculateSteps()
 
+    abstract fun onFocusedRangeChanged(left: Int, right: Int)
+
     fun draw(canvas: Canvas) {
         lineControllers.forEach {
             it.draw(canvas, horizontalStep, verticalStep)
         }
-    }
-
-    fun onFocusedRangeChanged(left: Int, right: Int) {
-        val size = lineControllers[0].getPoints().size
-        val focusLeft = size * left / 100
-        val focusRight = size * right / 100
-        focusRange = focusLeft..focusRight
-        calculateSteps()
-        notifyFocusRangeChanged()
-        view.update()
     }
 
     fun onLineStateChanged(name: String, isShow: Boolean) {
@@ -94,15 +85,7 @@ abstract class AbstractChartController<LC : BaseLinePrinter>(
         view.update()
     }
 
-    override fun isFocused(pos: Int): Boolean {
-        return pos in focusRange
-    }
-
-    override fun getFocusedRange(): IntRange {
-        return focusRange
-    }
-
-    fun getControllers(): List<LC> {
+    fun getControllers(): List<LP> {
         return lineControllers
     }
 
