@@ -4,7 +4,7 @@ import android.animation.Animator
 import android.animation.ValueAnimator
 import com.contest.chart.base.AbstractChartController
 import com.contest.chart.base.BaseListener
-import com.contest.chart.base.Refresher
+import com.contest.chart.base.ChartView
 import com.contest.chart.model.BrokenLine
 import com.contest.chart.model.LineChartData
 import com.contest.chart.utils.Constants
@@ -15,10 +15,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class UpperChartController(
     chartData: LineChartData,
-    width: Int,
-    height: Int,
-    refresher: Refresher
-) : AbstractChartController<UpperChatLinePrinter>(chartData, width, height, refresher) {
+    chartView: ChartView
+) : AbstractChartController<UpperChatLinePrinter>(chartData, chartView) {
 
     private val isHorizontalAnimBusy = AtomicBoolean()
     private val needUpdateHorizontalStep = AtomicBoolean()
@@ -26,7 +24,7 @@ class UpperChartController(
     private val horizontalAnimListener = object : BaseListener {
         override fun onAnimationUpdate(animation: ValueAnimator) {
             horizontalStep = animation.animatedValue as Float
-            refresher.refresh()
+            chartView.update()
         }
 
         override fun onAnimationEnd(animation: Animator) {
@@ -68,7 +66,7 @@ class UpperChartController(
         } else {
             val maxVal = getMaxSize()
             if (maxVal == 0) return
-            val newStep = width / maxVal.toFloat()
+            val newStep = view.getChartWidth() / maxVal.toFloat()
             if (horizontalStep != newStep) {
                 isHorizontalAnimBusy.set(true)
                 animateValue(horizontalStep, newStep, 200, horizontalAnimListener)

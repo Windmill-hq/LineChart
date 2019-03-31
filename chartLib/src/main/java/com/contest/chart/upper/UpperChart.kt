@@ -12,6 +12,7 @@ import com.contest.chart.scale.Scale
 class UpperChart : AbstractLineChart<UpperChartController>, ChartDetailsProvider {
     private val scale = Scale(resources, this)
     private val step = Step(0f, 0f)
+    private var inited = false
 
     constructor(context: Context) : super(context)
 
@@ -20,7 +21,8 @@ class UpperChart : AbstractLineChart<UpperChartController>, ChartDetailsProvider
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     override fun onCreateController(data: LineChartData): UpperChartController {
-        return UpperChartController(data, viewWidth, viewHeight, this)
+        inited = true
+        return UpperChartController(data, this)
     }
 
     override fun onAdditionalInit(chartData: LineChartData) {
@@ -58,7 +60,7 @@ class UpperChart : AbstractLineChart<UpperChartController>, ChartDetailsProvider
 
     override fun onFocusedRangeChanged(left: Int, right: Int) {
         super.onFocusedRangeChanged(left, right)
-        scale.onFocusedRangeChanged(getController().getFocusedRange())
+        if (inited) scale.onFocusedRangeChanged(getController().getFocusedRange())
     }
 
     override fun switchDayNightMode(nightMode: Boolean) {

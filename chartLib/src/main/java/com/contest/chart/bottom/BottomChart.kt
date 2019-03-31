@@ -14,6 +14,6 @@ class BottomChart : AbstractLineChart<BottomChartController> {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     override fun onCreateController(data: LineChartData): BottomChartController {
-        return BottomChartController(data, viewWidth, viewHeight, this)
+        return BottomChartController(data, this)
     }
 }

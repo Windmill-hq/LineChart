@@ -11,9 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class AbstractChartController<LC : BaseLinePrinter>(
     val chartData: LineChartData,
-    protected var width: Int,
-    protected var height: Int,
-    private val refresher: Refresher
+    protected val view: ChartView
 ) : DetalsProvider {
 
     private val lineControllers = ArrayList<LC>()
@@ -33,7 +31,7 @@ abstract class AbstractChartController<LC : BaseLinePrinter>(
     private val verticalAnimListener = object : BaseListener {
         override fun onAnimationUpdate(animation: ValueAnimator) {
             verticalStep = animation.animatedValue as Float
-            refresher.refresh()
+            view.update()
         }
 
         override fun onAnimationEnd(animation: Animator) {
@@ -51,7 +49,7 @@ abstract class AbstractChartController<LC : BaseLinePrinter>(
         } else {
             val maxVal = getMaxValue()
             if (maxVal == 0f) return
-            val newStep = (height - Constants.UPPER_VERTICAL_OFFSET) / maxVal
+            val newStep = (view.getChartHeight() - Constants.UPPER_VERTICAL_OFFSET) / maxVal
             if (verticalStep != newStep) {
                 isVerticalAnimBusy.set(true)
                 animateValue(verticalStep, newStep, 400, verticalAnimListener)
@@ -61,7 +59,7 @@ abstract class AbstractChartController<LC : BaseLinePrinter>(
 
 
     override fun getStartY(): Int {
-        return height
+        return view.getChartHeight()
     }
 
     abstract fun onCreateLinePainter(line: BrokenLine): LC
@@ -87,13 +85,13 @@ abstract class AbstractChartController<LC : BaseLinePrinter>(
         focusRange = focusLeft..focusRight
         calculateSteps()
         notifyFocusRangeChanged()
-        refresher.refresh()
+        view.update()
     }
 
     fun onLineStateChanged(name: String, isShow: Boolean) {
         chartData.brokenLines.forEach { if (it.name == name) it.isEnabled = isShow }
         calculateSteps()
-        refresher.refresh()
+        view.update()
     }
 
     override fun isFocused(pos: Int): Boolean {
@@ -110,18 +108,13 @@ abstract class AbstractChartController<LC : BaseLinePrinter>(
 
     protected fun calculateVerticalStepNoAnim() {
         val maxVal = getMaxValue()
-        verticalStep = (height - Constants.UPPER_VERTICAL_OFFSET) / maxVal
+        verticalStep = (view.getChartHeight() - Constants.UPPER_VERTICAL_OFFSET) / maxVal
     }
 
     protected fun calculateHorizontalStepNoAnim() {
         val maxSize = getMaxSize()
         if (maxSize == 0) return
-        horizontalStep = width / maxSize.toFloat()
-    }
-
-    fun setSize(width: Int, height: Int) {
-        this.width = width
-        this.height = height
+        horizontalStep = view.getChartWidth() / maxSize.toFloat()
     }
 }
 
