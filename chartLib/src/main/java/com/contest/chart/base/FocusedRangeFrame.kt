@@ -41,19 +41,13 @@ class FocusedRangeFrame : MeasuredView {
     private var listeners = ArrayList<Listener>()
     private var partToDraw = Part.UNKNOWN
 
-    constructor(context: Context) : super(context) {
-        init()
-    }
+    constructor(context: Context) : super(context)
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init()
-    }
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init()
-    }
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    private fun init() {
+    init {
         val frameColor = context.resources.getColor(R.color.frameColor)
         paintMainRect.color = frameColor
         paintHandle.color = frameColor

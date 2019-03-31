@@ -19,29 +19,23 @@ import com.contest.chart.utils.getColor
 class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
 
     private val chartDataList = ArrayList<LineChartData>()
-    lateinit var bottomChart: BottomChart
-    lateinit var upperChart: UpperChart
-    lateinit var focusedRangeFrame: FocusedRangeFrame
-    lateinit var namesLayout: LinearLayout
-    lateinit var detailsView: DetailsView
-    lateinit var container: LinearLayout
+    var bottomChart: BottomChart
+    var upperChart: UpperChart
+    var focusedRangeFrame: FocusedRangeFrame
+    var namesLayout: LinearLayout
+    var detailsView: DetailsView
+    var container: LinearLayout
     private var nightMode = false
     private val dataController = DataController()
     private var checkedChart = 0
 
-    constructor(context: Context) : super(context) {
-        init()
-    }
+    constructor(context: Context) : super(context)
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init()
-    }
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init()
-    }
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    private fun init() {
+    init {
         val view = LayoutInflater.from(context).inflate(R.layout.time_line_widget, this, true)
         container = view.findViewById(R.id.container)
         upperChart = view.findViewById(R.id.upper_chart)
@@ -59,7 +53,7 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
         spinner = view.findViewById(R.id.chart_spinner)
     }
 
-    lateinit var spinner: Spinner
+    var spinner: Spinner
 
     private fun prepareSpinner() {
         val values = ArrayList<String>()
