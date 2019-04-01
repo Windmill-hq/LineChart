@@ -22,6 +22,7 @@ abstract class AbstractLineChart<CC : AbstractChartController<*>> : MeasuredView
     override fun onMeasured(width: Int, height: Int) {
         this.viewWidth = width
         this.viewHeight = height
+        chartController.calculateSteps()
     }
 
     override fun getChartWidth(): Int {

@@ -39,12 +39,11 @@ class DetailsView : MeasuredView {
                 handleEvent(event.x)
                 true
             }
-            MotionEvent.ACTION_UP -> {
+            else -> {
                 inited = false
                 invalidate()
-                true
+                super.onTouchEvent(event)
             }
-            else -> super.onTouchEvent(event)
         }
     }
 

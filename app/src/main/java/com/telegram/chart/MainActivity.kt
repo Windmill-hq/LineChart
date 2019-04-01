@@ -4,6 +4,7 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
+import com.contest.chart.TimeLineChart
 import com.contest.chart.model.LineChartData
 import com.telegram.chart.model.DataProvider
 import kotlinx.android.synthetic.main.activity_main.*
@@ -24,7 +25,12 @@ class MainActivity : AppCompatActivity(), DataProvider.CallBack {
     }
 
     override fun onSuccess(chartsDataList: List<LineChartData>) {
-        timeLineChart.setData(chartsDataList)
+        chartsDataList.forEachIndexed { index, chartData ->
+            val chart = TimeLineChart(this)
+            chart.setData(chartData)
+            chart.setTitle("Chart #$index")
+            root.addView(chart)
+        }
     }
 
     override fun onError(exception: Exception) {
@@ -32,7 +38,12 @@ class MainActivity : AppCompatActivity(), DataProvider.CallBack {
     }
 
     private fun switchTheme() {
-        timeLineChart.switchTheme()
+        for (index in 0 until root.childCount) {
+            val child = root.getChildAt(index)
+            if (child is TimeLineChart) {
+                child.switchTheme()
+            }
+        }
         isNight = !isNight
         val color = resources.getColor(R.color.white, R.color.backGroundDark, isNight)
         root.setBackgroundColor(color)

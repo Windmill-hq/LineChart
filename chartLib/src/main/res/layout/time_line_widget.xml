@@ -21,14 +21,6 @@
             android:text="@string/title"
             android:textColor="@color/blue"
             android:textSize="26sp" />
-
-        <Spinner
-            android:id="@+id/chart_spinner"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_expand"
-            android:padding="8dp" />
-
     </LinearLayout>
 
     <FrameLayout
