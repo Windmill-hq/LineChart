@@ -2,8 +2,11 @@ package com.contest.chart
 
 import android.content.Context
 import android.graphics.Color
+import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -15,6 +18,7 @@ import com.contest.chart.model.LineChartData
 import com.contest.chart.upper.UpperChart
 import com.contest.chart.utils.createCheckBox
 import com.contest.chart.utils.createLayoutParams
+import com.contest.chart.utils.createSeparator
 import com.contest.chart.utils.getColor
 
 class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
@@ -33,7 +37,11 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
     init {
         val view = LayoutInflater.from(context).inflate(R.layout.time_line_widget, this, true)
@@ -64,8 +72,12 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
 
     private fun setNames(chartData: LineChartData) {
         namesLayout.removeAllViews()
-        chartData.brokenLines.forEach {
-            namesLayout.addView(createCheckBox(it.name, Color.parseColor(it.color), this), createLayoutParams())
+        chartData.brokenLines.forEachIndexed { index, line ->
+            namesLayout.addView(createCheckBox(line.name, Color.parseColor(line.color), this))
+
+            if (index != chartData.brokenLines.size - 1) {
+                namesLayout.addView(createSeparator())
+            }
         }
     }
 

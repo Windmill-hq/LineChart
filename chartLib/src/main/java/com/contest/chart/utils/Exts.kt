@@ -4,29 +4,40 @@ import android.animation.ValueAnimator
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Color
+import android.view.View
+import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import com.contest.chart.R
 import com.contest.chart.base.BaseListener
 import com.contest.chart.model.BrokenLine
 import com.contest.chart.model.LineChartData
 import java.util.*
 
 
-fun FrameLayout.createCheckBox(name: String, color: Int, listener: CompoundButton.OnCheckedChangeListener): CheckBox {
+fun FrameLayout.createCheckBox(
+    name: String,
+    color: Int,
+    listener: CompoundButton.OnCheckedChangeListener
+): CheckBox {
     val checkBox = CheckBox(context)
     checkBox.buttonTintList = ColorStateList.valueOf(color)
     checkBox.text = name
     checkBox.setTextColor(color)
     checkBox.isChecked = true
     checkBox.setOnCheckedChangeListener(listener)
+    checkBox.layoutParams = createLayoutParams()
     return checkBox
 }
 
 
 fun createLayoutParams(): LinearLayout.LayoutParams {
-    val params = LinearLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+    val params = LinearLayout.LayoutParams(
+        FrameLayout.LayoutParams.WRAP_CONTENT,
+        FrameLayout.LayoutParams.WRAP_CONTENT
+    )
     params.setMargins(12, 12, 12, 6)
     return params
 }
@@ -123,6 +134,15 @@ fun animateValue(
         addUpdateListener(listener)
         addListener(listener)
     }.start()
+}
+
+fun FrameLayout.createSeparator(): View {
+    val separator = View(context)
+    separator.setBackgroundColor(resources.getColor(R.color.detailsLineColor))
+    val separatorParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 3)
+    separatorParams.setMargins(70, 0, 0, 0)
+    separator.layoutParams = separatorParams
+    return separator
 }
 
 
