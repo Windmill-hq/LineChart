@@ -84,4 +84,8 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
         focusedRangeFrame.switchDayNightMode(nightMode)
         detailsView.switchDayNightMode(nightMode)
     }
+
+    fun setParent(scrollView: LockableScrollView) {
+        detailsView.setParent(scrollView)
+    }
 }

@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity(), DataProvider.CallBack {
             val chart = TimeLineChart(this)
             chart.setData(chartData)
             chart.setTitle("Chart #$index")
+            chart.setParent(scrollView)
             root.addView(chart)
         }
     }
@@ -49,7 +50,6 @@ class MainActivity : AppCompatActivity(), DataProvider.CallBack {
         root.setBackgroundColor(color)
     }
 }
-
 
 
 

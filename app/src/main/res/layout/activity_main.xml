@@ -45,7 +45,8 @@
 
     </RelativeLayout>
 
-    <ScrollView
+    <com.contest.chart.LockableScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -54,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical" />
-    </ScrollView>
+    </com.contest.chart.LockableScrollView>
 </LinearLayout>
 
 

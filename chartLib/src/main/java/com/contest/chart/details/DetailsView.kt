@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.MotionEvent
 import com.contest.chart.DataProvider
+import com.contest.chart.LockableScrollView
 import com.contest.chart.base.MeasuredView
 
 class DetailsView : MeasuredView {
@@ -33,18 +34,26 @@ class DetailsView : MeasuredView {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        return when (event.action) {
-            MotionEvent.ACTION_MOVE,
+        when (event.action) {
             MotionEvent.ACTION_DOWN -> {
+                blockParent(false)
                 handleEvent(event.x)
-                true
             }
-            else -> {
+            MotionEvent.ACTION_MOVE -> {
+                handleEvent(event.x)
+            }
+
+            MotionEvent.ACTION_UP -> {
+                blockParent(true)
                 inited = false
                 invalidate()
-                super.onTouchEvent(event)
             }
         }
+        return true
+    }
+
+    private fun blockParent(unBlock: Boolean) {
+        scrollView.setScrollingEnabled(unBlock)
     }
 
     private fun handleEvent(x: Float) {
@@ -80,5 +89,11 @@ class DetailsView : MeasuredView {
 
     fun refresh() {
         requestInterceptionsAndInvalidate(lastX)
+    }
+
+    private lateinit var scrollView: LockableScrollView
+
+    fun setParent(scrollView: LockableScrollView) {
+        this.scrollView = scrollView
     }
 }
