@@ -46,7 +46,11 @@ class FocusedRangeFrame : MeasuredView {
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
     init {
         val frameColor = context.resources.getColor(R.color.frameColor)
@@ -121,7 +125,12 @@ class FocusedRangeFrame : MeasuredView {
         if (checkMinWidthRight(event.x)) {
             val newLeft = event.x
             rightHandle.offsetTo(newLeft, rightHandle.top)
-            mainFrame.set(mainFrame.left, mainFrame.top, rightHandle.left - halfStroke, mainFrame.bottom)
+            mainFrame.set(
+                mainFrame.left,
+                mainFrame.top,
+                rightHandle.left - halfStroke,
+                mainFrame.bottom
+            )
             updateShadows()
         }
     }
@@ -140,7 +149,12 @@ class FocusedRangeFrame : MeasuredView {
         if (checkMinWidthLeft(event.x)) {
             val newLeft = event.x
             leftHandle.offsetTo(newLeft, leftHandle.top)
-            mainFrame.set(leftHandle.right + halfStroke, mainFrame.top, mainFrame.right, mainFrame.bottom)
+            mainFrame.set(
+                leftHandle.right + halfStroke,
+                mainFrame.top,
+                mainFrame.right,
+                mainFrame.bottom
+            )
             updateShadows()
         }
     }
@@ -190,9 +204,16 @@ class FocusedRangeFrame : MeasuredView {
         return mainFrame.contains(event.x, event.y)
     }
 
-    fun getFocusedRange() {
+    private var prevLeft = 0
+    private var prevRight = 0
+    private fun getFocusedRange() {
         val left = ((mainFrame.left / viewWidth) * 100).toInt()
         val right = ((mainFrame.right / viewWidth) * 100).toInt()
+
+        if (prevLeft == left && prevRight == right) return
+
+        prevLeft = left
+        prevRight = right
         listeners.forEach { it.onFocusedRangeChanged(left, right) }
     }
 
