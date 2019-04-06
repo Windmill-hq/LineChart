@@ -1,8 +1,6 @@
 package com.contest.chart.upper
 
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import com.contest.chart.base.BaseLinePrinter
 import com.contest.chart.base.DetalsProvider
 import com.contest.chart.model.BrokenLine
@@ -31,14 +29,7 @@ class UpperChatLinePrinter(
             val y2 = getStartY() - originY2 * yStep - Constants.BOTTOM_VERTICAL_OFFSET
 
             canvas.drawLine(x1, y1, x2, y2, paint)
-//            makeSmooth(canvas, x1, y1)
-//            makeSmooth(canvas, x2, y2)
         }
-    }
-
-    private val paintText = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.BLACK
-        textSize = 23f
     }
 
     fun offsetChanged(newOffset: Int) {

@@ -98,6 +98,6 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
     }
 
     fun setParent(scrollView: LockableScrollView) {
-        detailsView.setParent(scrollView)
+        focusedRangeFrame.setParent(scrollView)
     }
 }

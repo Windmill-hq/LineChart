@@ -41,7 +41,7 @@ class UpperChartController(
         return UpperChatLinePrinter(line, this, Constants.UPPER_CHART_LINE_THICKNESS)
     }
 
-    override fun notifyFocusRangeChanged() {
+    private fun notifyFocusRangeChanged() {
         getControllers().forEach {
             it.offsetChanged(focusRange.first)
         }
@@ -75,7 +75,7 @@ class UpperChartController(
         }
     }
 
-    override fun onFocusedRangeChanged(left: Int, right: Int) {
+    fun onFocusedRangeChanged(left: Int, right: Int) {
         val size = lineControllers[0].getPoints().size
         val focusLeft = size * left / 100
         val focusRight = size * right / 100

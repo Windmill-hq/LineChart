@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.MotionEvent
+import com.contest.chart.LockableScrollView
 import com.contest.chart.R
 import com.contest.chart.utils.getColor
 
@@ -85,6 +86,7 @@ class FocusedRangeFrame : MeasuredView {
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val handled = when (event.action) {
             MotionEvent.ACTION_DOWN -> {
+                blockParent(false)
                 onBeforeMove(event)
                 true
             }
@@ -93,6 +95,7 @@ class FocusedRangeFrame : MeasuredView {
                 true
             }
             MotionEvent.ACTION_UP -> {
+                blockParent(true)
                 onFinishMove()
                 true
             }
@@ -217,6 +220,16 @@ class FocusedRangeFrame : MeasuredView {
     override fun switchDayNightMode(nightMode: Boolean) {
         shadowPaint.color = resources.getColor(R.color.shadow, R.color.shadowNight, nightMode)
         invalidate()
+    }
+
+    private lateinit var scrollView: LockableScrollView
+
+
+    private fun blockParent(unBlock: Boolean) {
+        scrollView.setScrollingEnabled(unBlock)
+    }
+    fun setParent(scrollView: LockableScrollView) {
+        this.scrollView = scrollView
     }
 
     interface Listener {

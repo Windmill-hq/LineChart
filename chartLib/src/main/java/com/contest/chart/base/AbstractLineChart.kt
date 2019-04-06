@@ -5,14 +5,17 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import com.contest.chart.model.LineChartData
 
-abstract class AbstractLineChart<CC : AbstractChartController<*>> : MeasuredView, FocusedRangeFrame.Listener,
-    ChartView {
+abstract class AbstractLineChart<CC : AbstractChartController<*>> : MeasuredView, ChartView {
 
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
     protected var isInited = false
     protected var viewWidth = 0
@@ -38,7 +41,7 @@ abstract class AbstractLineChart<CC : AbstractChartController<*>> : MeasuredView
         chartController.draw(canvas)
     }
 
-   open fun setData(chartData: LineChartData) {
+    open fun setData(chartData: LineChartData) {
         onAdditionalInit(chartData)
         chartController = onCreateController(chartData)
         isInited = true
@@ -48,11 +51,6 @@ abstract class AbstractLineChart<CC : AbstractChartController<*>> : MeasuredView
     open fun onAdditionalInit(chartData: LineChartData) {}
 
     abstract fun onCreateController(data: LineChartData): CC
-
-    override fun onFocusedRangeChanged(left: Int, right: Int) {
-        if (!isInited) return
-        chartController.onFocusedRangeChanged(left, right)
-    }
 
     open fun onLineStateChanged(name: String, isEnabled: Boolean) {
         chartController.onLineStateChanged(name, isEnabled)

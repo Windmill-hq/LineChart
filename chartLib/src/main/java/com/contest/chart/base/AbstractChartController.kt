@@ -67,11 +67,7 @@ abstract class AbstractChartController<LP : BaseLinePrinter>(
 
     abstract fun getMaxValue(): Float
 
-    abstract fun notifyFocusRangeChanged()
-
     abstract fun calculateSteps()
-
-    abstract fun onFocusedRangeChanged(left: Int, right: Int)
 
     fun draw(canvas: Canvas) {
         lineControllers.forEach {
@@ -87,11 +83,6 @@ abstract class AbstractChartController<LP : BaseLinePrinter>(
 
     fun getControllers(): List<LP> {
         return lineControllers
-    }
-
-    protected fun calculateVerticalStepNoAnim() {
-        val maxVal = getMaxValue()
-        verticalStep = (view.getChartHeight() - Constants.UPPER_VERTICAL_OFFSET) / maxVal
     }
 
     protected fun calculateHorizontalStepNoAnim() {

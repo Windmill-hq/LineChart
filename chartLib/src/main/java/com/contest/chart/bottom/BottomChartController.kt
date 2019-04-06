@@ -1,8 +1,8 @@
 package com.contest.chart.bottom
 
 import com.contest.chart.base.AbstractChartController
-import com.contest.chart.base.LinePrinter
 import com.contest.chart.base.ChartView
+import com.contest.chart.base.LinePrinter
 import com.contest.chart.model.BrokenLine
 import com.contest.chart.model.LineChartData
 import com.contest.chart.utils.Constants
@@ -24,9 +24,6 @@ class BottomChartController(chartData: LineChartData, chartView: ChartView) :
         return chartData.getChartMaxSize(xStepStore)
     }
 
-    override fun notifyFocusRangeChanged() {
-    }
-
     init {
         calculateSteps()
     }
@@ -35,8 +32,6 @@ class BottomChartController(chartData: LineChartData, chartView: ChartView) :
         calculateVerticalStep()
         calculateHorizontalStepNoAnim()
     }
-
-    override fun onFocusedRangeChanged(left: Int, right: Int) {}
 
     override fun getFocusedRange(): IntRange {
         return IntRange.EMPTY

@@ -98,12 +98,8 @@ fun LineChartData.getChartMaxValueInRange(range: IntRange, store: ArrayList<Floa
 
 fun LineChartData.getChartMaxValue(store: ArrayList<Float>): Float {
     store.clear()
-    this.brokenLines.forEach { line ->
-        if (line.isEnabled) {
-            var max = 0f
-            line.points.forEach { if (it > max) max = it }
-            store.add(max)
-        }
+    this.brokenLines.forEach {
+        if (it.isEnabled) store.add(it.points.max() ?: 0f)
     }
 
     return store.max() ?: return 0f

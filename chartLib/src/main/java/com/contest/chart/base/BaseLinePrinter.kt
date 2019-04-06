@@ -28,8 +28,4 @@ abstract class BaseLinePrinter(
     override fun getStartY(): Int {
         return provider.getStartY()
     }
-
-    protected fun makeSmooth(canvas: Canvas, x: Float, y: Float) {
-        canvas.drawCircle(x, y, thickness / 2, circlePaint)
-    }
 }
