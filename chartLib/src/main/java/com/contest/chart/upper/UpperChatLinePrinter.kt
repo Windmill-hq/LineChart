@@ -1,6 +1,7 @@
 package com.contest.chart.upper
 
 import android.graphics.Canvas
+import android.graphics.Path
 import com.contest.chart.base.BaseLinePrinter
 import com.contest.chart.base.DetalsProvider
 import com.contest.chart.model.BrokenLine
@@ -13,11 +14,13 @@ class UpperChatLinePrinter(
 ) : BaseLinePrinter(line, thickness, provider) {
 
     private var positionOffset = 0
+    private val path = Path()
 
     override fun draw(canvas: Canvas, xStep: Float, yStep: Float) {
         if (!line.isEnabled) return
 
         val range = provider.getFocusedRange()
+        path.reset()
 
         for (positionX in range) {
             val x1 = (positionX - positionOffset) * xStep
@@ -28,8 +31,10 @@ class UpperChatLinePrinter(
             val y1 = getStartY() - originY1 * yStep - Constants.BOTTOM_VERTICAL_OFFSET
             val y2 = getStartY() - originY2 * yStep - Constants.BOTTOM_VERTICAL_OFFSET
 
-            canvas.drawLine(x1, y1, x2, y2, paint)
+            path.moveTo(x1, y1)
+            path.lineTo(x2, y2)
         }
+        canvas.drawPath(path, paint)
     }
 
     fun offsetChanged(newOffset: Int) {
