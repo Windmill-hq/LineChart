@@ -16,7 +16,8 @@ class MainActivity : AppCompatActivity(), DataProvider.CallBack {
     private var isNight = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!resources.getBoolean(R.bool.isTablet)) requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        if (!resources.getBoolean(R.bool.isTablet)) requestedOrientation =
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         setContentView(R.layout.activity_main)
         dataProvider = DataProvider()

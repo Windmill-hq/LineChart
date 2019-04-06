@@ -51,7 +51,7 @@ abstract class AbstractChartController<LP : BaseLinePrinter>(
             val newStep = (view.getChartHeight() - Constants.UPPER_VERTICAL_OFFSET) / maxVal
             if (verticalStep != newStep) {
                 isVerticalAnimBusy.set(true)
-                animateValue(verticalStep, newStep, 400, verticalAnimListener)
+                animateValue(verticalStep, newStep, 200, verticalAnimListener)
             }
         }
     }

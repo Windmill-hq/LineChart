@@ -31,8 +31,8 @@ class UpperChatLinePrinter(
             val y2 = getStartY() - originY2 * yStep - Constants.BOTTOM_VERTICAL_OFFSET
 
             canvas.drawLine(x1, y1, x2, y2, paint)
-            makeSmooth(canvas, x1, y1)
-            makeSmooth(canvas, x2, y2)
+//            makeSmooth(canvas, x1, y1)
+//            makeSmooth(canvas, x2, y2)
         }
     }
 
