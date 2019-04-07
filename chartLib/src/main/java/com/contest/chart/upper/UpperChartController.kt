@@ -90,4 +90,8 @@ class UpperChartController(
     }
 }
 
+interface OnAnimationListener {
+    fun onAnimEnd()
+}
+
 

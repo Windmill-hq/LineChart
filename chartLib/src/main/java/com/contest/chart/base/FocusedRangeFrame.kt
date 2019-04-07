@@ -215,6 +215,7 @@ class FocusedRangeFrame : MeasuredView {
         prevLeft = left
         prevRight = right
         listeners.forEach { it.onFocusedRangeChanged(left, right) }
+        frameChangeListener?.onFrameChanged()
     }
 
     fun addListener(listener: Listener) {
@@ -247,8 +248,9 @@ class FocusedRangeFrame : MeasuredView {
 
 
     private fun blockParent(unBlock: Boolean) {
-        scrollView.setScrollingEnabled(unBlock)
+        scrollView.scrollable = unBlock
     }
+
     fun setParent(scrollView: LockableScrollView) {
         this.scrollView = scrollView
     }
@@ -256,4 +258,6 @@ class FocusedRangeFrame : MeasuredView {
     interface Listener {
         fun onFocusedRangeChanged(left: Int, right: Int)
     }
+
+    var frameChangeListener: FrameChangeListener? = null
 }

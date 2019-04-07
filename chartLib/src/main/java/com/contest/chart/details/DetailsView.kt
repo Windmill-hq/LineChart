@@ -6,9 +6,13 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.MotionEvent
 import com.contest.chart.DataProvider
+import com.contest.chart.LockableScrollView
+import com.contest.chart.base.FrameChangeListener
 import com.contest.chart.base.MeasuredView
+import com.contest.chart.upper.OnAnimationListener
 
-class DetailsView : MeasuredView {
+class DetailsView : MeasuredView, FrameChangeListener, OnAnimationListener {
+
 
     private val interceptorPrinter = InterceptorPrinter()
     private val detailsWindow = DetailsWindow(resources)
@@ -35,6 +39,14 @@ class DetailsView : MeasuredView {
         textBlock.draw(canvas, detailsWindow.left, detailsWindow.top)
     }
 
+    override fun onFrameChanged() {
+        if (inited) handleEvent(lastX)
+    }
+
+    override fun onAnimEnd() {
+        onFrameChanged()
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         when (event.action) {
@@ -42,15 +54,17 @@ class DetailsView : MeasuredView {
                 handleEvent(event.x)
             }
             MotionEvent.ACTION_MOVE -> {
+//                blockParent(false)
                 handleEvent(event.x)
             }
 
             MotionEvent.ACTION_UP -> {
-                inited = false
+//                inited = false
+//                blockParent(true)
                 invalidate()
             }
             MotionEvent.ACTION_CANCEL -> {
-                inited = false
+//                inited = false
                 invalidate()
             }
         }
@@ -90,5 +104,16 @@ class DetailsView : MeasuredView {
 
     fun refresh() {
         requestInterceptionsAndInvalidate(lastX)
+        handleEvent(lastX)
+    }
+
+    private lateinit var scrollView: LockableScrollView
+
+    private fun blockParent(unBlock: Boolean) {
+        scrollView.scrollable = unBlock
+    }
+
+    fun setParent(scrollView: LockableScrollView) {
+        this.scrollView = scrollView
     }
 }

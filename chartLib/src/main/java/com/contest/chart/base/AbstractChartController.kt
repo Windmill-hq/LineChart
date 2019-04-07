@@ -5,6 +5,7 @@ import android.animation.ValueAnimator
 import android.graphics.Canvas
 import com.contest.chart.model.BrokenLine
 import com.contest.chart.model.LineChartData
+import com.contest.chart.upper.OnAnimationListener
 import com.contest.chart.utils.Constants
 import com.contest.chart.utils.animateValue
 import java.util.concurrent.atomic.AtomicBoolean
@@ -13,6 +14,7 @@ abstract class AbstractChartController<LP : BaseLinePrinter>(
     val chartData: LineChartData,
     protected val view: ChartView
 ) : DetalsProvider {
+    var listener: OnAnimationListener? = null
 
     protected val lineControllers = ArrayList<LP>()
     var horizontalStep = 0f
@@ -39,6 +41,7 @@ abstract class AbstractChartController<LP : BaseLinePrinter>(
                 needUpdateVerticalStep.set(false)
                 calculateVerticalStep()
             }
+            listener?.onAnimEnd()
         }
     }
 

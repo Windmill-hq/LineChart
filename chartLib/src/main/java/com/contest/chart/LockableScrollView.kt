@@ -5,33 +5,26 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.ScrollView
 
-class LockableScrollView : ScrollView {
+class LockableScrollView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : ScrollView(
+    context,
+    attrs,
+    defStyleAttr
+) {
 
-    constructor(context: Context) : super(context)
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
-    private var mScrollable = true
-
-    fun setScrollingEnabled(enabled: Boolean) {
-        mScrollable = enabled
-    }
-
-    fun isScrollable(): Boolean {
-        return mScrollable
-    }
+    var scrollable = true
 
     override fun onTouchEvent(ev: MotionEvent): Boolean {
-        when (ev.action) {
-            MotionEvent.ACTION_DOWN ->
-                return mScrollable && super.onTouchEvent(ev)
-            else -> return super.onTouchEvent(ev)
+        return when (ev.action) {
+            MotionEvent.ACTION_DOWN -> scrollable && super.onTouchEvent(ev)
+            else -> super.onTouchEvent(ev)
         }
     }
 
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
-        return mScrollable && super.onInterceptTouchEvent(ev)
+        return scrollable && super.onInterceptTouchEvent(ev)
     }
 }

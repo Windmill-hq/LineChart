@@ -73,4 +73,8 @@ class UpperChart : AbstractLineChart<UpperChartController>, ChartDetailsProvider
     override fun switchDayNightMode(nightMode: Boolean) {
         scale.switchDayNightMode(nightMode, resources)
     }
+
+    fun setListener(listener: OnAnimationListener) {
+        chartController.listener = listener
+    }
 }

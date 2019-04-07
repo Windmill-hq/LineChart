@@ -52,6 +52,7 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
         detailsView.setDataProvider(dataController)
         dataController.setChartDetailsProvider(upperChart)
         focusedRangeFrame.addListener(upperChart)
+        focusedRangeFrame.frameChangeListener = detailsView
     }
 
     fun setTitle(name: String) {
@@ -64,6 +65,7 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
         bottomChart.setData(chartData)
         upperChart.setData(chartData)
         setNames(chartData)
+        upperChart.setListener(detailsView)
     }
 
     private fun setNames(chartData: LineChartData) {
@@ -93,5 +95,6 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
 
     fun setParent(scrollView: LockableScrollView) {
         focusedRangeFrame.setParent(scrollView)
+        detailsView.setParent(scrollView)
     }
 }
