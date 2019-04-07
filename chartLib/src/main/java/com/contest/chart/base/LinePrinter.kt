@@ -1,10 +1,7 @@
 package com.contest.chart.base
 
 import android.graphics.Canvas
-import android.graphics.Color
 import com.contest.chart.model.BrokenLine
-import com.contest.chart.utils.Constants
-import com.contest.chart.utils.transparentOn
 
 open class LinePrinter(
     line: BrokenLine,

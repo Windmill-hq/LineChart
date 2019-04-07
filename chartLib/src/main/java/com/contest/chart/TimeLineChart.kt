@@ -1,12 +1,9 @@
 package com.contest.chart
 
 import android.content.Context
-import android.graphics.Color
-import android.os.Build
+import android.support.design.chip.ChipGroup
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -16,9 +13,7 @@ import com.contest.chart.bottom.BottomChart
 import com.contest.chart.details.DetailsView
 import com.contest.chart.model.LineChartData
 import com.contest.chart.upper.UpperChart
-import com.contest.chart.utils.createCheckBox
-import com.contest.chart.utils.createLayoutParams
-import com.contest.chart.utils.createSeparator
+import com.contest.chart.utils.createChip
 import com.contest.chart.utils.getColor
 
 class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
@@ -26,12 +21,13 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
     var bottomChart: BottomChart
     var upperChart: UpperChart
     var focusedRangeFrame: FocusedRangeFrame
-    var namesLayout: LinearLayout
+    var namesLayout: ChipGroup
     var detailsView: DetailsView
     var container: LinearLayout
     var title: TextView
     private var nightMode = false
     private val dataController = DataController()
+    private var ready = false
 
     constructor(context: Context) : super(context)
 
@@ -49,7 +45,7 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
         upperChart = view.findViewById(R.id.upper_chart)
         bottomChart = view.findViewById(R.id.bottom_chart)
         focusedRangeFrame = view.findViewById(R.id.focus_frame)
-        namesLayout = view.findViewById(R.id.checkbox_layout)
+        namesLayout = view.findViewById(R.id.chips_names)
         title = view.findViewById(R.id.title)
 
         detailsView = view.findViewById(R.id.details_view)
@@ -72,16 +68,14 @@ class TimeLineChart : FrameLayout, CompoundButton.OnCheckedChangeListener {
 
     private fun setNames(chartData: LineChartData) {
         namesLayout.removeAllViews()
-        chartData.brokenLines.forEachIndexed { index, line ->
-            namesLayout.addView(createCheckBox(line.name, Color.parseColor(line.color), this))
-
-            if (index != chartData.brokenLines.size - 1) {
-                namesLayout.addView(createSeparator())
-            }
+        chartData.brokenLines.forEach {
+            namesLayout.addView(createChip(it.name, it.color, this@TimeLineChart))
         }
+        ready = true
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
+        if (!ready) return
         val name = buttonView.text.toString()
         bottomChart.onLineStateChanged(name, isChecked)
         upperChart.onLineStateChanged(name, isChecked)

@@ -4,6 +4,8 @@ import android.animation.ValueAnimator
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Color
+import android.support.design.chip.Chip
+import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
@@ -16,36 +18,40 @@ import com.contest.chart.model.BrokenLine
 import com.contest.chart.model.LineChartData
 import java.util.*
 
-
-fun FrameLayout.createCheckBox(
+fun FrameLayout.createChip(
     name: String,
-    color: Int,
+    color: String,
     listener: CompoundButton.OnCheckedChangeListener
-): CheckBox {
-    val checkBox = CheckBox(context)
-    checkBox.buttonTintList = ColorStateList.valueOf(color)
-    checkBox.text = name
-    checkBox.setTextColor(color)
-    checkBox.isChecked = true
-    checkBox.setOnCheckedChangeListener(listener)
-    checkBox.layoutParams = createLayoutParams()
-    return checkBox
+): Chip {
+    val chip = Chip(context).apply {
+        text = name
+        isClickable = true
+        isCheckable = true
+        minWidth = 140
+        textAlignment = View.TEXT_ALIGNMENT_CENTER
+        setChipStrokeWidthResource(R.dimen.stroke)
+        checkedIcon = ContextCompat.getDrawable(context, R.drawable.ic_checked)
+        chipStrokeColor = ColorStateList.valueOf(Color.parseColor(color))
+        setTextColor(getStateColors("#FFFFFF", color))
+        chipBackgroundColor = getStateColors(color, "#FFFFFF")
+        setOnCheckedChangeListener(listener)
+    }
+    chip.isChecked = true
+
+    return chip
 }
 
 
-fun createLayoutParams(): LinearLayout.LayoutParams {
-    val params = LinearLayout.LayoutParams(
-        FrameLayout.LayoutParams.WRAP_CONTENT,
-        FrameLayout.LayoutParams.WRAP_CONTENT
+private fun getStateColors(checked: String, unchecked: String): ColorStateList {
+
+    val states = arrayOf(
+        intArrayOf(android.R.attr.state_checked),
+        intArrayOf(-android.R.attr.state_checked)
     )
-    params.setMargins(12, 12, 12, 6)
-    return params
-}
 
+    val colors = intArrayOf(Color.parseColor(checked), Color.parseColor(unchecked))
 
-fun String.transparentOn(transparency: String): Int {
-    val pale = StringBuilder(this).insert(1, transparency).toString()
-    return Color.parseColor(pale)
+    return ColorStateList(states, colors)
 }
 
 fun ArrayList<BrokenLine>.getMaxValueInRange(range: IntRange, store: ArrayList<Float>): Float? {
