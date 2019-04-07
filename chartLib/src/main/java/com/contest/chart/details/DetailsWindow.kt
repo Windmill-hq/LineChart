@@ -20,7 +20,7 @@ class DetailsWindow(resources: Resources) {
     private var nightMode = false
 
     private val statisticWidth = 40f
-    private val rectangle = RectF()
+    val rectangle = RectF()
 
     val left: Float
         get() {

@@ -21,6 +21,7 @@ class DetailsView : MeasuredView, FrameChangeListener, OnAnimationListener {
 
     private var lastX = 0f
     private var inited = false
+    private var clickType = ClickType.INFO
 
     constructor(context: Context) : super(context)
 
@@ -51,6 +52,12 @@ class DetailsView : MeasuredView, FrameChangeListener, OnAnimationListener {
     override fun onTouchEvent(event: MotionEvent): Boolean {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
+                val needZoom = detailsWindow.rectangle.contains(event.x, event.y)
+                clickType = if (needZoom) {
+                    inited = false
+                    invalidate()
+                    ClickType.ZOOM
+                } else ClickType.INFO
                 handleEvent(event.x)
             }
             MotionEvent.ACTION_MOVE -> {
@@ -72,6 +79,7 @@ class DetailsView : MeasuredView, FrameChangeListener, OnAnimationListener {
     }
 
     private fun handleEvent(x: Float) {
+        if (clickType == ClickType.ZOOM) return
         inited = true
         lastX = x
         requestInterceptionsAndInvalidate(x)
@@ -115,5 +123,9 @@ class DetailsView : MeasuredView, FrameChangeListener, OnAnimationListener {
 
     fun setParent(scrollView: LockableScrollView) {
         this.scrollView = scrollView
+    }
+
+    enum class ClickType {
+        INFO, ZOOM
     }
 }
