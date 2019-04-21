@@ -15,8 +15,12 @@ Simple graphic representation of data changing during the time
 ``` 
   include ':chartLib', ':YOUR_APP_NAME'
 ```
-3. In module level ```build.gradle``` file add next line  <br />
-  ```implementation project(':chartLib')```
+3. In module level ```build.gradle``` file add next line to block ```dependencies```  <br />
+  ```
+  dependencies{
+      implementation project(':chartLib')
+  }
+  ```
   
 4. Declare TimeLineChart view in your layout as shown below
 ```xml
@@ -34,23 +38,22 @@ Simple graphic representation of data changing during the time
         chart.setData(chartData)
   ```
           
-6. Chart supports two themes Light and Dark, to switch it just call method <code>switchTheme()</code> on class instance <br />
+6. Chart supports  Light and Dark themes, to switch between them just call method <code>switchTheme()</code> on class instance <br />
   ```kotlin 
   chart.switchTheme()
  ```
  
-
-7. In order to represent your data, chart requires you to provide data as instance of class <code>LineChartData </code> <br />
+7. In order to represent your data, chart requires you to provide data as instance of class <code>LineChartData </code> <br/>
   ```kotlin 
   class LineChartData(val id: Int) {
     val brokenLines = ArrayList<BrokenLine>()
     lateinit var timeLine: LongArray
 }
   ```
-  Field ```timeLine``` is array of <code>long</code> that represented time line during wich your data changes
-Since chart can represent a few chart lines simultaneously in one view in the same time frame, you need to provide your data as instance of class ```BrokenLine``` and add it to  ```brokenLines``` list. 
+  Field ```timeLine``` is array of <code>long</code> that represented time line during wich your data changes.<br/>
+Since chart can represent a few chart lines simultaneously in one view with the same time frame, you need to provide your data as instance of class ```BrokenLine``` and add it to  ```brokenLines``` list. 
 
-Class ```BrokenLine``` description
+Class ```BrokenLine``` declaration
 ```kotlin 
 class BrokenLine(val points: FloatArray, val name: String, val color: String)
 ```
@@ -59,7 +62,7 @@ where: <br />
    ```name``` - name of data <br />
    ```color``` - color in HEX format  <br />
    
-   IMPORTANT: size of  ```points``` and ```timeLine``` arrays shoul be always equal 
+   IMPORTANT: size of  ```points``` and ```timeLine``` arrays should be always equal 
 
 8.  Min API level 21
 
