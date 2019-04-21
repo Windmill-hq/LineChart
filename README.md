@@ -3,27 +3,30 @@ Simple graphic representation of data changing during the time
 
 Min API level 21
 
-How to use?
+#How to use?
+
 1. Copy chartLib as module to your project 
-2. In project level build.gradle file add next line 
+2. In project level build.gradle file add next line  <br />
   <code>  implementation project(':chartLib')  </code> 
+  
 3. Declare TimeLineChart view in your layout as shown below
-  <code>  
+```xml
     <com.contest.chart.TimeLineChart
             android:id="@+id/chart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" /> 
-   </code> 
+```
+
 4. Find chart view and set prepared data
-  <code>  
+  ```kotlin 
         val chartData : LineChartData = prepareData()
         val chart: TimeLineChart = findViewById(R.id.chart)
         chart.setTitle("YOUR CHART TITLE")
         chart.setData(chartData)
-          </code> 
-5. Chart supports two themes Light and Dark, to switch it just call method <code>switchTheme()</code>  <br />
- on class instance as show below
+  ```
+          
+5. Chart supports two themes Light and Dark, to switch it just call method <code>switchTheme()</code> on class instance <br />
     
-  <code>  
-        chart.switchTheme()
-  </code> 
+  ```kotlin 
+  chart.switchTheme()
+ ```
