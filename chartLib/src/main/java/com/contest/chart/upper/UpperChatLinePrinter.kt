@@ -14,7 +14,6 @@ class UpperChatLinePrinter(
 ) : BaseLinePrinter(line, thickness, provider) {
 
     private var positionOffset = 0
-    private val path = Path()
 
     override fun draw(canvas: Canvas, xStep: Float, yStep: Float) {
         if (!line.isEnabled) return
