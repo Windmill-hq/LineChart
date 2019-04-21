@@ -15,10 +15,10 @@ Simple graphic representation of data changing during the time
 ``` 
   include ':chartLib', ':YOUR_APP_NAME'
 ```
-2. In module level ```build.gradle``` file add next line  <br />
+3. In module level ```build.gradle``` file add next line  <br />
   ```implementation project(':chartLib')```
   
-3. Declare TimeLineChart view in your layout as shown below
+4. Declare TimeLineChart view in your layout as shown below
 ```xml
     <com.contest.chart.TimeLineChart
             android:id="@+id/chart"
@@ -26,7 +26,7 @@ Simple graphic representation of data changing during the time
             android:layout_height="wrap_content" /> 
 ```
 
-4. Find chart view and set prepared data
+5. Find chart view and set prepared data
   ```kotlin 
         val chartData : LineChartData = prepareData()
         val chart: TimeLineChart = findViewById(R.id.chart)
@@ -34,13 +34,13 @@ Simple graphic representation of data changing during the time
         chart.setData(chartData)
   ```
           
-5. Chart supports two themes Light and Dark, to switch it just call method <code>switchTheme()</code> on class instance <br />
+6. Chart supports two themes Light and Dark, to switch it just call method <code>switchTheme()</code> on class instance <br />
   ```kotlin 
   chart.switchTheme()
  ```
  
 
-6. In order to represent your data, chart requires you to provide data as instance of class <code>LineChartData </code> <br />
+7. In order to represent your data, chart requires you to provide data as instance of class <code>LineChartData </code> <br />
   ```kotlin 
   class LineChartData(val id: Int) {
     val brokenLines = ArrayList<BrokenLine>()
@@ -61,5 +61,5 @@ where: <br />
    
    IMPORTANT: size of  ```points``` and ```timeLine``` arrays shoul be always equal 
 
-7.  Min API level 21
+8.  Min API level 21
 
