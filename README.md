@@ -1,8 +1,6 @@
 # LineChart
 Simple graphic representation of data changing during the time
 
-Min API level 21
-
 <p float="left">
    <img src="https://github.com/Windmill-hq/LineChart/blob/readme/images/day.jpg" alt="drawing" width="350"/>
    <img src="https://github.com/Windmill-hq/LineChart/blob/readme/images/night.jpg" alt="drawing" width="350"/>
@@ -34,5 +32,8 @@ Min API level 21
   ```kotlin 
   chart.switchTheme()
  ```
+ 
+ Min API level 21
+
  
 
