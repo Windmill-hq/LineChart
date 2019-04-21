@@ -2,11 +2,11 @@
 Simple graphic representation of data changing during the time
 
 <p float="left">
-   <img src="https://github.com/Windmill-hq/LineChart/blob/readme/images/day.jpg" alt="drawing" width="350"/>
-   <img src="https://github.com/Windmill-hq/LineChart/blob/readme/images/night.jpg" alt="drawing" width="350"/>
+   <img src="https://github.com/Windmill-hq/LineChart/blob/develop/images/day.jpg" alt="drawing" width="350"/>
+   <img src="https://github.com/Windmill-hq/LineChart/blob/develop/images/night.jpg" alt="drawing" width="350"/>
 </p>
 
-<img src="https://github.com/Windmill-hq/LineChart/blob/readme/images/demo.gif" width="350" height="350" />
+<img src="https://github.com/Windmill-hq/LineChart/blob/develop/images/demo.gif" width="350" height="350" />
 
 # How to use?
 
