@@ -13,7 +13,7 @@ class DetailsWindow(resources: Resources) {
 
     private var positionX = 0f
     private var rectTop = 5f
-    private var rectWidth = 230f
+    private var rectWidth = 330f
     private var rectBottom = 50f
     private val radius = 10f
     private val xOffset = 30

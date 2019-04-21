@@ -33,7 +33,7 @@ fun FrameLayout.createChip(
         checkedIcon = ContextCompat.getDrawable(context, R.drawable.ic_checked)
         chipStrokeColor = ColorStateList.valueOf(Color.parseColor(color))
         setTextColor(getStateColors("#FFFFFF", color))
-        chipBackgroundColor = getStateColors(color, "#FFFFFF")
+        chipBackgroundColor = getStateColors(color, "#00FFFFFF")
         setOnCheckedChangeListener(listener)
     }
     chip.isChecked = true
