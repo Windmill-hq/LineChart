@@ -3,7 +3,12 @@ Simple graphic representation of data changing during the time
 
 Min API level 21
 
-#How to use?
+<p float="left">
+   <img src="https://github.com/Windmill-hq/LineChart/blob/readme/images/day.jpg" alt="drawing" width="350"/>
+   <img src="https://github.com/Windmill-hq/LineChart/blob/readme/images/night.jpg" alt="drawing" width="350"/>
+</p>
+
+# How to use?
 
 1. Copy chartLib as module to your project 
 2. In project level build.gradle file add next line  <br />
@@ -26,7 +31,8 @@ Min API level 21
   ```
           
 5. Chart supports two themes Light and Dark, to switch it just call method <code>switchTheme()</code> on class instance <br />
-    
   ```kotlin 
   chart.switchTheme()
  ```
+ 
+
